@@ -2,6 +2,7 @@
 Format `single` i `half` ze słowem 8 bitowym.
 
 ## Tests
+**BDD style is appreciated.**
 1. Install [this VsCode extension](https://marketplace.visualstudio.com/items?itemName=matepek.vscode-catch2-test-adapter)
 2. Create tests according to [Catch2](https://github.com/catchorg/Catch2/blob/master/docs/tutorial.md#top) specification
 

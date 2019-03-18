@@ -57,5 +57,14 @@
             "C2TESTEXECUTABLEPATH": "${absPath}"
         }
     }],
-    "catch2TestExplorer.defaultWatchTimeoutSec": 10
+    "catch2TestExplorer.defaultWatchTimeoutSec": 10,
+    "catch2TestExplorer.debugConfigTemplate": {
+        "type": "cppdbg",
+        "MIMode": "gdb",
+        "program": "${exec}",
+        "args": "${args}",
+        "cwd": "${cwd}",
+        "env": "${envObj}",
+        "externalConsole": false
+    }
 }
