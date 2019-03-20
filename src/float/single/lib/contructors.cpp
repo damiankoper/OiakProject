@@ -14,18 +14,17 @@ Single::Single(const Single &s)
     d = s.d;
 }
 
+Single::Single(float f)
+{
+    initFromFloat(f);
+}
+
 // Used by defined literals
 Single::Single(long double longDouble)
 {
-    // TODO: do this manually
-    float castedFloat = (double)longDouble;
+    // TODO: covnert to float manually
 
-    // Little endian
-    memcpy(&a, ((void *)&castedFloat), 1);
-    memcpy(&b, ((void *)&castedFloat) + 1, 1);
-    memcpy(&c, ((void *)&castedFloat) + 2, 1);
-    memcpy(&d, ((void *)&castedFloat) + 3, 1);
-    printBinary();
+    initFromFloat((float)longDouble);
 }
 
 // Used by defined literals
@@ -33,4 +32,13 @@ Single::Single(unsigned long long uLongLong)
 {
     // TODO: make it work
     std::cout << uLongLong << std::endl;
+}
+
+void Single::initFromFloat(float f)
+{
+    // Little endian
+    memcpy(&a, ((void *)&f), 1);
+    memcpy(&b, ((void *)&f) + 1, 1);
+    memcpy(&c, ((void *)&f) + 2, 1);
+    memcpy(&d, ((void *)&f) + 3, 1);
 }

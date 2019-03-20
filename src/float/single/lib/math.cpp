@@ -5,16 +5,6 @@
 #include <cinttypes>
 using namespace floating;
 
-Single Single::operator-()
-{
-    return changeSign();
-}
-
-bool Single::operator==(const Single &s)
-{
-    return s.a == a && s.b == b && s.c == c && s.d == d;
-}
-
 Single Single::abs()
 {
     Single result = Single(*this);

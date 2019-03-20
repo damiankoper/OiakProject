@@ -7,7 +7,7 @@ LDFLAGS =
 
 BUILD = ./build
 
-SRCS := $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*.s src/*/*.s src/*/*/*.s src/*/*/*/*.s)
+SRCS := $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp src/*.s src/*/*.s src/*/*/*.s src/*/*/*/*.s src/*/*/*/*/*.s)
 OBJS := $(SRCS:%=$(BUILD)/%.o )
 
 # C++ source

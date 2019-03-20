@@ -20,8 +20,38 @@ TEST_CASE("Single init test", "")
 
             THEN("value is correct")
             {
-                Single comp = -12.5_s;
-                REQUIRE((bool)(comp == single));
+                Single expected = -12.5_s;
+                REQUIRE((bool)(expected == single));
+            }
+        }
+    }
+}
+
+TEST_CASE("Single conversion test", "")
+{
+    GIVEN("Single object")
+    {
+        Single single = 12.5_s;
+
+        WHEN("assigned to float")
+        {
+            float actual = single;
+
+            THEN("float has correct value")
+            {
+                float expected = 12.5;
+                REQUIRE(actual == expected);
+            }
+        }
+
+        WHEN("casted to float")
+        {
+            float actual = (float)single;
+
+            THEN("float has correct value")
+            {
+                float expected = 12.5;
+                REQUIRE(actual == expected);
             }
         }
     }
