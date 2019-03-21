@@ -1,3 +1,4 @@
+#pragma GCC diagnostic ignored "-Wpointer-arith"
 #include "single.h"
 #include <cstring>
 using namespace floating;
