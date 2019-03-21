@@ -56,6 +56,7 @@ private:
    * [aaaaaaaabbbbbbbbccccccccdddddddd]
    */
   uint8_t d = 0, c = 0, b = 0, a = 0;
+  // dać tu unię
 
   void initFromFloat(float);
 };

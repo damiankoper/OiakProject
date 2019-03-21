@@ -23,8 +23,6 @@ Single::Single(float f)
 // Used by defined literals
 Single::Single(long double longDouble)
 {
-    // TODO: covnert to float manually
-
     initFromFloat((float)longDouble);
 }
 
