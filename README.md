@@ -1,6 +1,10 @@
 # Implementacja procedur obliczeń na liczbach zmiennoprzecinkowych za pomocą instrukcji stałoprzecinkowych.
 Format `single` i `half` ze słowem 8 bitowym.
 
+## 32bit
+For the sake of simplicity this project is compiled using 32bit architecture.
+To compile it using g++ on 64bit install `sudo apt-get install g++-multilib`
+
 ## Tests
 **BDD style is appreciated.**
 1. Install [this VsCode extension](https://marketplace.visualstudio.com/items?itemName=matepek.vscode-catch2-test-adapter)
@@ -8,5 +12,5 @@ Format `single` i `half` ze słowem 8 bitowym.
 
 ## Watch
 To watch file changes and recompile tests after change:
-* Install `apt-get install inotify-tools`
+* Install `sudo apt-get install inotify-tools`
 * Run `./watch.sh`
