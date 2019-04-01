@@ -1,6 +1,5 @@
 #include <cinttypes>
 #include <string>
-#include "shift_right.s"
 
 extern "C" void shift_right(uint8_t *, uint8_t *, uint8_t *, uint8_t, uint8_t, uint8_t);
 

@@ -3,6 +3,8 @@
 #include <bitset>
 #include <cstring>
 #include <cinttypes>
+extern "C" void shift_right(uint8_t *a, uint8_t *b, uint8_t *c, uint8_t ra, uint8_t rb, uint8_t rc);
+
 using namespace floating;
 
 Single Single::abs()
