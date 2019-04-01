@@ -7,18 +7,20 @@ LDFLAGS =
 
 BUILD = ./build
 
-SRCS := $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp src/*.s src/*/*.s src/*/*/*.s src/*/*/*/*.s src/*/*/*/*/*.s)
+# Assembly source
+$(BUILD)/%.s.o: %.s
+	$(MKDIR_P) $(dir $@)
+	$(AS) $(ASFLAGS) $< -o $@ 
+
+SRCS := $(wildcard src/*.s src/*/*.s src/*/*/*.s src/*/*/*/*.s src/*/*/*/*/*.s src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp)
 OBJS := $(SRCS:%=$(BUILD)/%.o )
+
 
 # C++ source
 $(BUILD)/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
 	$(CXX) $(CXXFLAGS)  -c $< $(LDFLAGS) -o $@ 
 
-# Assembly source
-$(BUILD)/%.s.o: %.s
-	$(MKDIR_P) $(dir $@)
-	$(AS) $(ASFLAGS) $< -o $@ 
 
 # TESTS
 TEST_DIR= ./tests/compiled

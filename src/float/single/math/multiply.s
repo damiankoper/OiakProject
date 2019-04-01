@@ -173,3 +173,4 @@ single_multiply:
 	popl	%edi
 	popl	%ebp
 	ret
+
