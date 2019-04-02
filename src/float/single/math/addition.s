@@ -148,8 +148,6 @@ SHIFTING_FIRST:
 
 SHIFTING_SECOND:
 
-	xor %ch, %ch	
-
 	cmpb %ch, %dh
 	je SHIFTING_SECOND_EXIT
 
@@ -157,7 +155,7 @@ SHIFTING_SECOND:
 	rcrb $1, %cl
 	rcrb $1, %dl
 
-	movb $1, %ch
+	addb $1, %ch
 	jmp SHIFTING_SECOND
 
 SHIFTING_FIRST_EXIT:	
@@ -183,9 +181,9 @@ SHIFTING_SECOND_EXIT:
 	movb %cl, -0x3(%ebp) # b
 	movb %dl, -0x4(%ebp) # a
 
-	movb 0x13(%ebp), %al # c2 
-	movb 0x12(%ebp), %cl # b2
-	movb 0x11(%ebp), %dl # a2		
+	movb 0x12(%ebp), %al # c2 
+	movb 0x11(%ebp), %cl # b2
+	movb 0x10(%ebp), %dl # a2		
 
 	# przesunięcie dodające ukrytą jedynke
 	shlb $1, %al

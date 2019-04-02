@@ -6,6 +6,8 @@
 using namespace floating;
 
 extern "C" void addition(float *, float, float);
+extern "C" void multiply(float *, float, float);
+extern "C" void subtraction(float *, float, float);
 
 Single Single::abs()
 {
@@ -25,7 +27,7 @@ Single Single::changeSign()
     return result;
 }
 
-Single Single::uglyAddition(Single a, Single b)
+Single Single::singleAddition(Single a, Single b)
 {
 
     Single result3;
@@ -35,6 +37,38 @@ Single Single::uglyAddition(Single a, Single b)
     float z;
 
     addition(&z, y, x);
+
+    result3 = z;
+
+    return result3;
+}
+
+Single Single::singleSubtraction(Single a, Single b)
+{
+
+    Single result3;
+
+    float x = a;
+    float y = b;
+    float z;
+
+    subtraction(&z, y, x);
+
+    result3 = z;
+
+    return result3;
+}
+
+Single Single::singleMultiplication(Single a, Single b)
+{
+
+    Single result3;
+
+    float x = b;
+    float y = a;
+    float z;
+
+    multiply(&z, y, x);
 
     result3 = z;
 

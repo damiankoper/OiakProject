@@ -1,7 +1,7 @@
 #include <cinttypes>
 #include <string>
 
-//extern "C" void addition(float *, float, float);
+//extern "C" void multiply(float *, float, float);
 
 namespace floating
 {
@@ -37,7 +37,9 @@ public:
   Single operator-();
   Single abs();
   Single changeSign();
-  Single uglyAddition(Single, Single);
+  Single singleAddition(Single, Single);
+  Single singleMultiplication(Single, Single);
+  Single singleSubtraction(Single, Single);
   /**
    * Comparison operators
    */

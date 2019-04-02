@@ -1,11 +1,11 @@
 .section .text
-.globl single_multiply
+.globl multiply
 
 # Mantysa ma (razem z niejawną 1) 24 bity = 3 bajty
 # W mnożeniu długość liczby się podwoi (nie licząc liczb nieznormalizowanych),
 # więc trzeba zapisać najbardziej znaczące bity i odjąć przesunięcie (24 bity)
 # od końcowego wykładnika.
-single_multiply:
+multiply:
 	pushl	%ebp
 	pushl	%edi
 	movl	%esp, %ebp

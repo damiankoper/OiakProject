@@ -67,12 +67,54 @@ TEST_CASE("Single addition test", "")
 
         WHEN("addition is made")
         {
-            sum = sum.uglyAddition(a, b);
+            sum = sum.singleAddition(a, b);
 
             THEN("value is correct")
             {
                 Single expected = -1.5_s;
                 REQUIRE((bool)(expected == sum));
+            }
+        }
+    }
+}
+
+TEST_CASE("Single multiplication test", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 4.5_s;
+        Single b = -3.0_s;
+        Single result;
+
+        WHEN("addition is made")
+        {
+            result = result.singleMultiplication(a, b);
+
+            THEN("value is correct")
+            {
+                Single expected = -13.5_s;
+                REQUIRE((bool)(expected == result));
+            }
+        }
+    }
+}
+
+TEST_CASE("Single subtracting test", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = -5.0_s;
+        Single b = 3.0_s;
+        Single result;
+
+        WHEN("addition is made")
+        {
+            result = result.singleSubtraction(a, b);
+
+            THEN("value is correct")
+            {
+                Single expected = -8.0_s;
+                REQUIRE((bool)(expected == result));
             }
         }
     }
