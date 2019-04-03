@@ -69,7 +69,7 @@ TEST_CASE("Single addition test", "")
 
         WHEN("addition is made")
         {
-            sum = sum.singleAddition(a, b);
+            sum = a.add(b);
 
             THEN("value is correct")
             {
@@ -88,9 +88,9 @@ TEST_CASE("Single multiplication test", "")
         Single b = -3.0_s;
         Single result;
 
-        WHEN("addition is made")
+        WHEN("multiplication is made")
         {
-            result = result.singleMultiplication(a, b);
+            result = a.multiply(b);
 
             THEN("value is correct")
             {
@@ -109,9 +109,9 @@ TEST_CASE("Single subtracting test", "")
         Single b = 3.0_s;
         Single result;
 
-        WHEN("addition is made")
+        WHEN("subtraction is made")
         {
-            result = result.singleSubtraction(a, b);
+            result = a.subtract(b);
 
             THEN("value is correct")
             {
@@ -122,12 +122,12 @@ TEST_CASE("Single subtracting test", "")
     }
 }
 
-TEST_CASE("Single squareroot test", "")
+TEST_CASE("Single squareRoot test", "")
 {
     GIVEN("New Single objects")
     {
         Single a = 5.0_s;
-        WHEN("addition is made")
+        WHEN("square root is made")
         {
             a = a.squareRoot();
 

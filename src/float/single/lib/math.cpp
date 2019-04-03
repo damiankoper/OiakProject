@@ -5,17 +5,17 @@
 #include <cinttypes>
 using namespace floating;
 
-extern "C" void addition(float *, float, float);
-extern "C" void multiply(float *, float, float);
-extern "C" void subtraction(float *, float, float);
-extern "C" void squareroot(float *, float);
+extern "C" void single_add(uint32_t *, uint32_t, uint32_t);
+extern "C" void single_mul(uint32_t *, uint32_t, uint32_t);
+extern "C" void single_sub(uint32_t *, uint32_t, uint32_t);
+extern "C" void single_squareRoot(uint32_t *, uint32_t);
 
 Single Single::abs()
 {
     Single result = Single(*this);
     // Set number's 1st bit
     // dddd dddd AND 0111 1111
-    result.d &= 0x7f;
+    result.data.bytes[0] &= 0x7f;
     return result;
 }
 
@@ -24,64 +24,36 @@ Single Single::changeSign()
     Single result = Single(*this);
     // Toggle number's 1st bit
     // dddd dddd XOR 1000 0000
-    result.d ^= 0x80;
+    result.data.bytes[0] ^= 0x80;
     return result;
 }
 
-Single Single::singleAddition(Single a, Single b)
+Single Single::add(Single component)
 {
 
-    Single result3;
-
-    float x = b;
-    float y = a;
-    float z;
-
-    addition(&z, y, x);
-
-    result3 = z;
-
-    return result3;
+    Single result = Single();
+    single_add(&result.data.raw, data.raw, component.data.raw);
+    return result;
 }
 
-Single Single::singleSubtraction(Single a, Single b)
+Single Single::multiply(Single multiplier)
 {
 
-    Single result3;
-
-    float x = a;
-    float y = b;
-    float z;
-
-    subtraction(&z, y, x);
-
-    result3 = z;
-
-    return result3;
+    Single result = Single();
+    single_mul(&result.data.raw, data.raw, multiplier.data.raw);
+    return result;
 }
 
-Single Single::singleMultiplication(Single a, Single b)
+Single Single::subtract(Single subtrahend)
 {
-
-    Single result3;
-
-    float x = b;
-    float y = a;
-    float z;
-
-    multiply(&z, y, x);
-
-    result3 = z;
-
-    return result3;
+    Single result = Single();
+    single_sub(&result.data.raw, data.raw, subtrahend.data.raw);
+    return result;
 }
 
-Single Single::squareRoot()
+Single Single::sqrt()
 {
-    Single result = Single(*this);
-    float x = result;
-    float z;
-    squareroot(&z, x);
-    result = z;
+    Single result = Single();
+    single_squareRoot(&result.data.raw, data.raw);
     return result;
 }

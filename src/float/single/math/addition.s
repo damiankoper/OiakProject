@@ -1,7 +1,7 @@
 .section .text
 .globl addition
 
-addition:
+single_add:
 
 	pushl	%ebp
 	pushl	%edi

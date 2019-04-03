@@ -1,7 +1,7 @@
 .section .text
 .globl subtraction
 
-subtraction:
+single_sub:
 
 	pushl	%ebp
 	pushl	%edi

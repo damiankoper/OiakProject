@@ -17,8 +17,6 @@ public:
   Single(long double longDouble);
   Single(unsigned long long uLongLong);
   Single(const Single &s);
-  Single(uint8_t a, uint8_t b, uint8_t c, uint8_t d)
-      : a(a), b(b), c(c), d(d){};
 
   /**
   * Conversions
@@ -37,10 +35,11 @@ public:
   Single operator-();
   Single abs();
   Single changeSign();
-  Single singleAddition(Single, Single);
-  Single singleMultiplication(Single, Single);
-  Single singleSubtraction(Single, Single);
-  Single squareRoot();
+
+  Single add(Single component);
+  Single multiply(Single multiplier);
+  Single subtract(Single subtrahend);
+  Single sqrt();
   /**
    * Comparison operators
    */
@@ -59,10 +58,15 @@ private:
    * Format: d | dddddddc | cccccccbbbbbbbbaaaaaaaa
    *             exponent
    * Float in memory looks like:
-   * [aaaaaaaabbbbbbbbccccccccdddddddd]
+   * [a       b       c       d       ]
+   * [bytes[0]bytes[1]bytes[2]bytes[3]]
    */
-  uint8_t d = 0, c = 0, b = 0, a = 0;
-  // dać tu unię
+  union Data {
+    uint8_t bytes[4];
+    uint32_t raw;
+    float f;
+  };
+  Data data;
 
   void initFromFloat(float);
 };

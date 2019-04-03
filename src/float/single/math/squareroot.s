@@ -1,7 +1,7 @@
 .section .text
 .globl squareroot
 
-squareroot:
+single_squareRoot:
 
 	pushl	%ebp
 	pushl	%edi

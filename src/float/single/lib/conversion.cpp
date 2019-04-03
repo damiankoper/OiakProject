@@ -5,23 +5,15 @@ using namespace floating;
 
 int Single::toInt()
 {
-    // TODO
-    return 0;
+    return (int)data.f;
 }
 
 float Single::toFloat()
 {
-    float result;
-    // Little endian
-    memcpy(((void *)&result), &a, 1);
-    memcpy(((void *)&result) + 1, &b, 1);
-    memcpy(((void *)&result) + 2, &c, 1);
-    memcpy(((void *)&result) + 3, &d, 1);
-    return result;
+    return data.f;
 }
 
 double Single::toDouble()
 {
-    // TODO
-    return 0;
+    return (double)data.f;
 }

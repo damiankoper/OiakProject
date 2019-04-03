@@ -5,7 +5,7 @@
 # W mnożeniu długość liczby się podwoi (nie licząc liczb nieznormalizowanych),
 # więc trzeba zapisać najbardziej znaczące bity i odjąć przesunięcie (24 bity)
 # od końcowego wykładnika.
-multiply:
+single_mul:
 	pushl	%ebp
 	pushl	%edi
 	movl	%esp, %ebp
