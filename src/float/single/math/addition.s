@@ -55,7 +55,7 @@ CHECK_SIGN_FIRST:
 
 CHECK_SIGN_SECOND:
 
-	movb 0x17(%ebp), %dl
+	movb 0x13(%ebp), %dl
 	shlb $1, %dl
 	jc UJEMNA_SECOND
 	jmp SECOND_EXP
