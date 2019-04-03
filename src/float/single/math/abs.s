@@ -1,6 +1,5 @@
-.section .text
+.text
 .globl single_abs
-
 single_abs:
 # Rejestry EBP, EBX, ESI i EDI muszą zostać zachowane jeśli są używane
 	pushl	%ebp

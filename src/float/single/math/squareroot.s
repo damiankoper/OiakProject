@@ -1,7 +1,7 @@
-.section .text
-.globl squareroot
+.text
+.globl single_sqrt
 
-single_squareRoot:
+single_sqrt:
 
 	pushl	%ebp
 	pushl	%edi

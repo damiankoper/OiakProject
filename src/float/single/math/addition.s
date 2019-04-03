@@ -1,6 +1,5 @@
-.section .text
-.globl addition
-
+.text
+.globl single_add
 single_add:
 
 	pushl	%ebp

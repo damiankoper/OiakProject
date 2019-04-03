@@ -1,5 +1,5 @@
-.section .text
-.globl multiply
+.text
+.globl single_mul
 
 # Mantysa ma (razem z niejawną 1) 24 bity = 3 bajty
 # W mnożeniu długość liczby się podwoi (nie licząc liczb nieznormalizowanych),

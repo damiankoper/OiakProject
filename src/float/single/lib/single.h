@@ -33,17 +33,26 @@ public:
    * Math
    */
   Single operator-();
+  Single operator+(const Single &s);
+  Single operator-(const Single &s);
+  Single operator*(const Single &s);
+  Single operator/(const Single &s);
+  Single operator/(Single);
+
   Single abs();
   Single changeSign();
 
   Single add(Single component);
   Single multiply(Single multiplier);
   Single subtract(Single subtrahend);
+  Single divideBy(Single divisor); // TODO: implement this
+
   Single sqrt();
   /**
    * Comparison operators
    */
   bool operator==(const Single &s);
+  bool operator==(const float &f);
 
   /**
    * Utils, debug, etc.
@@ -58,8 +67,8 @@ private:
    * Format: d | dddddddc | cccccccbbbbbbbbaaaaaaaa
    *             exponent
    * Float in memory looks like:
-   * [a       b       c       d       ]
-   * [bytes[0]bytes[1]bytes[2]bytes[3]]
+   * [d       c       b       a       ]
+   * [bytes[3]bytes[2]bytes[1]bytes[1]]
    */
   union Data {
     uint8_t bytes[4];

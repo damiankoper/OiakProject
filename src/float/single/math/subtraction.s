@@ -1,6 +1,5 @@
-.section .text
-.globl subtraction
-
+.text
+.globl single_sub
 single_sub:
 
 	pushl	%ebp
