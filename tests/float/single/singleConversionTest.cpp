@@ -1,6 +1,8 @@
 #define CATCH_CONFIG_MAIN
 #include "../../catch/catch.hpp"
 #include "../../../src/float/single/lib/single.h"
+#include <cmath>
+
 using namespace floating;
 using namespace floating::literal;
 TEST_CASE("Single init test", "")
@@ -115,6 +117,24 @@ TEST_CASE("Single subtracting test", "")
             {
                 Single expected = -8.0_s;
                 REQUIRE((bool)(expected == result));
+            }
+        }
+    }
+}
+
+TEST_CASE("Single squareroot test", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 5.0_s;
+        WHEN("addition is made")
+        {
+            a = a.squareRoot();
+
+            THEN("value is correct")
+            {
+                Single expected = 2.23606777f;
+                REQUIRE((bool)(expected == a));
             }
         }
     }

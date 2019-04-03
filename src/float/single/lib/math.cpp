@@ -8,6 +8,7 @@ using namespace floating;
 extern "C" void addition(float *, float, float);
 extern "C" void multiply(float *, float, float);
 extern "C" void subtraction(float *, float, float);
+extern "C" void squareroot(float *, float);
 
 Single Single::abs()
 {
@@ -73,4 +74,14 @@ Single Single::singleMultiplication(Single a, Single b)
     result3 = z;
 
     return result3;
+}
+
+Single Single::squareRoot()
+{
+    Single result = Single(*this);
+    float x = result;
+    float z;
+    squareroot(&z, x);
+    result = z;
+    return result;
 }

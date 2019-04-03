@@ -40,6 +40,7 @@ public:
   Single singleAddition(Single, Single);
   Single singleMultiplication(Single, Single);
   Single singleSubtraction(Single, Single);
+  Single squareRoot();
   /**
    * Comparison operators
    */
