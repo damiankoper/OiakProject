@@ -67,7 +67,7 @@ private:
    *             exponent
    * Float in memory looks like:
    * [d       c       b       a       ]
-   * [bytes[3]bytes[2]bytes[1]bytes[1]]
+   * [bytes[3]bytes[2]bytes[1]bytes[0]]
    */
   union Data {
     uint8_t bytes[4];
