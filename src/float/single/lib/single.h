@@ -37,7 +37,6 @@ public:
   Single operator-(const Single &s);
   Single operator*(const Single &s);
   Single operator/(const Single &s);
-  Single operator/(Single);
 
   Single abs();
   Single changeSign();
