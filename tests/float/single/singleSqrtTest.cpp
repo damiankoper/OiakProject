@@ -3,7 +3,7 @@
 using namespace floating;
 using namespace floating::literal;
 
-TEST_CASE("Single squareRoot test", "")
+TEST_CASE("Square root 1", "")
 {
     GIVEN("New Single objects")
     {

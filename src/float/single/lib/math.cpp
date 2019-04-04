@@ -39,7 +39,7 @@ Single Single::add(Single component)
 Single Single::subtract(Single subtrahend)
 {
     Single result = Single();
-    single_sub(&result.data.raw, data.raw, subtrahend.data.raw);
+    single_add(&result.data.raw, changeSign().data.raw, subtrahend.data.raw);
     return result;
 }
 

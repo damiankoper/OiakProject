@@ -3,7 +3,7 @@
 using namespace floating;
 using namespace floating::literal;
 
-TEST_CASE("Single subtraction test", "")
+TEST_CASE("Subtraction 1", "")
 {
     GIVEN("New Single objects")
     {

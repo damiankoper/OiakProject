@@ -5,7 +5,7 @@
 
 using namespace floating;
 using namespace floating::literal;
-TEST_CASE("Single init test", "")
+TEST_CASE("Init", "")
 {
     GIVEN("New Single object")
     {
@@ -29,7 +29,7 @@ TEST_CASE("Single init test", "")
     }
 }
 
-TEST_CASE("Single conversion test", "")
+TEST_CASE("Conversion", "")
 {
     GIVEN("Single object")
     {
