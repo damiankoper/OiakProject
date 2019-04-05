@@ -1,10 +1,34 @@
 .text
 .globl simple_sub
-# A - liczba 8b w rejestrach %ah, %al, %bh, %bl
-# B - liczba 8b w rejestrach %ch, %cl, %dh, %dl
-# Wynik tam gdzie A
+# simple_add(int8* A, int8* B)
+# A = A - B
+# a0a1a2a3 = a0a1a2a3 - b0b1b2b3
 simple_sub:
-  subb %dl, %bl
-  sbbb %dh, %bh
-  sbbb %cl, %al
-  sbbb %ch, %ah
+  pushl	%ebp
+	movl	%esp, %ebp
+
+  # Wskaźniki na składniki są na stosie 
+  mov 8(%ebp), %eax
+  mov 12(%ebp), %ebx
+
+  # Index bajta
+  # Dodawania a3 = a3 + b3
+  mov $0, %ecx
+  movb (%ebx, %ecx, 1), %dl
+  subb %dl, (%eax, %ecx, 1)
+
+  inc %ecx
+  movb (%ebx, %ecx, 1), %dl
+  sbbb %dl, (%eax, %ecx, 1)
+
+  inc %ecx
+  movb (%ebx, %ecx, 1), %dl
+  sbbb %dl, (%eax, %ecx, 1)
+
+  inc %ecx
+  movb (%ebx, %ecx, 1), %dl
+  sbbb %dl, (%eax, %ecx, 1)
+
+	movl	%ebp, %esp
+	popl	%ebp
+	ret $8
