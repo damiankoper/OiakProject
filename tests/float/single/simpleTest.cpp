@@ -4,6 +4,7 @@
 extern "C" void simple_add(int32_t *, int32_t *);
 extern "C" void simple_sub(int32_t *, int32_t *);
 extern "C" void simple_mul(int32_t *, int32_t *);
+extern "C" void simple_div(int32_t *, int32_t *);
 extern "C" void simple_shiftR(int32_t *, int8_t);
 extern "C" void simple_shiftL(int32_t *, int8_t);
 extern "C" void simple_shiftL_64(int32_t *, int8_t);
@@ -211,6 +212,24 @@ TEST_CASE("Simple mul test", "")
             {
                 REQUIRE(a == 0x14B66);
                 REQUIRE(b == 0xDAFAAF71);
+            }
+        }
+    }
+}
+
+TEST_CASE("Simple div test", "")
+{
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 8;
+        int32_t b = 4;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 2);
+                REQUIRE(b == 0);
             }
         }
     }

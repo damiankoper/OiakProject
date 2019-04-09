@@ -4,6 +4,7 @@
 simple_shiftL:
   pushl	%ebp
 	movl	%esp, %ebp
+  pusha
 
   # Wskaźnik na składnik jest na stosie
   mov 8(%ebp), %eax
@@ -34,6 +35,7 @@ simple_shiftL:
     
     loop timesLoop
 
+  popa
 	movl	%ebp, %esp
 	popl	%ebp
 	ret $8

@@ -6,6 +6,7 @@
 simple_add:
   pushl	%ebp
 	movl	%esp, %ebp
+  pusha
 
   # Wskaźniki na składniki są na stosie 
   mov 8(%ebp), %eax
@@ -29,6 +30,7 @@ simple_add:
   movb (%ebx, %ecx, 1), %dl
   adcb %dl, (%eax, %ecx, 1)
   
+  popa
 	movl	%ebp, %esp
 	popl	%ebp
 	ret $8

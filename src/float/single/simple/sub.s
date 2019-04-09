@@ -6,13 +6,14 @@
 simple_sub:
   pushl	%ebp
 	movl	%esp, %ebp
+  pusha
 
   # Wskaźniki na składniki są na stosie 
   mov 8(%ebp), %eax
   mov 12(%ebp), %ebx
 
   # Index bajta
-  # Dodawania a3 = a3 + b3
+  # Odejmowanie a3 = a3 - b3
   mov $0, %ecx
   movb (%ebx, %ecx, 1), %dl
   subb %dl, (%eax, %ecx, 1)
@@ -29,6 +30,7 @@ simple_sub:
   movb (%ebx, %ecx, 1), %dl
   sbbb %dl, (%eax, %ecx, 1)
 
+  popa
 	movl	%ebp, %esp
 	popl	%ebp
 	ret $8
