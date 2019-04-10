@@ -1,5 +1,5 @@
 .bss 
-  result: .space 4
+  div_result: .space 4
 .text
 .globl simple_div
 # Tylko liczby dodatnie
@@ -22,13 +22,13 @@ simple_div:
   # jeśli tak to wynik = 0, reszta = A
 
   mov $0, %edi
-  movb $0, result(,%edi,1)
+  movb $0, div_result(,%edi,1)
   inc %edi
-  movb $0, result(,%edi,1)
+  movb $0, div_result(,%edi,1)
   inc %edi
-  movb $0, result(,%edi,1)
+  movb $0, div_result(,%edi,1)
   inc %edi
-  movb $0, result(,%edi,1)
+  movb $0, div_result(,%edi,1)
 
   # Skalujemy A razem z B
   scaleLoopA:
@@ -70,6 +70,7 @@ simple_div:
 
   divLoop:
     push %ecx
+
     # Sprawdzamy zgodność znaków 
     movb (%ebx, %edi, 1), %al
     andb $0x80, %al  
@@ -98,21 +99,31 @@ simple_div:
 
         # Wstawianie 1 na końcu wyniku
         mov $0, %edi
-        movb result(,%edi,1), %al
+        movb div_result(,%edi,1), %al
         orb $0x01, %al
-        movb $0x32, result
+        movb %al, div_result
         mov $3, %edi
     addsubEnd:
 
     # Przesuwanie wyniku w lewo o 1
     push $1
-    push $result
+    push $div_result
     call simple_shiftL
 
     pop %ecx
     loop divLoop  
 
+  # Kopiujemy wynik
+  mov $3, %ecx
+  div_result_loop:
+    movb div_result(,%ecx,1), %al
+    movb %al, (%ebx, %ecx, 1)
+    dec %ecx
+    cmp $-1, %ecx
+    jne div_result_loop
 
+  # TODO: kopiowanie reszty
+ 
   popa
 	movl %ebp, %esp
 	popl %ebp

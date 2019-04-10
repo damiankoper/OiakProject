@@ -1,7 +1,7 @@
 .data 
-  result: .long 0
+  mul_result: .long 0
           .long 0
-  buffer: .long 0
+  mul_buffer: .long 0
           .long 0
 .text
 .globl simple_mul
@@ -19,7 +19,7 @@ simple_mul:
   # A: 1 2 3 4
   # B: A B C D
 
-  call simple_mul_clearResult
+  call simple_mul_clearmul_result
 
   # Pętla iterująca po B
   mov $0, %esi
@@ -37,16 +37,16 @@ simple_mul:
       # Wstawianie wyniku już na odpowiednie miejsce bufora (z przesunięciem)
       add %si, %di
       mov %edi, %edx
-      movb %al, buffer(,%edx,1)
+      movb %al, mul_buffer(,%edx,1)
       inc %edx
-      movb %ah, buffer(,%edx,1)
+      movb %ah, mul_buffer(,%edx,1)
 
       # Dodanie bufora do wyniku
-      pushl $buffer
-      pushl $result
+      pushl $mul_buffer
+      pushl $mul_result
       call simple_add_64
 
-      call simple_mul_clearBuffer
+      call simple_mul_clearmul_buffer
 
       pop %edi
       inc %di
@@ -56,29 +56,29 @@ simple_mul:
     inc %si
     cmp $4, %si
     jne simple_mul_outerLoop
-
-  # Wpisywanie wyniku pod wskażniki z argumentów z adresu 'result'
+  
+  # Wpisywanie wyniku pod wskażniki z argumentów z adresu 'mul_result'
   # Część wyższa
   mov $0, %eax
-  simple_mul_resultLoop1:
-    movb result(,%eax,1), %dl
+  simple_mul_mul_resultLoop1:
+    movb mul_result(,%eax,1), %dl
     movb %edx, (%ecx, %eax, 1)
 
     inc %eax
     cmp $4, %eax
-    jne simple_mul_resultLoop1
+    jne simple_mul_mul_resultLoop1
 
   # Część niższa
   mov $4, %eax
   mov $0, %ecx
-  simple_mul_resultLoop2:
-    movb result(, %eax, 1), %dl
+  simple_mul_mul_resultLoop2:
+    movb mul_result(, %eax, 1), %dl
     movb %dl, (%ebx, %ecx, 1)
 
     inc %ecx
     inc %eax
     cmp $8, %eax
-    jne simple_mul_resultLoop2
+    jne simple_mul_mul_resultLoop2
 
   popa
 	movl %ebp, %esp
@@ -87,27 +87,27 @@ simple_mul:
 
 
 # Mali pomocnicy do czyszczenia buforów
-simple_mul_clearBuffer:
+simple_mul_clearmul_buffer:
   pusha
   mov $8, %ecx
 
-  simple_mul_clearBufferLoop:
+  simple_mul_clearmul_bufferLoop:
     dec %ecx
-    movb $0, buffer(,%ecx,1)
+    movb $0, mul_buffer(,%ecx,1)
     inc %ecx
-    loop simple_mul_clearBufferLoop
+    loop simple_mul_clearmul_bufferLoop
   popa
   ret
 
-simple_mul_clearResult:
+simple_mul_clearmul_result:
   pusha
   mov $8, %ecx
 
-  simple_mul_clearResultLoop:
+  simple_mul_clearmul_resultLoop:
     dec %ecx
-    movb $0, result(,%ecx,1)
+    movb $0, mul_result(,%ecx,1)
     inc %ecx
-    loop simple_mul_clearResultLoop
+    loop simple_mul_clearmul_resultLoop
   popa
   ret
   
