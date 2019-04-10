@@ -221,14 +221,29 @@ TEST_CASE("Simple div test", "")
 {
     GIVEN("Raw uint32")
     {
-        int32_t a = 100;
-        int32_t b = 5;
+        int32_t a = 150;
+        int32_t b = 3;
         WHEN("division is made")
         {
             simple_div(&a, &b);
             THEN("value is correct")
             {
-                REQUIRE(a == 20);
+                REQUIRE(a == 50);
+                //REQUIRE(b == 0);
+            }
+        }
+    }
+
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 150;
+        int32_t b = 3;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 50);
                 //REQUIRE(b == 0);
             }
         }

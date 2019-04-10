@@ -1,3 +1,5 @@
+.data
+  firstTime: .byte 1
 .bss 
   div_result: .space 4
 .text
@@ -29,6 +31,7 @@ simple_div:
   movb $0, div_result(,%edi,1)
   inc %edi
   movb $0, div_result(,%edi,1)
+  movb $1, firstTime
 
   # Skalujemy A razem z B
   scaleLoopA:
@@ -62,12 +65,21 @@ simple_div:
     jmp scaleLoopB
     scaleLoopBEnd:
 
-  # Dzielenie nieodtwarzające
+  # Porównanie i korekcja skalowania
+  movb (%ebx, %edi, 1), %ah
+  movb (%edx, %edi, 1), %al
+  cmpb %al, %ah
+  jae div_continue
 
-    push %edx
-    push %ebx
-    call simple_sub
+  push $1
+  push %edx
+  call simple_shiftR
+  decb %cl
+  div_continue:
 
+  inc %ecx
+  cmp $0, %ecx
+  je divLoopEnd
   divLoop:
     push %ecx
 
@@ -76,42 +88,48 @@ simple_div:
     andb $0x80, %al  
     movb (%edx, %edi, 1), %cl  
     andb $0x80, %cl  
-    pushf # zachowanie flag 
-
-    push $1
-    push %ebx
-    call simple_shiftL
-
-    popf # przywrócenie flag
     cmpb %al, %cl
+    pushf
+
+    jne div_bit_zero
+      # Wstawianie 1 na końcu wyniku jeśli znaki zgodne
+      call setResultFirstBit
+    div_bit_zero:
+
+    cmpb $1, firstTime
+    je notFirstTime
+      push $1
+      push %ebx
+      call simple_shiftL
+
+      # Przesuwanie wyniku w lewo o 1
+      push $1
+      push $div_result
+      call simple_shiftL
+    notFirstTime:
+    movb $0, firstTime
+
+
+    popf
     je subR
     jne addR
 
     addR:
-        push %ebx
-        push %edx
-        call simple_add
-        jmp addsubEnd
-    subR:
-        push %edx
-        push %ebx
-        call simple_sub
+      push %edx
+      push %ebx
+      call simple_add
+      jmp addsubEnd
 
-        # Wstawianie 1 na końcu wyniku
-        mov $0, %edi
-        movb div_result(,%edi,1), %al
-        orb $0x01, %al
-        movb %al, div_result
-        mov $3, %edi
+    subR:
+      push %edx
+      push %ebx
+      call simple_sub
     addsubEnd:
 
-    # Przesuwanie wyniku w lewo o 1
-    push $1
-    push $div_result
-    call simple_shiftL
-
+    clc
     pop %ecx
-    loop divLoop  
+    loop divLoop
+  divLoopEnd:
 
   # Kopiujemy wynik
   mov $3, %ecx
@@ -128,3 +146,13 @@ simple_div:
 	movl %ebp, %esp
 	popl %ebp
 	ret $8
+
+
+setResultFirstBit:
+  mov $0, %edi
+  movb div_result(,%edi,1), %al
+  orb $0x01, %al
+  movb %al, div_result
+  mov $3, %edi
+
+  ret
