@@ -16,7 +16,7 @@ simple_add:
   # Dodawania a3 = a3 + b3
   mov $0, %ecx
   movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  addb %dl, (%eax, %ecx, 1)
 
   inc %ecx
   movb (%ebx, %ecx, 1), %dl

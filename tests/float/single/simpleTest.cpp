@@ -221,30 +221,102 @@ TEST_CASE("Simple div test", "")
 {
     GIVEN("Raw uint32")
     {
-        int32_t a = 150;
+        int32_t a = 16;
+        int32_t b = 9;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 1);
+                REQUIRE(b == 7);
+            }
+        }
+    }
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 16;
+        int32_t b = 5;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 3);
+                REQUIRE(b == 1);
+            }
+        }
+    }
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 100000000;
+        int32_t b = 100;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 1000000);
+                REQUIRE(b == 0);
+            }
+        }
+    }
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 123;
         int32_t b = 3;
         WHEN("division is made")
         {
             simple_div(&a, &b);
             THEN("value is correct")
             {
-                REQUIRE(a == 50);
-                //REQUIRE(b == 0);
+                REQUIRE(a == 41);
+                REQUIRE(b == 0);
             }
         }
     }
 
     GIVEN("Raw uint32")
     {
-        int32_t a = 150;
+        int32_t a = 125;
         int32_t b = 3;
         WHEN("division is made")
         {
             simple_div(&a, &b);
             THEN("value is correct")
             {
-                REQUIRE(a == 50);
-                //REQUIRE(b == 0);
+                REQUIRE(a == 41);
+                REQUIRE(b == 2);
+            }
+        }
+    }
+
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 123457;
+        int32_t b = 3;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 41152);
+                REQUIRE(b == 1);
+            }
+        }
+    }
+
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 7999999;
+        int32_t b = 123456;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 64);
+                REQUIRE(b == 98815);
             }
         }
     }

@@ -1,5 +1,6 @@
 .data
   firstTime: .byte 1
+  xShift: .byte 0
 .bss 
   div_result: .space 4
 .text
@@ -32,14 +33,16 @@ simple_div:
   inc %edi
   movb $0, div_result(,%edi,1)
   movb $1, firstTime
+  movb $0, xShift
 
   # Skalujemy A razem z B
   scaleLoopA:
     movb (%ebx, %edi, 1), %al
-    andb $0x40, %al
-    cmpb $0x40, %al
+    andb $0x20, %al
+    cmpb $0x20, %al
     je scaleLoopAEnd
 
+    incb xShift
     pushl $1
     pushl %ebx
     call simple_shiftL
@@ -54,10 +57,11 @@ simple_div:
   xor %ecx, %ecx
   scaleLoopB:
     movb (%edx, %edi, 1), %al
-    andb $0x40, %al
-    cmpb $0x40, %al
+    andb $0x20, %al
+    cmpb $0x20, %al
     je scaleLoopBEnd
 
+    incb xShift
     push $1
     push %edx
     call simple_shiftL
@@ -66,35 +70,32 @@ simple_div:
     scaleLoopBEnd:
 
   # Porównanie i korekcja skalowania
-  movb (%ebx, %edi, 1), %ah
-  movb (%edx, %edi, 1), %al
-  cmpb %al, %ah
-  jae div_continue
-
-  push $1
-  push %edx
-  call simple_shiftR
-  decb %cl
+  mov $3, %edi
+  div_cmpLoop:
+    movb (%ebx, %edi, 1), %ah
+    movb (%edx, %edi, 1), %al
+    cmpb %al, %ah
+    jb div_adjust_scale
+    ja div_continue
+    dec %edi
+    cmp $-1, %edi
+    jne div_cmpLoop
+  div_adjust_scale:
+    decb xShift
+    push $1
+    push %edx
+    call simple_shiftR
+    decb %cl
   div_continue:
-
+  
   inc %ecx
   cmp $0, %ecx
   je divLoopEnd
+  mov $3, %edi
   divLoop:
     push %ecx
-
-    # Sprawdzamy zgodność znaków 
-    movb (%ebx, %edi, 1), %al
-    andb $0x80, %al  
-    movb (%edx, %edi, 1), %cl  
-    andb $0x80, %cl  
-    cmpb %al, %cl
-    pushf
-
-    jne div_bit_zero
-      # Wstawianie 1 na końcu wyniku jeśli znaki zgodne
-      call setResultFirstBit
-    div_bit_zero:
+  
+    call compareAndAddBit
 
     cmpb $1, firstTime
     je notFirstTime
@@ -109,8 +110,7 @@ simple_div:
     notFirstTime:
     movb $0, firstTime
 
-
-    popf
+    call compare
     je subR
     jne addR
 
@@ -131,6 +131,31 @@ simple_div:
     loop divLoop
   divLoopEnd:
 
+  call compareAndAddBit
+
+  # Przywracamy resztę
+  movb (%ebx, %edi, 1), %al
+  andb $0x80, %al  
+  cmpb $0x80, %al 
+  jne div_reminder_gt_zero
+    push %edx
+    push %ebx
+    call simple_add
+  div_reminder_gt_zero:
+
+  push xShift
+  push %ebx
+  call simple_shiftR
+
+  # Kopiujemy resztę
+  mov $3, %ecx
+  div_reminder_loop:
+    movb (%ebx,%ecx,1), %al
+    movb %al, (%edx, %ecx, 1)
+    dec %ecx
+    cmp $-1, %ecx
+    jne div_reminder_loop
+
   # Kopiujemy wynik
   mov $3, %ecx
   div_result_loop:
@@ -140,13 +165,23 @@ simple_div:
     cmp $-1, %ecx
     jne div_result_loop
 
-  # TODO: kopiowanie reszty
+
  
   popa
 	movl %ebp, %esp
 	popl %ebp
 	ret $8
 
+
+###################### END
+
+compareAndAddBit:
+  call compare
+  jne div_bit_zero
+    # Wstawianie 1 na końcu wyniku jeśli znaki zgodne
+    call setResultFirstBit
+  div_bit_zero:
+  ret
 
 setResultFirstBit:
   mov $0, %edi
@@ -155,4 +190,13 @@ setResultFirstBit:
   movb %al, div_result
   mov $3, %edi
 
+  ret
+
+compare:
+  # Sprawdzamy zgodność znaków 
+  movb (%ebx, %edi, 1), %al
+  andb $0x80, %al  
+  movb (%edx, %edi, 1), %cl  
+  andb $0x80, %cl  
+  cmpb %al, %cl
   ret
