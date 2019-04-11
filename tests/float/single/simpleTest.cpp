@@ -134,7 +134,7 @@ TEST_CASE("Simple shiftL test", "")
             simple_shiftL(&a, 4);
             THEN("value is correct")
             {
-                REQUIRE(a == 0x0000000f);
+                REQUIRE(a == 0x00000f00);
             }
         }
     }
@@ -147,7 +147,7 @@ TEST_CASE("Simple shiftL test", "")
             simple_shiftL(&a, 8);
             THEN("value is correct")
             {
-                REQUIRE(a == 0x00f00000);
+                REQUIRE(a == 0x00000000);
             }
         }
     }

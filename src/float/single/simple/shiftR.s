@@ -9,9 +9,9 @@ simple_shiftR:
   # Wskaźnik na składnik jest na stosie
   mov 8(%ebp), %eax
   mov 12(%ebp), %ecx # ile razy
-  clc
 
   timesLoop:
+    clc
     # Index bajta
     mov $3, %edx
     movb (%eax, %edx, 1), %bl

@@ -12,8 +12,8 @@ simple_shiftL_64:
   cmp $0, %ecx
   je shilfL_64_exit
 
-  clc
   timesLoop:
+    clc
     # Index bajta
     mov $0, %edx
     movb (%eax, %edx, 1), %bl
