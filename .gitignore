@@ -2,3 +2,4 @@ build
 build/**/*
 main.out
 ipch
+tests/compiled/**/*
