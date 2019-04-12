@@ -21,9 +21,6 @@ simple_div:
   # A: 1 2 3 4
   # B: A B C D
 
-  # TODO: Tutaj porównać czy A < B
-  # jeśli tak to wynik = 0, reszta = A
-
   mov $0, %edi
   movb $0, div_result(,%edi,1)
   inc %edi
@@ -34,6 +31,42 @@ simple_div:
   movb $0, div_result(,%edi,1)
   movb $1, firstTime
   movb $0, xShift
+
+  # Sprawdzenie czy A < B
+  mov $3, %edi
+  div_cmpZeroLoop:
+    movb (%ebx, %edi, 1), %ah
+    movb (%edx, %edi, 1), %al
+    cmpb %al, %ah
+    ja div_ZeroContinue
+    je div_ZeroIf
+
+    # Kopiujemy resztę
+    mov $3, %ecx
+    div_result_zero_loop1:
+      movb (%ebx, %ecx, 1), %al
+      movb %al, (%edx, %ecx, 1)
+      dec %ecx
+      cmp $-1, %ecx
+      jne div_result_zero_loop1
+
+    # Kopiujemy wynik
+    mov $3, %ecx
+    div_result_zero_loop2:
+      movb $0, (%ebx, %ecx, 1)
+      dec %ecx
+      cmp $-1, %ecx
+      jne div_result_zero_loop2
+
+    jmp divEnd
+
+    div_ZeroIf:
+
+    dec %edi
+    cmp $-1, %edi
+    jne div_cmpZeroLoop
+  div_ZeroContinue:
+  mov $3, %edi
 
   # Skalujemy A razem z B
   scaleLoopA:
@@ -76,7 +109,7 @@ simple_div:
     movb (%edx, %edi, 1), %al
     cmpb %al, %ah
     jb div_adjust_scale
-    ja div_continue
+    jae div_continue
     dec %edi
     cmp $-1, %edi
     jne div_cmpLoop
@@ -165,7 +198,7 @@ simple_div:
     cmp $-1, %ecx
     jne div_result_loop
 
-
+  divEnd:
  
   popa
 	movl %ebp, %esp
