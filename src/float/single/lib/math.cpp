@@ -5,7 +5,7 @@
 #include <cinttypes>
 using namespace floating;
 
-extern "C" void single_add_2(uint32_t *, uint32_t, uint32_t);
+extern "C" void single_add(uint32_t *, uint32_t, uint32_t);
 extern "C" void single_mul(uint32_t *, uint32_t, uint32_t);
 extern "C" void single_sub(uint32_t *, uint32_t, uint32_t);
 extern "C" void single_sqrt(uint32_t *, uint32_t);
@@ -32,14 +32,14 @@ Single Single::add(Single component)
 {
 
     Single result = Single();
-    single_add_2(&result.data.raw, data.raw, component.data.raw);
+    single_add(&result.data.raw, data.raw, component.data.raw);
     return result;
 }
 
 Single Single::subtract(Single subtrahend)
 {
     Single result = Single();
-    single_add_2(&result.data.raw, changeSign().data.raw, subtrahend.data.raw);
+    single_add(&result.data.raw, changeSign().data.raw, subtrahend.data.raw);
     return result;
 }
 
