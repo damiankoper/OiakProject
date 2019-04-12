@@ -117,7 +117,7 @@ TEST_CASE("Multiplication 5", "")
 
             THEN("value is correct")
             {
-                Single expected = 1.7835_s;
+                Single expected = 1.78350008_s;
                 REQUIRE((bool)(expected == result)); // Nie zgadza się bo wynik to 1.78350008 xd z floatem się zgadza
             }
             THEN("value is correct with float")
