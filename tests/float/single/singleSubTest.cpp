@@ -14,7 +14,7 @@ TEST_CASE("Subtraction 1", "")
         {
             Single result = b.subtract(a);
 
-            /* THEN("value is correct")
+            THEN("value is correct")
             {
                 Single expected = -8.0_s;
                 REQUIRE((bool)(expected == result));
@@ -23,7 +23,7 @@ TEST_CASE("Subtraction 1", "")
             THEN("value is correct with float")
             {
                 REQUIRE((bool)(result == -8.0f));
-            } */
+            }
         }
     }
 }

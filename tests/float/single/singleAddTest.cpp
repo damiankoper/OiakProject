@@ -104,3 +104,27 @@ TEST_CASE("Addition 4 - minus infinity", "")
         }
     }
 }
+
+TEST_CASE("Addition 5", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 0.123_s;
+        Single b = 0.123_s;
+
+        WHEN("addition is made")
+        {
+            Single sum = a + b;
+
+            THEN("value is correct with float")
+            {
+                REQUIRE(sum.toFloat() == 0.246f);
+            }
+            THEN("reverse action gives same result")
+            {
+                Single reverse = b + a;
+                REQUIRE((bool)(b + a == sum));
+            }
+        }
+    }
+}
