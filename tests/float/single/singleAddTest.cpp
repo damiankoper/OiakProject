@@ -128,3 +128,99 @@ TEST_CASE("Addition 5", "")
         }
     }
 }
+
+TEST_CASE("Addition 6", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 2137.1337_s;
+        Single b = 20456.666_s;
+
+        WHEN("addition is made")
+        {
+            Single sum = a + b;
+
+            THEN("value is correct with float")
+            {
+                REQUIRE(sum.toFloat() == 22593.7997f);
+            }
+            THEN("reverse action gives same result")
+            {
+                Single reverse = b + a;
+                REQUIRE((bool)(b + a == sum));
+            }
+        }
+    }
+}
+
+TEST_CASE("Addition 7", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 21337.1337_s;
+        Single b = 20456.666_s;
+
+        WHEN("addition is made")
+        {
+            Single sum = a + b;
+
+            THEN("value is correct with float")
+            {
+                REQUIRE(sum.toFloat() == 41793.7997f);
+            }
+            THEN("reverse action gives same result")
+            {
+                Single reverse = b + a;
+                REQUIRE((bool)(b + a == sum));
+            }
+        }
+    }
+}
+
+TEST_CASE("Addition 8", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 2.111_s;
+        Single b = 2.666_s;
+
+        WHEN("addition is made")
+        {
+            Single sum = a + b;
+
+            THEN("value is correct with float")
+            {
+                REQUIRE(sum.toFloat() == 4.111f);
+            }
+            THEN("reverse action gives same result")
+            {
+                Single reverse = b + a;
+                REQUIRE((bool)(b + a == sum));
+            }
+        }
+    }
+}
+
+TEST_CASE("Addition 9", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 2_s;
+        Single b = 2.1_s;
+
+        WHEN("addition is made")
+        {
+            Single sum = a + b;
+
+            THEN("value is correct with float")
+            {
+                REQUIRE(sum.toFloat() == 4.2f);
+            }
+            THEN("reverse action gives same result")
+            {
+                Single reverse = b + a;
+                REQUIRE((bool)(b + a == sum));
+            }
+        }
+    }
+}
