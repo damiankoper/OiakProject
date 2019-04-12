@@ -1,6 +1,7 @@
 #include "../../catch/catch.hpp"
 #include "../../../src/float/single/lib/single.h"
 #include <limits>
+#include <cfenv>
 using namespace floating;
 using namespace floating::literal;
 
@@ -166,7 +167,7 @@ TEST_CASE("Addition 7", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == 41793.7997f);
+                REQUIRE(sum.toFloat() == 21337.1337f + 20456.666f);
             }
             THEN("reverse action gives same result")
             {
@@ -190,7 +191,7 @@ TEST_CASE("Addition 8", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == 4.111f);
+                REQUIRE(sum.toFloat() == 4.777f);
             }
             THEN("reverse action gives same result")
             {
@@ -214,7 +215,7 @@ TEST_CASE("Addition 9", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == 4.2f);
+                REQUIRE(sum.toFloat() == 4.1f);
             }
             THEN("reverse action gives same result")
             {

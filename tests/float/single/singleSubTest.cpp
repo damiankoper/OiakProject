@@ -3,6 +3,10 @@
 using namespace floating;
 using namespace floating::literal;
 
+/**
+ * Subtraction is basically addition with changed sign, no more tests required 
+ */
+
 TEST_CASE("Subtraction 1", "")
 {
     GIVEN("New Single objects")

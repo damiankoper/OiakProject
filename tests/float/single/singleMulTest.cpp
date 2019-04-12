@@ -1,5 +1,7 @@
 #include "../../catch/catch.hpp"
 #include "../../../src/float/single/lib/single.h"
+#include <cfenv>
+
 using namespace floating;
 using namespace floating::literal;
 
@@ -118,11 +120,70 @@ TEST_CASE("Multiplication 5", "")
             THEN("value is correct")
             {
                 Single expected = 1.78350008_s;
-                REQUIRE((bool)(expected == result)); // Nie zgadza się bo wynik to 1.78350008 xd z floatem się zgadza
+                REQUIRE((bool)(expected == result));
             }
             THEN("value is correct with float")
             {
                 REQUIRE((bool)(result == 1.23f * 1.45f));
+            }
+            THEN("reverse action gives same result")
+            {
+                Single reverse = b * a;
+                REQUIRE((bool)(b * a == result));
+            }
+        }
+    }
+}
+
+TEST_CASE("Multiplication 6", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 11111.11_s;
+        Single b = 22222.22_s;
+
+        WHEN("multiplication is made")
+        {
+            Single result = a * b;
+
+            THEN("value is correct")
+            {
+                Single expected = 246913530.8642_s;
+                REQUIRE((bool)(expected == result));
+            }
+            THEN("value is correct with float")
+            {
+                int roundingMode = std::fegetround();
+                std::fesetround(FE_TOWARDZERO); // Tu faktycznie widać zaokrąglanie
+                REQUIRE(result.toFloat() == a.toFloat() * b.toFloat());
+                std::fesetround(roundingMode);
+            }
+            THEN("reverse action gives same result")
+            {
+                Single reverse = b * a;
+                REQUIRE((bool)(b * a == result));
+            }
+        }
+    }
+}
+
+TEST_CASE("Multiplication 7", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = 0.445621_s;
+        Single b = -2.34576_s;
+
+        WHEN("multiplication is made")
+        {
+            Single result = a * b;
+
+            THEN("value is correct with float")
+            {
+                int roundingMode = std::fegetround();
+                std::fesetround(FE_TOWARDZERO); // Tu faktycznie widać zaokrąglanie
+                REQUIRE(result.toFloat() == a.toFloat() * b.toFloat());
+                std::fesetround(roundingMode);
             }
             THEN("reverse action gives same result")
             {
