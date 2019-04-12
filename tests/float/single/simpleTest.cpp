@@ -221,18 +221,34 @@ TEST_CASE("Simple div test", "")
 {
     GIVEN("Raw uint32")
     {
-        int32_t a = 16;
-        int32_t b = 9;
+        int32_t a = 0b100000000000000000000000;
+        int32_t b = 0b100000000000000000000000;
         WHEN("division is made")
         {
             simple_div(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 1);
-                REQUIRE(b == 7);
+                REQUIRE(b == 0);
             }
         }
     }
+
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 0b000000000000000010010000;
+        int32_t b = 0b000000000000000010010000;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 1);
+                REQUIRE(b == 0);
+            }
+        }
+    }
+
     GIVEN("Raw uint32")
     {
         int32_t a = 16;
@@ -317,6 +333,23 @@ TEST_CASE("Simple div test", "")
             {
                 REQUIRE(a == 64);
                 REQUIRE(b == 98815);
+            }
+        }
+    }
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 123456;
+        int32_t b = 7999999;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 0);
+            }
+            THEN("value is correct")
+            {
+                REQUIRE(b == 123456);
             }
         }
     }

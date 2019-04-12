@@ -1,5 +1,7 @@
 #include "../../catch/catch.hpp"
 #include "../../../src/float/single/lib/single.h"
+#include <cfenv>
+
 using namespace floating;
 using namespace floating::literal;
 
@@ -46,8 +48,11 @@ TEST_CASE("Square root 2", "")
             // TODO: rounding mode
             THEN("value is correct with float")
             {
+                int roundingMode = std::fegetround();
+                std::fesetround(FE_TOWARDZERO); // Tu faktycznie widać zaokrąglanie
                 float expected = std::sqrt(6);
-                REQUIRE((bool)(a == expected));
+                REQUIRE(a.toFloat() == expected);
+                std::fesetround(roundingMode);
             }
         }
     }
