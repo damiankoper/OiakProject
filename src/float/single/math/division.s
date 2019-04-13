@@ -156,7 +156,7 @@ SWAP:
     movb -0xa(%ebp), %al
     movb %al, 0x2(%edi)
     movb -0x9(%ebp), %al
-    movb %al, 0x1(%edi)
+    movb %al, 0x3(%edi)
 
     movl %edi, %ebx
     movl %esi, %edi
