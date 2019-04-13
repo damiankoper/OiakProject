@@ -28,6 +28,7 @@ TEST_SRCS_SINGLE := $(wildcard tests/float/single/*.cpp)
 TEST_OBJS_SINGLE := $(TEST_SRCS_SINGLE:%=$(BUILD)/%.o )
 
 testSingle: $(OBJS) $(TEST_OBJS_SINGLE)
+	$(MKDIR_P) $(TEST_DIR)
 	$(MKDIR_P) $(BUILD)
 	$(CXX) $(OBJS) $(TEST_OBJS_SINGLE) $(CXXFLAGS) -o $(TEST_DIR)/$@
 
