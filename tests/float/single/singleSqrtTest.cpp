@@ -44,16 +44,6 @@ TEST_CASE("Square root 2", "")
                 Single expected = 2.44948959f;
                 REQUIRE((bool)(expected == a));
             }
-
-            // TODO: rounding mode
-            THEN("value is correct with float")
-            {
-                int roundingMode = std::fegetround();
-                std::fesetround(FE_TOWARDZERO); // Tu faktycznie widać zaokrąglanie
-                float expected = std::sqrt(6);
-                REQUIRE(a.toFloat() == expected);
-                std::fesetround(roundingMode);
-            }
         }
     }
 }
