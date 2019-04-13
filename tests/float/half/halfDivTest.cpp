@@ -1,5 +1,5 @@
 #include "../../catch/catch.hpp"
-#include "../../../src/float/single/lib/single.h"
+#include "../../../src/float/half/lib/half.h"
 #include <cfenv>
 
 using namespace floating;
@@ -7,14 +7,14 @@ using namespace floating::literal;
 
 TEST_CASE("Division 1", "")
 {
-    GIVEN("New Single objects")
+    GIVEN("New Half objects")
     {
-        Single a = 5.0_s;
-        Single b = 2.0_s;
+        Half a = 5.0_h;
+        Half b = 2.0_h;
 
         WHEN("division is made")
         {
-            Single result = a / b;
+            Half result = a / b;
 
             THEN("value is correct with float")
             {
@@ -26,14 +26,14 @@ TEST_CASE("Division 1", "")
 
 TEST_CASE("Division 2", "")
 {
-    GIVEN("New Single objects")
+    GIVEN("New Half objects")
     {
-        Single a = -10.25_s;
-        Single b = 2.32_s;
+        Half a = -10.25_h;
+        Half b = 2.32_h;
 
         WHEN("division is made")
         {
-            Single result = a / b;
+            Half result = a / b;
 
             THEN("value is correct with float")
             {
@@ -45,14 +45,14 @@ TEST_CASE("Division 2", "")
 
 TEST_CASE("Division 3", "")
 {
-    GIVEN("New Single objects")
+    GIVEN("New Half objects")
     {
-        Single a = -10.5_s;
-        Single b = -6.0_s;
+        Half a = -10.5_h;
+        Half b = -6.0_h;
 
         WHEN("division is made")
         {
-            Single result = a / b;
+            Half result = a / b;
 
             THEN("value is correct with float")
             {
@@ -64,14 +64,14 @@ TEST_CASE("Division 3", "")
 
 TEST_CASE("Division 4, when divident - 0", "")
 {
-    GIVEN("New Single objects")
+    GIVEN("New Half objects")
     {
-        Single a = 0.0_s;
-        Single b = -6.0_s;
+        Half a = 0.0_h;
+        Half b = -6.0_h;
 
         WHEN("division is made")
         {
-            Single result = a / b;
+            Half result = a / b;
 
             THEN("value is correct with float")
             {
@@ -83,14 +83,14 @@ TEST_CASE("Division 4, when divident - 0", "")
 
 TEST_CASE("Division 5, when divisor - 0", "")
 {
-    GIVEN("New Single objects")
+    GIVEN("New Half objects")
     {
-        Single a = 25.666_s;
-        Single b = 0.0_s;
+        Half a = 25.666_h;
+        Half b = 0.0_h;
 
         WHEN("division is made")
         {
-            Single result = a / b;
+            Half result = a / b;
 
             THEN("value is correct with float")
             {
