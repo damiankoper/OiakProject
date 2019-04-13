@@ -143,7 +143,7 @@ TEST_CASE("Addition 6", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == 2137.1337f + 20456.666f);
+                REQUIRE(sum.toFloat() == 22593.7997f);
             }
             THEN("reverse action gives same result")
             {
