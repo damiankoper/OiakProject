@@ -47,16 +47,26 @@
         "bitset": "cpp",
         "cstddef": "cpp",
         "memory": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "cfenv": "cpp"
     },
     "catch2TestExplorer.executables": [{
-        "name": "Single test",
-        "pattern": "tests/compiled/*{test,Test,TEST}*",
-        "cwd": "${absDirpath}",
-        "env": {
-            "C2TESTEXECUTABLEPATH": "${absPath}"
+            "name": "Single test",
+            "pattern": "tests/compiled/testSingle",
+            "cwd": "${absDirpath}",
+            "env": {
+                "C2TESTEXECUTABLEPATH": "${absPath}"
+            }
+        },
+        {
+            "name": "Half test",
+            "pattern": "tests/compiled/testHalf",
+            "cwd": "${absDirpath}",
+            "env": {
+                "C2TESTEXECUTABLEPATH": "${absPath}"
+            }
         }
-    }],
+    ],
     "catch2TestExplorer.defaultWatchTimeoutSec": 10,
     "catch2TestExplorer.debugConfigTemplate": {
         "type": "cppdbg",
@@ -64,7 +74,6 @@
         "program": "${exec}",
         "args": "${args}",
         "cwd": "${cwd}",
-        "env": "${envObj}",
         "externalConsole": false
     }
 }

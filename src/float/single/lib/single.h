@@ -1,8 +1,6 @@
 #include <cinttypes>
 #include <string>
 
-//extern "C" void multiply(float *, float, float);
-
 namespace floating
 {
 
