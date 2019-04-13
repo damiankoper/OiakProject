@@ -12,7 +12,7 @@ TEST_CASE("Division 1", "")
         Single a = 5.0_s;
         Single b = 2.0_s;
 
-        WHEN("multiplication is made")
+        WHEN("division is made")
         {
             Single result = a / b;
 
@@ -31,7 +31,7 @@ TEST_CASE("Division 2", "")
         Single a = -10.25_s;
         Single b = 2.32_s;
 
-        WHEN("multiplication is made")
+        WHEN("division is made")
         {
             Single result = a / b;
 
@@ -53,7 +53,7 @@ TEST_CASE("Division 3", "")
         Single a = -10.5_s;
         Single b = -6.0_s;
 
-        WHEN("multiplication is made")
+        WHEN("division is made")
         {
             Single result = a / b;
 
@@ -72,7 +72,7 @@ TEST_CASE("Division 4, Gdy dzielna - 0", "")
         Single a = 0.0_s;
         Single b = -6.0_s;
 
-        WHEN("multiplication is made")
+        WHEN("division is made")
         {
             Single result = a / b;
 
@@ -91,7 +91,7 @@ TEST_CASE("Division 5, Gdy dzielnik - 0", "")
         Single a = 25.666_s;
         Single b = 0.0_s;
 
-        WHEN("multiplication is made")
+        WHEN("division is made")
         {
             Single result = a / b;
 
