@@ -63,6 +63,17 @@ single_sqrt:
 
 UNDOABLE:
 
+
+    movb $255, 0x3(%ebx)
+    movb $255, 0x2(%ebx)
+    push $1
+    push %ebx
+    call simple_shiftR
+
+    movl 0x0(%ebx), %ecx
+    movl 0x10(%ebp), %edi
+    movl %ecx, 0x0(%edi)
+
     movl	%ebp, %esp
 	popl	%edi
     popl    %esi

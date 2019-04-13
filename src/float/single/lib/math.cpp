@@ -9,6 +9,7 @@ extern "C" void single_add(uint32_t *, uint32_t, uint32_t);
 extern "C" void single_mul(uint32_t *, uint32_t, uint32_t);
 extern "C" void single_sub(uint32_t *, uint32_t, uint32_t);
 extern "C" void single_sqrt(uint32_t *, uint32_t);
+extern "C" void single_div(uint32_t *, uint32_t, uint32_t);
 
 Single Single::abs()
 {
@@ -53,8 +54,10 @@ Single Single::multiply(Single multiplier)
 
 Single Single::divideBy(Single divisor)
 {
+    Single result = Single();
     // TODO: implement this
-    return divisor;
+    single_div(&result.data.raw, data.raw, divisor.data.raw);
+    return result;
 }
 
 Single Single::sqrt()
