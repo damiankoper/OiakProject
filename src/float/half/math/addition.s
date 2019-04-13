@@ -25,41 +25,33 @@ half_add:
 # | kopia EBP		|  0x8(%ebp)
 # | kopia ESI       |  0x4(%ebp)
 # | kopia EDI		|  0x0(%ebp)
-# | exp             | -0x1(%ebp)
-# | znakA           | -0x2(%ebp)
-# | znakB           | -0x3(%ebp)
+# | znakA            | -0x1(%ebp)
+# | znakB           | -0x2(%ebp)
+# | EXP           | -0x3(%ebp)
 
 # Wyrównanie wykładników	
 
 # Wykładnik 1
     
-    movb (%edi, %ecx, 1), %al
-    movb (%esi, %ecx, 1), %ah
-    
     movb $0, %dl
+    movb 0x15(%ebp), %al
     shlb $1, %al
     adcb $0, %dl
     movb %dl, -0x1(%ebp)
 
-    movb $0, %dh
+
+    movb $0, %dl
+    movb 0x19(%ebp), %ah
     shlb $1, %ah
-    adcb $0, %dh
-    movb %dh, -0x2(%ebp)
+    adcb $0, %dl
+    movb %dl, -0x2(%ebp)
 
-    pushl $1
-    pushl %edi   
-    call simple_shiftL
-
-    pushl $1
-    pushl %esi
-    call simple_shiftL
-
-    movb (%edi, %ecx, 1), %al
-    movb (%esi, %ecx, 1), %ah
-
-    cmpb $255, %al
+    shrb $3, %al
+    shrb $3, %ah
+    
+    cmpb $33, %al
     je INFINITY
-    cmpb $255, %al
+    cmpb $33, %ah
     je INFINITY
 
     cmpb %ah, %al    
@@ -68,18 +60,15 @@ half_add:
 
 SWAP:
 
-    movb %al, %cl
-    movb %ah, %al
-    movb %cl, %ah
+    movb 0x14(%ebp), %al
+    movb 0x18(%ebp), %ah
+    movb %al, 0x18(%ebp)
+    movb %ah, 0x14(%ebp)
 
-    movb -0x1(%ebp), %dl
-    movb -0x2(%ebp), %dh
-    movb %dh, -0x1(%ebp)
-    movb %dl, -0x2(%ebp)
-
-    movl %edi, %ebx
-    movl %esi, %edi
-    movl %ebx, %esi 
+    movb 0x15(%ebp), %al
+    movb 0x19(%ebp), %ah
+    movb %al, 0x19(%ebp)
+    movb %ah, 0x15(%ebp)
 
 M:
 
@@ -87,11 +76,11 @@ M:
     subb %ah, %al
     xor %ah, %ah
 
-    push $8
+    push $22
     push %esi
     call simple_shiftL
 
-    push $9
+    push $22
     push %esi
     call simple_shiftR
 
