@@ -259,6 +259,9 @@ TEST_CASE("Simple div test", "")
             THEN("value is correct")
             {
                 REQUIRE(a == 3);
+            }
+            THEN("value is correct")
+            {
                 REQUIRE(b == 1);
             }
         }
@@ -273,6 +276,9 @@ TEST_CASE("Simple div test", "")
             THEN("value is correct")
             {
                 REQUIRE(a == 1000000);
+            }
+            THEN("value is correct")
+            {
                 REQUIRE(b == 0);
             }
         }
@@ -287,6 +293,9 @@ TEST_CASE("Simple div test", "")
             THEN("value is correct")
             {
                 REQUIRE(a == 41);
+            }
+            THEN("value is correct")
+            {
                 REQUIRE(b == 0);
             }
         }
@@ -302,6 +311,9 @@ TEST_CASE("Simple div test", "")
             THEN("value is correct")
             {
                 REQUIRE(a == 41);
+            }
+            THEN("value is correct")
+            {
                 REQUIRE(b == 2);
             }
         }
@@ -317,6 +329,9 @@ TEST_CASE("Simple div test", "")
             THEN("value is correct")
             {
                 REQUIRE(a == 41152);
+            }
+            THEN("value is correct")
+            {
                 REQUIRE(b == 1);
             }
         }
@@ -332,6 +347,9 @@ TEST_CASE("Simple div test", "")
             THEN("value is correct")
             {
                 REQUIRE(a == 64);
+            }
+            THEN("value is correct")
+            {
                 REQUIRE(b == 98815);
             }
         }
@@ -350,6 +368,26 @@ TEST_CASE("Simple div test", "")
             THEN("value is correct")
             {
                 REQUIRE(b == 123456);
+            }
+        }
+    }
+}
+TEST_CASE("Simple div test 1", "")
+{
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 125;
+        int32_t b = 3;
+        WHEN("division is made")
+        {
+            simple_div(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 41);
+            }
+            THEN("value is correct")
+            {
+                REQUIRE(b == 2);
             }
         }
     }
