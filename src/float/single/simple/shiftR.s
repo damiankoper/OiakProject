@@ -6,9 +6,11 @@ simple_shiftR:
 	movl	%esp, %ebp
   pusha
 
+  xor %ecx, %ecx
+
   # Wskaźnik na składnik jest na stosie
   mov 8(%ebp), %eax
-  mov 12(%ebp), %ecx # ile razy
+  mov 12(%ebp), %cl # ile razy
 
   timesLoop:
     clc
