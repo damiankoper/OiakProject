@@ -99,3 +99,22 @@ TEST_CASE("Division 5, when divisor - 0", "")
         }
     }
 }
+
+TEST_CASE("Division 6", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = -3.447_s;
+        Single b = 1.2543_s;
+
+        WHEN("division is made")
+        {
+            Single result = a / b;
+
+            THEN("value is correct with float")
+            {
+                REQUIRE(result.toFloat() == -3.447f / 1.2543f);
+            }
+        }
+    }
+}

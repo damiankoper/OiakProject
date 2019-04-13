@@ -25,7 +25,7 @@ half_add:
 # | kopia EBP		|  0x8(%ebp)
 # | kopia ESI       |  0x4(%ebp)
 # | kopia EDI		|  0x0(%ebp)
-# | znakA            | -0x1(%ebp)
+# | znakA           | -0x1(%ebp)
 # | znakB           | -0x2(%ebp)
 # | EXP           | -0x3(%ebp)
 
@@ -40,6 +40,7 @@ half_add:
     movb %dl, -0x1(%ebp)
 
 
+
     movb $0, %dl
     movb 0x19(%ebp), %ah
     shlb $1, %ah
@@ -49,9 +50,9 @@ half_add:
     shrb $3, %al
     shrb $3, %ah
     
-    cmpb $33, %al
+    cmpb $31, %al
     je INFINITY
-    cmpb $33, %ah
+    cmpb $31, %ah
     je INFINITY
 
     cmpb %ah, %al    
@@ -60,15 +61,24 @@ half_add:
 
 SWAP:
 
-    movb 0x14(%ebp), %al
-    movb 0x18(%ebp), %ah
-    movb %al, 0x18(%ebp)
-    movb %ah, 0x14(%ebp)
+    movb -0x1(%ebp), %cl
+    movb -0x2(%ebp), %ch
+    movb %cl, -0x2(%ebp)
+    movb %ch, -0x1(%ebp)
 
-    movb 0x15(%ebp), %al
-    movb 0x19(%ebp), %ah
-    movb %al, 0x19(%ebp)
-    movb %ah, 0x15(%ebp)
+    movb %al, %cl
+    movb %ah, %al
+    movb %cl, %ah
+
+    movb 0x14(%ebp), %cl
+    movb 0x18(%ebp), %ch
+    movb %cl, 0x18(%ebp)
+    movb %ch, 0x14(%ebp)
+
+    movb 0x15(%ebp), %cl
+    movb 0x19(%ebp), %ch
+    movb %cl, 0x19(%ebp)
+    movb %ch, 0x15(%ebp)
 
 M:
 
@@ -76,28 +86,32 @@ M:
     subb %ah, %al
     xor %ah, %ah
 
-    push $22
+    push $6
     push %esi
     call simple_shiftL
 
-    push $22
+    push $6
     push %esi
     call simple_shiftR
 
-    movb $2, %cl
-    addb $128, (%esi, %ecx, 1)
+    movb 0x19(%ebp), %cl
+    addb $4, %cl
+    movb %cl, 0x19(%ebp)
 
-    push $8
+    push $6
     push %edi
     call simple_shiftL
 
-    push $9
+    push $6
     push %edi
     call simple_shiftR
 
-    addb $128, (%edi, %ecx, 1)
+    movb 0x15(%ebp), %cl
+    addb $4, %cl
+    movb %cl, 0x15(%ebp)
 
-    cmpb $0, %eax
+
+    cmpb $0, %al
     je DONT_SHIFT
     push %eax
     push %esi
@@ -115,22 +129,26 @@ ADD:
     push %edi
     call simple_add
 
-    movb $3, %cl
-    movb (%edi, %ecx, 1), %al
-    cmpb $1, %al
-    je ADD_TO_EXP
-    push $1
+    movb 0x15(%ebp), %al
+    cmpb $7, %al
+    jg ADD_TO_EXP
+
+  
+    push $6
     push %edi
     call simple_shiftL
     jmp CHECK_SIGN
+
 OTHER_ADD:
 
     push %esi
     push %edi
     call simple_sub
 
-    movl $2, %ecx
-    movb (%edi, %ecx, 1), %al
+    movb 0x15(%ebp), %al
+    
+    shlb $6, %al
+
 
     movb $0, %dl
 
@@ -142,45 +160,49 @@ LOOP:
 LOOP_EXIT:
 
     movb -0x3(%ebp), %al
+    addb $1, %dl
     subb %dl, %al
     movb %al, -0x3(%ebp)
 
-    addb $1, %dl
-
+    xor %ecx, %ecx
     movb %dl, %cl
     push %ecx
     push %edi
     call simple_shiftL
+
+    push $6
+    push %edi
+    call simple_shiftL
+
     jmp CHECK_SIGN
 
 ADD_TO_EXP:
 
     movb -0x3(%ebp), %cl
     addb $1, %cl
-    cmpb $255, %cl
+
+    push $5
+    push %edi
+    call simple_shiftL
+
+    cmpb $33, %cl
     je INFINITY
     movb %cl, -0x3(%ebp)
     jmp CHECK_SIGN
+    
 INFINITY:
-    movb %cl, -0x3(%ebp)
-    movb $0, %cl
-    movb $0, (%edi, %ecx, 1)
-    addb $1, %cl
-    movb $0, (%edi, %ecx,1)
-    addb $1, %cl
-    movb $0, (%edi, %ecx, 1)
-    addb $1, %cl
-    movb $0, (%edi, %ecx, 1)
+    movb %al, -0x3(%ebp)
+    movb $0, 0x14(%ebp)
+    movb $0, 0x15(%ebp)
 
 CHECK_SIGN:
 
-    movb $3, %cl
     movb -0x3(%ebp), %al
-    movb %al, (%edi, %ecx, 1)
+    movb %al, 0x16(%ebp)
 
-    push $1
+    push $6
     push %edi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb -0x1(%ebp), %al
     cmpb $1, %al
@@ -189,9 +211,12 @@ CHECK_SIGN:
 
 CHANGE_SIGN:
 
-    addb $128, (%edi, %ecx,1)
+    movb 0x15(%ebp), %al
+    addb $128, %al
+    movb %al, 0x15(%ebp)
 
 RESULT:
+
 
     movl 0x0(%edi), %ecx
     movl 0x10(%ebp), %esi
