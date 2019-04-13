@@ -1,6 +1,7 @@
 #include "../../catch/catch.hpp"
 #include <cinttypes>
-
+extern "C" void floatToHalf(float *, int16_t *);
+extern "C" void halfToFloat(int16_t *, float *);
 extern "C" void simple_add(int16_t *, int16_t *);
 extern "C" void simple_sub(int16_t *, int16_t *);
 extern "C" void simple_mul(int16_t *, int16_t *);
@@ -8,6 +9,71 @@ extern "C" void simple_div(int16_t *, int16_t *);
 extern "C" void simple_shiftR(int16_t *, int8_t);
 extern "C" void simple_shiftL(int16_t *, int8_t);
 extern "C" void simple_shiftL_32(int16_t *, int8_t);
+
+TEST_CASE("Float to Half test", "")
+{
+    GIVEN("Float")
+    {
+        float fl = 2.0f;
+        int16_t raw = 0;
+
+        WHEN("conversion is made")
+        {
+            floatToHalf(&fl, &raw);
+            THEN("value is correct")
+            {
+                REQUIRE(raw == 0x4000);
+            }
+        }
+    }
+
+    GIVEN("Float")
+    {
+        float fl = 2.625f;
+        int16_t raw = 0;
+
+        WHEN("conversion is made")
+        {
+            floatToHalf(&fl, &raw);
+            THEN("value is correct")
+            {
+                REQUIRE(raw == 0b0100000101000000);
+            }
+        }
+    }
+}
+
+TEST_CASE("Half to Float test", "")
+{
+    GIVEN("Float")
+    {
+        int16_t raw = 0x4000;
+        float fl = 0;
+
+        WHEN("conversion is made")
+        {
+            halfToFloat(&raw, &fl);
+            THEN("value is correct")
+            {
+                REQUIRE(fl == 2.0f);
+            }
+        }
+    }
+    GIVEN("Float")
+    {
+        int16_t raw = 0b0100000101000000;
+        float fl = 0;
+
+        WHEN("conversion is made")
+        {
+            halfToFloat(&raw, &fl);
+            THEN("value is correct")
+            {
+                REQUIRE(fl == 2.625f);
+            }
+        }
+    }
+}
 
 TEST_CASE("Simple add test", "")
 {
@@ -37,19 +103,6 @@ TEST_CASE("Simple add test", "")
             }
         }
     }
-    /*   GIVEN("Raw uint16")
-    {
-        int16_t a = 4562;
-        int16_t b = -204389;
-        WHEN("addition is made")
-        {
-            simple_add(&a, &b);
-            THEN("value is correct")
-            {
-                REQUIRE(a == -199827);
-            }
-        }
-    } */
 }
 
 TEST_CASE("Simple sub test", "")

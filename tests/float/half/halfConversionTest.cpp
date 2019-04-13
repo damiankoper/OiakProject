@@ -17,7 +17,7 @@ TEST_CASE("Init", "")
 
             THEN("binary representation is correct")
             {
-                REQUIRE(half.printBinary() == "1 | 11111 | 1111111111");
+                REQUIRE(half.printBinary() == "1 | 10010 | 1001000000");
             }
 
             THEN("value is correct")

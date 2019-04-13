@@ -6,6 +6,7 @@
 #include <string>
 #include <cinttypes>
 using namespace floating;
+extern "C" void floatToHalf(float *, uint16_t *);
 
 Half::Half(const Half &s)
 {
@@ -26,12 +27,10 @@ Half::Half(long double longDouble)
 // Used by defined literals
 Half::Half(unsigned long long uLongLong)
 {
-    //TODO conversion VCVTPS2PS
-    data.raw = 0;
+    initFromFloat((float)uLongLong);
 }
 
 void Half::initFromFloat(float f)
 {
-    //TODO conversion VCVTPS2PS
-    data.raw = 0;
+    floatToHalf(&f, &data.raw);
 }

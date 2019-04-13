@@ -3,20 +3,21 @@
 #include <cstring>
 using namespace floating;
 
+extern "C" void halfToFloat(uint16_t *, float *);
+
 int Half::toInt()
 {
-    //TODO conversion
-    return (int)0;
+    return (int)toFloat();
 }
 
 float Half::toFloat()
 {
-    // TODO: conversion VCVTPS2PH
-    return (float)0;
+    float f;
+    halfToFloat(&data.raw, &f);
+    return f;
 }
 
 double Half::toDouble()
 {
-    // TODO: conversion VCVTPS2PH
-    return (double)0;
+    return (double)toFloat();
 }

@@ -1,5 +1,6 @@
 #include "../half.h"
 using namespace floating;
+extern "C" void floatToHalf(const float *, int16_t *);
 
 bool Half::operator==(const Half &s)
 {
@@ -8,6 +9,7 @@ bool Half::operator==(const Half &s)
 
 bool Half::operator==(const float &f)
 {
-    // TODO: conversion VCVTPS2PH
-    return false;
+    int16_t raw;
+    floatToHalf(&f, &raw);
+    return data.raw == raw;
 }

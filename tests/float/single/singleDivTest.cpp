@@ -37,10 +37,7 @@ TEST_CASE("Division 2", "")
 
             THEN("value is correct with float")
             {
-                int roundingMode = std::fegetround();
-                std::fesetround(FE_TOWARDZERO);
                 REQUIRE(result.toFloat() == -10.25f / 2.32f);
-                std::fesetround(roundingMode);
             }
         }
     }
