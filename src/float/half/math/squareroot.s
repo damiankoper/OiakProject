@@ -47,15 +47,18 @@ half_sqrt:
     movb $0, (%ebx, %ecx, 1)
 
 # Sprawdzam czy liczba jest dodatnia
-    movb 0x17(%ebp), %al # d
-    movb 0x16(%ebp), %cl # c
-    shlb $1, %cl
-    rclb $1, %al
+
+    movb 0x15(%ebp), %al
+
+    shlb $1, %al
+
     jc UNDOABLE
+
+    shrb $3, %al
 
 # Sprawdzam czy wykładnik jest parzysty
 
-    subb $127, %al
+    subb $15, %al
     movb %al, %cl
     shrb $1, %cl
     jc ODD
@@ -73,27 +76,47 @@ ODD:
 
     subb $1, %al
     shrb $1, %al
-    addb $127, %al
+    addb $15, %al
 
     movb %al, -0xd(%ebp)
 
 # wykładnik gotowy
 # Przesunięcie mantysy w lewo żeby pozbyć się najstarszego bitu, który jest częścią wykładnika
 
-    push $9
+    push $6
     push %edi
     call simple_shiftL
 
-    push $1
+    push $6
     push %edi
     call simple_shiftR
 
-    movb $3, %cl
-    addb $128, (%edi, %ecx, 1)
+    movb $1, %cl
+    addb $4, (%edi, %ecx, 1)
+
+    push $5
+    push %edi
+    call simple_shiftL
+
+    //przesuniecie dodajace reszte
+
+    movb -0x7(%ebp), %al
+    movb %al, -0x4(%ebp)
 
     push $2
     push %edi
+    call simple_shiftL
+
+    push $2
+    push %esi
     call simple_shiftL_32
+
+    push $8
+    push %esi
+    call simple_shiftR_32
+
+
+    // esi - reszta
 
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
@@ -108,24 +131,41 @@ ODD:
 EVEN:
 
     shrb $1, %al
-    addb $127, %al
+    addb $15, %al
 
     movb %al, -0xd(%ebp)
 
-    push $9
+    push $6
+    push %edi
+    call simple_shiftL
+
+    push $6
+    push %edi
+    call simple_shiftR
+
+    movb $1, %cl
+    addb $4, (%edi, %ecx, 1)
+
+    push $5
+    push %edi
+    call simple_shiftL
+
+        //przesuniecie dodajace reszte
+
+    movb -0x7(%ebp), %al
+    movb %al, -0x4(%ebp)
+
+    push $1
     push %edi
     call simple_shiftL
 
     push $1
-    push %edi
-    call simple_shiftR
-
-    movb $3, %cl
-    addb $128, (%edi, %ecx, 1)
-
-    push $1
-    push %edi
+    push %esi
     call simple_shiftL_32
+
+    push $8
+    push %esi
+    call simple_shiftR_32
 
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
@@ -139,22 +179,37 @@ EVEN:
 
 ALGORITHM_LOOP:
 
-    cmpb $24, %dl
+    cmpb $11, %dl
     je ALGORITHM_LOOP_EXIT
+
+    push $8
+    push %esi
+    call simple_shiftL_32
+
+    movb -0x7(%ebp), %al
+    movb %al, -0x4(%ebp)
 
     push $2
     push %edi
+    call simple_shiftL
+
+    push $2
+    push %esi
     call simple_shiftL_32
+
+    push $8
+    push %esi
+    call simple_shiftR_32
+
 
     push $2
     push %ebx
-    call simple_shiftL
+    call simple_shiftL_32
 
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
 
-
-    movb $3, %cl
+    movb $2, %cl
 LOOP:    
     cmpb $0, %cl
     jl X_1
@@ -204,17 +259,23 @@ X_0:
 
 ALGORITHM_LOOP_EXIT:
 
-    movb $3, %cl
+    push $5
+    push %ebx
+    call simple_shiftL_32
+
+    movb $2, %cl
     movb -0xd(%ebp), %al
     movb %al, (%ebx, %ecx, 1)
 
+    push $5
+    push %ebx
+    call simple_shiftR_32
 
 ADDING_THE_SIGN:
 
     push $1
     push %ebx
     call simple_shiftR
-
 
     movl 0x0(%ebx), %ecx
     movl 0x10(%ebp), %edi

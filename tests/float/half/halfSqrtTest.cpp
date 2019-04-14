@@ -59,7 +59,7 @@ TEST_CASE("Square root 3", "")
 
             THEN("value is correct more or less")
             {
-                Half expected = 3.0f;
+                Half expected = 3.0_h;
                 REQUIRE((bool)(expected == a));
             }
 
