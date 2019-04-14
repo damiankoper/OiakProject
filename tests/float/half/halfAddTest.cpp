@@ -162,16 +162,21 @@ TEST_CASE("Addition 7", "")
 {
     GIVEN("New Half objects")
     {
-        Half a = 21337.1337_h;
-        Half b = 20456.666_h;
+        Half a = 21340_h;
+        Half b = 20460_h;
 
         WHEN("addition is made")
         {
             Half sum = a + b;
+            Half expected = 41800_h;
 
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == 21337.1337f + 20456.666f);
+                REQUIRE((bool)(expected == sum));
+            }
+            THEN("binary representation is correct")
+            {
+                REQUIRE(sum.printBinary() == expected.printBinary());
             }
             THEN("reverse action gives same result")
             {
@@ -195,7 +200,8 @@ TEST_CASE("Addition 8", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == 4.777f);
+                Half expected = 4.777_h;
+                REQUIRE((bool)(expected == sum));
             }
             THEN("reverse action gives same result")
             {
@@ -219,7 +225,8 @@ TEST_CASE("Addition 9", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == 4.1f);
+                Half expected = 4.1_h;
+                REQUIRE((bool)(expected == sum));
             }
             THEN("reverse action gives same result")
             {

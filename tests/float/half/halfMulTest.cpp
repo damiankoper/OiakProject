@@ -116,11 +116,15 @@ TEST_CASE("Multiplication 5", "")
         WHEN("multiplication is made")
         {
             Half result = a * b;
+            Half expected = 1.784_h;
 
             THEN("value is correct")
             {
-                Half expected = 1.784_h;
                 REQUIRE((bool)(expected == result));
+            }
+            THEN("binary representation is correct")
+            {
+                REQUIRE(result.printBinary() == expected.printBinary());
             }
             THEN("reverse action gives same result")
             {
@@ -145,8 +149,12 @@ TEST_CASE("Multiplication 6", "")
 
             THEN("value is correct")
             {
-                REQUIRE(result.printBinary() == expected.printBinary());
                 REQUIRE((bool)(expected == result));
+            }
+            THEN("binary representation is correct")
+            {
+
+                REQUIRE(result.printBinary() == expected.printBinary());
             }
             THEN("reverse action gives same result")
             {
