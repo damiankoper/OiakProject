@@ -28,25 +28,6 @@ TEST_CASE("Division 2", "")
 {
     GIVEN("New Single objects")
     {
-        Single a = -10.25_s;
-        Single b = 2.32_s;
-
-        WHEN("division is made")
-        {
-            Single result = a / b;
-
-            THEN("value is correct with float")
-            {
-                REQUIRE(result.toFloat() == -10.25f / 2.32f);
-            }
-        }
-    }
-}
-
-TEST_CASE("Division 3", "")
-{
-    GIVEN("New Single objects")
-    {
         Single a = -10.5_s;
         Single b = -6.0_s;
 
@@ -62,7 +43,7 @@ TEST_CASE("Division 3", "")
     }
 }
 
-TEST_CASE("Division 4, when divident - 0", "")
+TEST_CASE("Division 3, when divident - 0", "")
 {
     GIVEN("New Single objects")
     {
@@ -81,7 +62,7 @@ TEST_CASE("Division 4, when divident - 0", "")
     }
 }
 
-TEST_CASE("Division 5, when divisor - 0", "")
+TEST_CASE("Division 4, when divisor - 0", "")
 {
     GIVEN("New Single objects")
     {
@@ -100,7 +81,7 @@ TEST_CASE("Division 5, when divisor - 0", "")
     }
 }
 
-TEST_CASE("Division 6", "")
+TEST_CASE("Division 5", "")
 {
     GIVEN("New Single objects")
     {
