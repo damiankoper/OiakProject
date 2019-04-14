@@ -185,13 +185,13 @@ ADD_TO_EXP:
     push %edi
     call simple_shiftL
 
-    cmpb $33, %cl
+    cmpb $31, %cl
     je INFINITY
     movb %cl, -0x3(%ebp)
     jmp CHECK_SIGN
     
 INFINITY:
-    movb %al, -0x3(%ebp)
+    movb $31, -0x3(%ebp)
     movb $0, 0x14(%ebp)
     movb $0, 0x15(%ebp)
 
