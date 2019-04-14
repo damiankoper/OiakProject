@@ -56,7 +56,7 @@ Half Half::divideBy(Half divisor)
 {
     Half result = Half();
     half_div(&result.data.raw, data.raw, divisor.data.raw);
-    return divisor;
+    return result;
 }
 
 Half Half::sqrt()

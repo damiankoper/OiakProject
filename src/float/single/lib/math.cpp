@@ -55,7 +55,6 @@ Single Single::multiply(Single multiplier)
 Single Single::divideBy(Single divisor)
 {
     Single result = Single();
-    // TODO: implement this
     single_div(&result.data.raw, data.raw, divisor.data.raw);
     return result;
 }

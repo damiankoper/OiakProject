@@ -16,7 +16,7 @@ TEST_CASE("Subtraction 1", "")
 
         WHEN("subtraction is made")
         {
-            Half result = b.subtract(a);
+            Half result = b - a;
 
             THEN("value is correct")
             {
@@ -26,7 +26,7 @@ TEST_CASE("Subtraction 1", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE((bool)(result == -8.0f));
+                REQUIRE(result.toFloat() == -8.0f);
             }
         }
     }

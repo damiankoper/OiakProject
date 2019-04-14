@@ -23,7 +23,7 @@ TEST_CASE("Multiplication 1", "")
             }
             THEN("value is correct with float")
             {
-                REQUIRE((bool)(result == 4.5f * -3.0f));
+                REQUIRE(result.toFloat() == 4.5f * -3.0f);
             }
             THEN("reverse action gives same result")
             {
@@ -47,7 +47,7 @@ TEST_CASE("Multiplication 2 - times 0", "")
 
             THEN("value should be 0")
             {
-                REQUIRE((bool)(result == 0.0f));
+                REQUIRE(result.toFloat() == 0.0f);
             }
             THEN("reverse action gives same result")
             {
@@ -119,12 +119,8 @@ TEST_CASE("Multiplication 5", "")
 
             THEN("value is correct")
             {
-                Half expected = 1.78350008_h;
+                Half expected = 1.784_h;
                 REQUIRE((bool)(expected == result));
-            }
-            THEN("value is correct with float")
-            {
-                REQUIRE((bool)(result == 1.23f * 1.45f));
             }
             THEN("reverse action gives same result")
             {
@@ -139,24 +135,18 @@ TEST_CASE("Multiplication 6", "")
 {
     GIVEN("New Half objects")
     {
-        Half a = 11111.11_h;
-        Half b = 22222.22_h;
+        Half a = 111.11_h;
+        Half b = 222.22_h;
 
         WHEN("multiplication is made")
         {
             Half result = a * b;
+            Half expected = 24700_h;
 
             THEN("value is correct")
             {
-                Half expected = 246913530.8642_h;
+                REQUIRE(result.printBinary() == expected.printBinary());
                 REQUIRE((bool)(expected == result));
-            }
-            THEN("value is correct with float")
-            {
-                int roundingMode = std::fegetround();
-                std::fesetround(FE_TOWARDZERO); // Tu faktycznie widać zaokrąglanie
-                REQUIRE(result.toFloat() == a.toFloat() * b.toFloat());
-                std::fesetround(roundingMode);
             }
             THEN("reverse action gives same result")
             {
@@ -171,19 +161,16 @@ TEST_CASE("Multiplication 7", "")
 {
     GIVEN("New Half objects")
     {
-        Half a = 0.445621_h;
-        Half b = -2.34576_h;
+        Half a = 0.4456_h;
+        Half b = -2.346_h;
 
         WHEN("multiplication is made")
         {
             Half result = a * b;
-
+            Half expected = -1.045_h;
             THEN("value is correct with float")
             {
-                int roundingMode = std::fegetround();
-                std::fesetround(FE_TOWARDZERO); // Tu faktycznie widać zaokrąglanie
-                REQUIRE(result.toFloat() == a.toFloat() * b.toFloat());
-                std::fesetround(roundingMode);
+                REQUIRE(result.printBinary() == expected.printBinary());
             }
             THEN("reverse action gives same result")
             {

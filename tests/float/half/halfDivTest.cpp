@@ -18,7 +18,12 @@ TEST_CASE("Division 1", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE((bool)(result == 5.0f / 2.0f));
+                REQUIRE(result.toFloat() == 5.0f / 2.0f);
+            }
+            THEN("a and b are untouched")
+            {
+                REQUIRE((bool)(a == 5.0_h));
+                REQUIRE((bool)(b == 2.0_h));
             }
         }
     }
@@ -56,7 +61,7 @@ TEST_CASE("Division 3", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE((bool)(result == -10.5f / -6.0f));
+                REQUIRE(result.toFloat() == -10.5f / -6.0f);
             }
         }
     }
@@ -75,7 +80,7 @@ TEST_CASE("Division 4, when divident - 0", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE((bool)(result == 0.0f / -6.0f));
+                REQUIRE(result.toFloat() == 0.0f / -6.0f);
             }
         }
     }
@@ -94,7 +99,7 @@ TEST_CASE("Division 5, when divisor - 0", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE((bool)(result == 25.666f / 0.0f));
+                REQUIRE(result.toFloat() == 25.666f / 0.0f);
             }
         }
     }

@@ -20,7 +20,6 @@ TEST_CASE("Square root 1", "")
                 REQUIRE((bool)(expected == a));
             }
 
-            // TODO: rounding mode
             THEN("value is correct with float")
             {
                 float expected = std::sqrt(2);
@@ -63,11 +62,10 @@ TEST_CASE("Square root 3", "")
                 REQUIRE((bool)(expected == a));
             }
 
-            // TODO: rounding mode
             THEN("value is correct with float")
             {
                 float expected = std::sqrt(9);
-                REQUIRE((bool)(a == expected));
+                REQUIRE(a.toFloat() == expected);
             }
         }
     }
