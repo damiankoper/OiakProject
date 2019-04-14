@@ -14,7 +14,7 @@ floatToHalf:
   movups (%eax), %xmm2
   # Bardzo fajna instrukcja
   # Zaokrąglanie do parzystej 0x00 w imm8
-  VCVTPS2PH $0b00000000, %xmm2, buffer
+  VCVTPS2PH $0b00000011, %xmm2, buffer
   
   mov buffer, %ax
   mov %ax, (%ebx)

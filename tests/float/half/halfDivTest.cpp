@@ -18,7 +18,8 @@ TEST_CASE("Division 1", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(result.toFloat() == 5.0f / 2.0f);
+                Half expected = 2.5_h;
+                REQUIRE((bool)(expected == result));
             }
             THEN("a and b are untouched")
             {
@@ -42,7 +43,8 @@ TEST_CASE("Division 2", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(result.toFloat() == -10.25f / 2.32f);
+                Half expected = -4.418_h;
+                REQUIRE((bool)(expected == result));
             }
         }
     }
