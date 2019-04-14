@@ -73,9 +73,9 @@ half_div:
     shrb $3, %ah
     shrb $3, %al
 
-    cmpb $0, %ah
-    je NAN_OR_INF
     cmpb $0, %al
+    je NAN_OR_INF
+    cmpb $0, %ah
     je ZERO
 
     subb %al, %ah
@@ -140,7 +140,8 @@ LOOP:
     push %esi
     call simple_shiftL
 
-    movb 0x14(%ebp), %al    
+    movb $0, %cl
+    movb (%edi, %ecx, 1), %al    
 
     cmpb $1, %al
     je X_1
@@ -256,7 +257,7 @@ RESULT:
 
 NAN_OR_INF:
 
-    cmpb $0, %al
+    cmpb $0, %ah
     je NAN
 
 INF: 

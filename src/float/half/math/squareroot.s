@@ -125,7 +125,7 @@ ODD:
     push %esi
     call simple_sub
 
-
+    movb $0, %dl
     jmp ALGORITHM_LOOP
 
 EVEN:
