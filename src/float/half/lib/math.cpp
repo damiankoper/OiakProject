@@ -9,6 +9,7 @@ extern "C" void half_add(uint16_t *, uint16_t, uint16_t);
 extern "C" void half_mul(uint16_t *, uint16_t, uint16_t);
 extern "C" void half_hub(uint16_t *, uint16_t, uint16_t);
 extern "C" void half_sqrt(uint16_t *, uint16_t);
+extern "C" void half_div(uint16_t *, uint16_t, uint16_t);
 
 Half Half::abs()
 {
@@ -53,7 +54,8 @@ Half Half::multiply(Half multiplier)
 
 Half Half::divideBy(Half divisor)
 {
-    // TODO: implement this
+    Half result = Half();
+    half_div(&result.data.raw, data.raw, divisor.data.raw);
     return divisor;
 }
 
