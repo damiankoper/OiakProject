@@ -1,7 +1,6 @@
 #include "../../catch/catch.hpp"
 #include <cinttypes>
 #include <iostream>
-#include <ctime>
 
 extern "C" void simple_add_32(int32_t *, int32_t *);
 extern "C" void simple_sub_32(int32_t *, int32_t *);
@@ -10,14 +9,6 @@ extern "C" void simple_div_32(int32_t *, int32_t *);
 extern "C" void simple_shiftR_32(int32_t *, int8_t);
 extern "C" void simple_shiftL_32(int32_t *, int8_t);
 extern "C" void simple_shiftL_64(int32_t *, int8_t);
-
-uint64_t rdtsc()
-{
-    unsigned int lo, hi;
-    __asm__ __volatile__("rdtsc"
-                         : "=a"(lo), "=d"(hi));
-    return ((uint64_t)hi << 32) | lo;
-}
 
 TEST_CASE("Simple add test", "")
 {
