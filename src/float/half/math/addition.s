@@ -88,11 +88,11 @@ M:
 
     push $6
     push %esi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $6
     push %esi
-    call simple_shiftR
+    call simple_shiftR_16
 
     movb 0x19(%ebp), %cl
     addb $4, %cl
@@ -100,11 +100,11 @@ M:
 
     push $6
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $6
     push %edi
-    call simple_shiftR
+    call simple_shiftR_16
 
     movb 0x15(%ebp), %cl
     addb $4, %cl
@@ -115,7 +115,7 @@ M:
     je DONT_SHIFT
     push %eax
     push %esi
-    call simple_shiftR
+    call simple_shiftR_16
 DONT_SHIFT:
     movb -0x1(%ebp), %al
     movb -0x2(%ebp), %ah
@@ -127,7 +127,7 @@ ADD:
 
     push %esi
     push %edi
-    call simple_add
+    call simple_add_16
 
     movb 0x15(%ebp), %al
     cmpb $7, %al
@@ -136,14 +136,14 @@ ADD:
   
     push $6
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
     jmp CHECK_SIGN
 
 OTHER_ADD:
 
     push %esi
     push %edi
-    call simple_sub
+    call simple_sub_16
 
     movb 0x15(%ebp), %al
     
@@ -168,11 +168,11 @@ LOOP_EXIT:
     movb %dl, %cl
     push %ecx
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $6
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     jmp CHECK_SIGN
 
@@ -183,7 +183,7 @@ ADD_TO_EXP:
 
     push $5
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     cmpb $31, %cl
     je INFINITY

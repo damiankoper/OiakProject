@@ -13,4 +13,5 @@ To compile it using g++ on 64bit install `sudo apt-get install g++-multilib`
 ## Watch
 To watch file changes and recompile tests after change:
 * Install `sudo apt-get install inotify-tools`
-* Run `./watch.sh`
+* Run `./watch.sh [target "watched files"]`
+  * You can specify make target alongside with files to be watched enclosed with commas

@@ -1,9 +1,9 @@
 .text
-.globl simple_add_32
+.globl simple_add_16
 # simple_add(int8* A, int8* B)
 # A = A + B
-# a0a1a2a3 = a0a1a2a3 + b0b1b2b3
-simple_add_32:
+# a0a1 = a0a1 + b0b1
+simple_add_16:
   pushl	%ebp
 	movl	%esp, %ebp
   pusha
@@ -12,17 +12,12 @@ simple_add_32:
   mov 8(%ebp), %eax
   mov 12(%ebp), %ebx
 
+  # Index bajta
   movb (%ebx), %dl
-  adcb %dl, (%eax)
+  addb %dl, (%eax)
 
   movb 1(%ebx), %dl
   adcb %dl, 1(%eax)
-
-  movb 2(%ebx), %dl
-  adcb %dl, 2(%eax)
-
-  movb 3(%ebx), %dl
-  adcb %dl, 3(%eax)
   
   popa
 	movl	%ebp, %esp

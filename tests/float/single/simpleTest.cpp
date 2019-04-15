@@ -1,13 +1,23 @@
 #include "../../catch/catch.hpp"
 #include <cinttypes>
+#include <iostream>
+#include <ctime>
 
-extern "C" void simple_add(int32_t *, int32_t *);
-extern "C" void simple_sub(int32_t *, int32_t *);
-extern "C" void simple_mul(int32_t *, int32_t *);
-extern "C" void simple_div(int32_t *, int32_t *);
-extern "C" void simple_shiftR(int32_t *, int8_t);
-extern "C" void simple_shiftL(int32_t *, int8_t);
+extern "C" void simple_add_32(int32_t *, int32_t *);
+extern "C" void simple_sub_32(int32_t *, int32_t *);
+extern "C" void simple_mul_32(int32_t *, int32_t *);
+extern "C" void simple_div_32(int32_t *, int32_t *);
+extern "C" void simple_shiftR_32(int32_t *, int8_t);
+extern "C" void simple_shiftL_32(int32_t *, int8_t);
 extern "C" void simple_shiftL_64(int32_t *, int8_t);
+
+uint64_t rdtsc()
+{
+    unsigned int lo, hi;
+    __asm__ __volatile__("rdtsc"
+                         : "=a"(lo), "=d"(hi));
+    return ((uint64_t)hi << 32) | lo;
+}
 
 TEST_CASE("Simple add test", "")
 {
@@ -17,7 +27,7 @@ TEST_CASE("Simple add test", "")
         int32_t b = 255;
         WHEN("addition is made")
         {
-            simple_add(&a, &b);
+            simple_add_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 510);
@@ -30,7 +40,7 @@ TEST_CASE("Simple add test", "")
         int32_t b = -255;
         WHEN("addition is made")
         {
-            simple_add(&a, &b);
+            simple_add_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 255);
@@ -43,7 +53,7 @@ TEST_CASE("Simple add test", "")
         int32_t b = -204389;
         WHEN("addition is made")
         {
-            simple_add(&a, &b);
+            simple_add_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == -199827);
@@ -60,7 +70,7 @@ TEST_CASE("Simple sub test", "")
         int32_t b = 255;
         WHEN("subtraction is made")
         {
-            simple_sub(&a, &b);
+            simple_sub_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0);
@@ -73,7 +83,7 @@ TEST_CASE("Simple sub test", "")
         int32_t b = 78843;
         WHEN("subtraction is made")
         {
-            simple_sub(&a, &b);
+            simple_sub_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 599589);
@@ -86,7 +96,7 @@ TEST_CASE("Simple sub test", "")
         int32_t b = -8943;
         WHEN("subtraction is made")
         {
-            simple_sub(&a, &b);
+            simple_sub_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 21330);
@@ -102,7 +112,7 @@ TEST_CASE("Simple shiftR test", "")
         int32_t a = 0x000000f0;
         WHEN("shift right is made")
         {
-            simple_shiftR(&a, 4);
+            simple_shiftR_32(&a, 4);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x0000000f);
@@ -115,7 +125,7 @@ TEST_CASE("Simple shiftR test", "")
         int32_t a = 0xf0000000;
         WHEN("shift right is made")
         {
-            simple_shiftR(&a, 8);
+            simple_shiftR_32(&a, 8);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x00f00000);
@@ -131,7 +141,7 @@ TEST_CASE("Simple shiftL test", "")
         int32_t a = 0x000000f0;
         WHEN("shift right is made")
         {
-            simple_shiftL(&a, 4);
+            simple_shiftL_32(&a, 4);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x00000f00);
@@ -144,7 +154,7 @@ TEST_CASE("Simple shiftL test", "")
         int32_t a = 0xf0000000;
         WHEN("shift left is made")
         {
-            simple_shiftL(&a, 8);
+            simple_shiftL_32(&a, 8);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x00000000);
@@ -153,7 +163,7 @@ TEST_CASE("Simple shiftL test", "")
     }
 }
 
-// simple_mul resturns result in a:b, 'a' is higher part
+// simple_mul_32 resturns result in a:b, 'a' is higher part
 TEST_CASE("Simple mul test", "")
 {
     GIVEN("Raw uint32")
@@ -162,7 +172,7 @@ TEST_CASE("Simple mul test", "")
         int32_t b = 255;
         WHEN("multiplication is made")
         {
-            simple_mul(&a, &b);
+            simple_mul_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0);
@@ -177,7 +187,7 @@ TEST_CASE("Simple mul test", "")
         int32_t b = 1023;
         WHEN("multiplication is made")
         {
-            simple_mul(&a, &b);
+            simple_mul_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0);
@@ -192,7 +202,7 @@ TEST_CASE("Simple mul test", "")
         int32_t b = 0x80000;
         WHEN("multiplication is made")
         {
-            simple_mul(&a, &b);
+            simple_mul_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x40);
@@ -207,7 +217,7 @@ TEST_CASE("Simple mul test", "")
         int32_t b = 0x1234567;
         WHEN("crazy multiplication is made")
         {
-            simple_mul(&a, &b);
+            simple_mul_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x14B66);
@@ -225,7 +235,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 0b100000000000000000000000;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 1);
@@ -240,7 +250,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 0b000000000000000010010000;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 1);
@@ -255,7 +265,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 5;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 3);
@@ -272,7 +282,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 100;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 1000000);
@@ -289,7 +299,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 3;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 41);
@@ -307,7 +317,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 3;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 41);
@@ -325,7 +335,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 3;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 41152);
@@ -343,7 +353,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 123456;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 64);
@@ -360,7 +370,7 @@ TEST_CASE("Simple div test", "")
         int32_t b = 7999999;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0);
@@ -380,7 +390,8 @@ TEST_CASE("Simple div test 1", "")
         int32_t b = 3;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+
+            simple_div_32(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 41);

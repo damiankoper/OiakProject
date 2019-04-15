@@ -1,7 +1,7 @@
 .text
-.globl simple_shiftR
+.globl simple_shiftR_16
 # simple_shiftr(int8* A, int8 times)
-simple_shiftR:
+simple_shiftR_16:
   pushl	%ebp
 	movl	%esp, %ebp
   pusha
@@ -15,7 +15,7 @@ simple_shiftR:
   timesLoop:
     clc
     # Index bajta
-    mov $3, %edx
+    mov $1, %edx
     movb (%eax, %edx, 1), %bl
     rcrb %bl
     movb %bl, (%eax, %edx, 1)
@@ -25,16 +25,6 @@ simple_shiftR:
     rcrb %bl
     movb %bl, (%eax, %edx, 1)
 
-    dec %edx
-    movb (%eax, %edx, 1), %bl
-    rcrb %bl
-    movb %bl, (%eax, %edx, 1)
-
-    dec %edx
-    movb (%eax, %edx, 1), %bl
-    rcrb %bl
-    movb %bl, (%eax, %edx, 1)
-    
     loop timesLoop
 
   popa

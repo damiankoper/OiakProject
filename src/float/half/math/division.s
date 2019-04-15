@@ -54,15 +54,15 @@ half_div:
 
     push $1
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $1
     push %esi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $1
     push %edx
-    call simple_shiftL
+    call simple_shiftL_16
 
     xor %ecx, %ecx
     movb $3, %cl
@@ -88,19 +88,19 @@ half_div:
 
     push $5
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $6
     push %edi
-    call simple_shiftR
+    call simple_shiftR_16
 
     push $5
     push %esi
-    call simple_shiftL 
+    call simple_shiftL_16
 
     push $6
     push %esi
-    call simple_shiftR
+    call simple_shiftR_16
 
     movb 0x15(%ebp), %cl
     addb $4, %cl
@@ -133,12 +133,12 @@ LOOP:
 
     push %esi
     push %edi
-    call simple_div
+    call simple_div_16
 
 
     push $1
     push %esi
-    call simple_shiftL
+    call simple_shiftL_16
 
     movb $0, %cl
     movb (%edi, %ecx, 1), %al    
@@ -229,7 +229,7 @@ ADDING_THE_SIGN:
 
     push $1
     push %edx
-    call simple_shiftR
+    call simple_shiftR_16
 
     movb -0x4(%ebp), %al
     cmpb $1, %al

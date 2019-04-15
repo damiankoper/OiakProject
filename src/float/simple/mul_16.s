@@ -2,10 +2,10 @@
   mul_result: .long 0
   mul_buffer: .long 0
 .text
-.globl simple_mul
+.globl simple_mul_16
 # simple_add(int8* A, int8* B)
 # A = H(A*B), B = L(A*B)
-simple_mul:
+simple_mul_16:
   pushl	%ebp
 	movl	%esp, %ebp
   pusha

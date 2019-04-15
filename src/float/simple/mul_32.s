@@ -4,10 +4,10 @@
   mul_buffer: .long 0
           .long 0
 .text
-.globl simple_mul
-# simple_add(int8* A, int8* B)
+.globl simple_mul_32
+# simple_add_32(int8* A, int8* B)
 # A = H(A*B), B = L(A*B)
-simple_mul:
+simple_mul_32:
   pushl	%ebp
 	movl	%esp, %ebp
   pusha
@@ -19,15 +19,15 @@ simple_mul:
   # A: 1 2 3 4
   # B: A B C D
 
-  call simple_mul_clearmul_result
+  call simple_mul_32_clearmul_result
 
   # Pętla iterująca po B
   mov $0, %esi
-  simple_mul_outerLoop:
+  simple_mul_32_outerLoop:
 
     # Pętla iterująca po A
     mov $0, %edi
-    simple_mul_innerLoop:
+    simple_mul_32_innerLoop:
       pushl %edi
 
       # Mnożenie składowych
@@ -43,41 +43,41 @@ simple_mul:
       # Dodanie bufora do wyniku
       pushl $mul_buffer
       pushl $mul_result
-      call simple_add_64
+      call simple_add_32_64
 
-      call simple_mul_clearmul_buffer
+      call simple_mul_32_clearmul_buffer
 
       pop %edi
       inc %di
       cmp $4, %di
-      jne simple_mul_innerLoop
+      jne simple_mul_32_innerLoop
 
     inc %si
     cmp $4, %si
-    jne simple_mul_outerLoop
+    jne simple_mul_32_outerLoop
   
   # Wpisywanie wyniku pod wskażniki z argumentów z adresu 'mul_result'
   # Część wyższa
   mov $0, %eax
-  simple_mul_mul_resultLoop1:
+  simple_mul_32_mul_resultLoop1:
     movb mul_result(,%eax,1), %dl
     movb %edx, (%ecx, %eax, 1)
 
     inc %eax
     cmp $4, %eax
-    jne simple_mul_mul_resultLoop1
+    jne simple_mul_32_mul_resultLoop1
 
   # Część niższa
   mov $4, %eax
   mov $0, %ecx
-  simple_mul_mul_resultLoop2:
+  simple_mul_32_mul_resultLoop2:
     movb mul_result(, %eax, 1), %dl
     movb %dl, (%ebx, %ecx, 1)
 
     inc %ecx
     inc %eax
     cmp $8, %eax
-    jne simple_mul_mul_resultLoop2
+    jne simple_mul_32_mul_resultLoop2
 
   popa
 	movl %ebp, %esp
@@ -86,21 +86,21 @@ simple_mul:
 
 
 # Mali pomocnicy do czyszczenia buforów
-simple_mul_clearmul_buffer:
+simple_mul_32_clearmul_buffer:
   push %ecx
   mov $8, %ecx
-  simple_mul_clearmul_bufferLoop:
+  simple_mul_32_clearmul_bufferLoop:
     movb $0, -1+mul_buffer(,%ecx,1)
-    loop simple_mul_clearmul_bufferLoop
+    loop simple_mul_32_clearmul_bufferLoop
   pop %ecx
   ret
 
-simple_mul_clearmul_result:
+simple_mul_32_clearmul_result:
   push %ecx
   mov $8, %ecx
-  simple_mul_clearmul_resultLoop:
+  simple_mul_32_clearmul_resultLoop:
     movb $0, -1+mul_result(,%ecx,1)
-    loop simple_mul_clearmul_resultLoop
+    loop simple_mul_32_clearmul_resultLoop
   pop %ecx
   ret
   

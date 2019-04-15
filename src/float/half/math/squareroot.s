@@ -85,18 +85,18 @@ ODD:
 
     push $6
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $6
     push %edi
-    call simple_shiftR
+    call simple_shiftR_16
 
     movb $1, %cl
     addb $4, (%edi, %ecx, 1)
 
     push $5
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     //przesuniecie dodajace reszte
 
@@ -105,7 +105,7 @@ ODD:
 
     push $2
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $2
     push %esi
@@ -123,7 +123,7 @@ ODD:
 
     push %ebx
     push %esi
-    call simple_sub
+    call simple_sub_16
 
     movb $0, %dl
     jmp ALGORITHM_LOOP
@@ -137,18 +137,18 @@ EVEN:
 
     push $6
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $6
     push %edi
-    call simple_shiftR
+    call simple_shiftR_16
 
     movb $1, %cl
     addb $4, (%edi, %ecx, 1)
 
     push $5
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
         //przesuniecie dodajace reszte
 
@@ -157,7 +157,7 @@ EVEN:
 
     push $1
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $1
     push %esi
@@ -172,7 +172,7 @@ EVEN:
 
     push %ebx
     push %esi
-    call simple_sub
+    call simple_sub_16
 
 
     movb $0, %dl
@@ -191,7 +191,7 @@ ALGORITHM_LOOP:
 
     push $2
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $2
     push %esi
@@ -228,15 +228,15 @@ X_1:
 
     push %ebx
     push %esi
-    call simple_sub
+    call simple_sub_16
 
     push $2
     push %ebx
-    call simple_shiftR
+    call simple_shiftR_16
 
     push $1
     push %ebx
-    call simple_shiftL
+    call simple_shiftL_16
 
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
@@ -248,11 +248,11 @@ X_0:
 
     push $2
     push %ebx
-    call simple_shiftR
+    call simple_shiftR_16
 
     push $1
     push %ebx
-    call simple_shiftL
+    call simple_shiftL_16
 
     incb %dl
     jmp ALGORITHM_LOOP
@@ -275,7 +275,7 @@ ADDING_THE_SIGN:
 
     push $1
     push %ebx
-    call simple_shiftR
+    call simple_shiftR_16
 
     movl 0x0(%ebx), %ecx
     movl 0x10(%ebp), %edi

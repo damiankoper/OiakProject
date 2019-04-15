@@ -48,11 +48,11 @@ single_add:
 
     pushl $1
     pushl %edi   
-    call simple_shiftL
+    call simple_shiftL_32
 
     pushl $1
     pushl %esi
-    call simple_shiftL
+    call simple_shiftL_32
 
     movb (%edi, %ecx, 1), %al
     movb (%esi, %ecx, 1), %ah
@@ -89,22 +89,22 @@ M:
 
     push $8
     push %esi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $9
     push %esi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb $2, %cl
     addb $128, (%esi, %ecx, 1)
 
     push $8
     push %edi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $9
     push %edi
-    call simple_shiftR
+    call simple_shiftR_32
 
     addb $128, (%edi, %ecx, 1)
 
@@ -112,7 +112,7 @@ M:
     je DONT_SHIFT
     push %eax
     push %esi
-    call simple_shiftR
+    call simple_shiftR_32
 DONT_SHIFT:
     movb -0x1(%ebp), %al
     movb -0x2(%ebp), %ah
@@ -124,7 +124,7 @@ ADD:
 
     push %esi
     push %edi
-    call simple_add
+    call simple_add_32
 
     movb $3, %cl
     movb (%edi, %ecx, 1), %al
@@ -132,13 +132,13 @@ ADD:
     je ADD_TO_EXP
     push $1
     push %edi
-    call simple_shiftL
+    call simple_shiftL_32
     jmp CHECK_SIGN
 OTHER_ADD:
 
     push %esi
     push %edi
-    call simple_sub
+    call simple_sub_32
 
     movl $2, %ecx
     movb (%edi, %ecx, 1), %al
@@ -161,7 +161,7 @@ LOOP_EXIT:
     movb %dl, %cl
     push %ecx
     push %edi
-    call simple_shiftL
+    call simple_shiftL_32
     jmp CHECK_SIGN
 
 ADD_TO_EXP:
@@ -191,7 +191,7 @@ CHECK_SIGN:
 
     push $1
     push %edi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb -0x1(%ebp), %al
     cmpb $1, %al

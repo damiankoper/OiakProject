@@ -93,28 +93,28 @@ DALEJ_2:
 
     push $9
     push %esi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $9
     push %esi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb $2, %cl
     addb $128, (%esi, %ecx, 1)
 
     push $9
     push %edi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $9
     push %edi
-    call simple_shiftR
+    call simple_shiftR_32
 
     addb $128, (%edi, %ecx, 1)
 
     push %edi
     push %esi
-    call simple_mul
+    call simple_mul_32
 
     push $16
     push %edi
@@ -140,11 +140,11 @@ LOOP_EXIT:
 
     push %ecx
     push %esi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $8
     push %esi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb $3, %cl
     movb %al, (%esi, %ecx, 1)
@@ -153,7 +153,7 @@ ADDING_THE_SIGN:
 
     push $1
     push %esi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb -0x2(%ebp), %al
     movb -0x3(%ebp), %dl

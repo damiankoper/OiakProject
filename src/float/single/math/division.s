@@ -54,15 +54,15 @@ single_div:
 
     push $1
     push %edi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $1
     push %esi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $1
     push %edx
-    call simple_shiftL
+    call simple_shiftL_32
 
     xor %ecx, %ecx
     movb $3, %cl
@@ -90,14 +90,14 @@ single_div:
 
     push $1
     push %edi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb $2, %cl
     addb $128, (%edi, %ecx, 1)
 
     push $1
     push %esi
-    call simple_shiftR
+    call simple_shiftR_32
 
     addb $128, (%esi, %ecx, 1)
 
@@ -112,7 +112,7 @@ single_div:
 
     push $1
     push %edx
-    call simple_shiftR
+    call simple_shiftR_32
 
     addb $128, (%edx, %ecx, 1)
 
@@ -131,12 +131,12 @@ LOOP:
 
     push %esi
     push %edi
-    call simple_div
+    call simple_div_32
 
 
     push $1
     push %esi
-    call simple_shiftL
+    call simple_shiftL_32
 
     movb $0, %cl
     movb (%edi, %ecx, 1), %al
@@ -206,7 +206,7 @@ SHIFT_EXP_M:
 
     push $1
     push %edx
-    call simple_shiftL
+    call simple_shiftL_32
 
     movb -0x1(%ebp), %al
     subb $1, %al
@@ -221,7 +221,7 @@ ADDING_THE_SIGN:
 
     push $1
     push %edx
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb -0x4(%ebp), %al
     cmpb $1, %al

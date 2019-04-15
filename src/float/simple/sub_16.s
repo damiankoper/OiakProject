@@ -1,9 +1,9 @@
 .text
-.globl simple_sub
+.globl simple_sub_16
 # simple_add(int8* A, int8* B)
 # A = A - B
-# a0a1a2a3 = a0a1a2a3 - b0b1b2b3
-simple_sub:
+# a0a1 = a0a1 - b0b1
+simple_sub_16:
   pushl	%ebp
 	movl	%esp, %ebp
   pusha
@@ -12,17 +12,12 @@ simple_sub:
   mov 8(%ebp), %eax
   mov 12(%ebp), %ebx
 
+  # Index bajta
   movb (%ebx), %dl
   subb %dl, (%eax)
 
   movb 1(%ebx), %dl
   sbbb %dl, 1(%eax)
-
-  movb 2(%ebx), %dl
-  sbbb %dl, 2(%eax)
-
-  movb 3(%ebx), %dl
-  sbbb %dl, 3(%eax)
 
   popa
 	movl	%ebp, %esp

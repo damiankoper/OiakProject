@@ -2,12 +2,12 @@
 #include <cinttypes>
 extern "C" void floatToHalf(float *, int16_t *);
 extern "C" void halfToFloat(int16_t *, float *);
-extern "C" void simple_add(int16_t *, int16_t *);
-extern "C" void simple_sub(int16_t *, int16_t *);
-extern "C" void simple_mul(int16_t *, int16_t *);
-extern "C" void simple_div(int16_t *, int16_t *);
-extern "C" void simple_shiftR(int16_t *, int8_t);
-extern "C" void simple_shiftL(int16_t *, int8_t);
+extern "C" void simple_add_16(int16_t *, int16_t *);
+extern "C" void simple_sub_16(int16_t *, int16_t *);
+extern "C" void simple_mul_16(int16_t *, int16_t *);
+extern "C" void simple_div_16(int16_t *, int16_t *);
+extern "C" void simple_shiftR_16(int16_t *, int8_t);
+extern "C" void simple_shiftL_16(int16_t *, int8_t);
 extern "C" void simple_shiftL_32(int16_t *, int8_t);
 
 TEST_CASE("Float to Half test", "")
@@ -83,7 +83,7 @@ TEST_CASE("Simple add test", "")
         int16_t b = 255;
         WHEN("addition is made")
         {
-            simple_add(&a, &b);
+            simple_add_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 510);
@@ -96,7 +96,7 @@ TEST_CASE("Simple add test", "")
         int16_t b = -255;
         WHEN("addition is made")
         {
-            simple_add(&a, &b);
+            simple_add_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 255);
@@ -113,7 +113,7 @@ TEST_CASE("Simple sub test", "")
         int16_t b = 255;
         WHEN("subtraction is made")
         {
-            simple_sub(&a, &b);
+            simple_sub_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0);
@@ -126,7 +126,7 @@ TEST_CASE("Simple sub test", "")
         int16_t b = 28902;
         WHEN("subtraction is made")
         {
-            simple_sub(&a, &b);
+            simple_sub_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == -966);
@@ -139,7 +139,7 @@ TEST_CASE("Simple sub test", "")
         int16_t b = -8943;
         WHEN("subtraction is made")
         {
-            simple_sub(&a, &b);
+            simple_sub_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 21330);
@@ -155,7 +155,7 @@ TEST_CASE("Simple shiftR test", "")
         int16_t a = 0x00f0;
         WHEN("shift right is made")
         {
-            simple_shiftR(&a, 4);
+            simple_shiftR_16(&a, 4);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x000f);
@@ -168,7 +168,7 @@ TEST_CASE("Simple shiftR test", "")
         int16_t a = 0xf000;
         WHEN("shift right is made")
         {
-            simple_shiftR(&a, 8);
+            simple_shiftR_16(&a, 8);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x00f0);
@@ -184,7 +184,7 @@ TEST_CASE("Simple shiftL test", "")
         int16_t a = 0x00f0;
         WHEN("shift right is made")
         {
-            simple_shiftL(&a, 4);
+            simple_shiftL_16(&a, 4);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x0f00);
@@ -197,7 +197,7 @@ TEST_CASE("Simple shiftL test", "")
         int16_t a = 0xf000;
         WHEN("shift left is made")
         {
-            simple_shiftL(&a, 8);
+            simple_shiftL_16(&a, 8);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x0000);
@@ -215,7 +215,7 @@ TEST_CASE("Simple mul test", "")
         int16_t b = 127;
         WHEN("multiplication is made")
         {
-            simple_mul(&a, &b);
+            simple_mul_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0);
@@ -230,7 +230,7 @@ TEST_CASE("Simple mul test", "")
         int16_t b = 1023;
         WHEN("multiplication is made")
         {
-            simple_mul(&a, &b);
+            simple_mul_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 15);
@@ -245,7 +245,7 @@ TEST_CASE("Simple mul test", "")
         int16_t b = 0x8000;
         WHEN("multiplication is made")
         {
-            simple_mul(&a, &b);
+            simple_mul_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x4000);
@@ -260,7 +260,7 @@ TEST_CASE("Simple mul test", "")
         int16_t b = 0x1234;
         WHEN("crazy multiplication is made")
         {
-            simple_mul(&a, &b);
+            simple_mul_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 0x014B);
@@ -278,7 +278,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 0b1000000000;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 1);
@@ -296,7 +296,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 0b0010010000;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("value is correct")
             {
                 REQUIRE(a == 1);
@@ -314,7 +314,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 5;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 3);
@@ -331,7 +331,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 100;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 100);
@@ -348,7 +348,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 3;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 41);
@@ -366,7 +366,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 3;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 41);
@@ -384,7 +384,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 3;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 4115);
@@ -402,7 +402,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 1236;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 6);
@@ -419,7 +419,7 @@ TEST_CASE("Simple div test", "")
         int16_t b = 799;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 0);
@@ -439,7 +439,7 @@ TEST_CASE("Simple div test 1", "")
         int16_t b = 3;
         WHEN("division is made")
         {
-            simple_div(&a, &b);
+            simple_div_16(&a, &b);
             THEN("quotient is correct")
             {
                 REQUIRE(a == 41);

@@ -68,7 +68,7 @@ UNDOABLE:
     movb $255, 0x2(%ebx)
     push $1
     push %ebx
-    call simple_shiftR
+    call simple_shiftR_32
 
     movl 0x0(%ebx), %ecx
     movl 0x10(%ebp), %edi
@@ -93,11 +93,11 @@ ODD:
 
     push $9
     push %edi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $1
     push %edi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb $3, %cl
     addb $128, (%edi, %ecx, 1)
@@ -111,7 +111,7 @@ ODD:
 
     push %ebx
     push %esi
-    call simple_sub
+    call simple_sub_32
 
 
     jmp ALGORITHM_LOOP
@@ -125,11 +125,11 @@ EVEN:
 
     push $9
     push %edi
-    call simple_shiftL
+    call simple_shiftL_32
 
     push $1
     push %edi
-    call simple_shiftR
+    call simple_shiftR_32
 
     movb $3, %cl
     addb $128, (%edi, %ecx, 1)
@@ -143,7 +143,7 @@ EVEN:
 
     push %ebx
     push %esi
-    call simple_sub
+    call simple_sub_32
 
 
     movb $0, %dl
@@ -159,7 +159,7 @@ ALGORITHM_LOOP:
 
     push $2
     push %ebx
-    call simple_shiftL
+    call simple_shiftL_32
 
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
@@ -184,15 +184,15 @@ X_1:
 
     push %ebx
     push %esi
-    call simple_sub
+    call simple_sub_32
 
     push $2
     push %ebx
-    call simple_shiftR
+    call simple_shiftR_32
 
     push $1
     push %ebx
-    call simple_shiftL
+    call simple_shiftL_32
 
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
@@ -204,11 +204,11 @@ X_0:
 
     push $2
     push %ebx
-    call simple_shiftR
+    call simple_shiftR_32
 
     push $1
     push %ebx
-    call simple_shiftL
+    call simple_shiftL_32
 
     incb %dl
     jmp ALGORITHM_LOOP
@@ -224,7 +224,7 @@ ADDING_THE_SIGN:
 
     push $1
     push %ebx
-    call simple_shiftR
+    call simple_shiftR_32
 
 
     movl 0x0(%ebx), %ecx

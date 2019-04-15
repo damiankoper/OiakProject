@@ -85,11 +85,11 @@ DALEJ_2:
 
     push $6
     push %esi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $6
     push %esi
-    call simple_shiftR
+    call simple_shiftR_16
 
     movb 0x19(%ebp), %cl
     addb $4, %cl
@@ -97,11 +97,11 @@ DALEJ_2:
 
     push $6
     push %edi
-    call simple_shiftL
+    call simple_shiftL_16
 
     push $6
     push %edi
-    call simple_shiftR
+    call simple_shiftR_16
 
     movb 0x15(%ebp), %cl
     addb $4, %cl
@@ -109,7 +109,7 @@ DALEJ_2:
 
     push %edi
     push %esi
-    call simple_mul
+    call simple_mul_16
 
     movb 0x18(%ebp), %al
     movb %al, 0x16(%ebp)
@@ -150,7 +150,7 @@ ADDING_THE_SIGN:
 
     push $1
     push %edi
-    call simple_shiftR
+    call simple_shiftR_16
 
 CHECK_SIGN:
 

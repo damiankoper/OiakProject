@@ -4,12 +4,12 @@
 .bss 
   div_result: .space 4
 .text
-.globl simple_div
+.globl simple_div_32
 # Tylko liczby dodatnie
 # A = A/B; B = A%B
 # Wynik A
 # Reszta B
-simple_div:
+simple_div_32:
   pushl	%ebp
 	movl	%esp, %ebp
   pusha
@@ -73,10 +73,10 @@ simple_div:
     incb xShift
     pushl $1
     pushl %ebx
-    call simple_shiftL
+    call simple_shiftL_32
     push $1
     push %edx
-    call simple_shiftL
+    call simple_shiftL_32
     jmp scaleLoopA
     scaleLoopAEnd:
 
@@ -92,7 +92,7 @@ simple_div:
     incb xShift
     push $1
     push %edx
-    call simple_shiftL
+    call simple_shiftL_32
     incb %cl
     jmp scaleLoopB
     scaleLoopBEnd:
@@ -112,7 +112,7 @@ simple_div:
     decb xShift
     push $1
     push %edx
-    call simple_shiftR
+    call simple_shiftR_32
     decb %cl
   div_continue:
   
@@ -129,12 +129,12 @@ simple_div:
     je notFirstTime
       push $1
       push %ebx
-      call simple_shiftL
+      call simple_shiftL_32
 
       # Przesuwanie wyniku w lewo o 1
       push $1
       push $div_result
-      call simple_shiftL
+      call simple_shiftL_32
     notFirstTime:
     movb $0, firstTime
 
@@ -145,13 +145,13 @@ simple_div:
     addR:
       push %edx
       push %ebx
-      call simple_add
+      call simple_add_32
       jmp addsubEnd
 
     subR:
       push %edx
       push %ebx
-      call simple_sub
+      call simple_sub_32
     addsubEnd:
 
     clc
@@ -168,12 +168,12 @@ simple_div:
   jne div_reminder_gt_zero
     push %edx
     push %ebx
-    call simple_add
+    call simple_add_32
   div_reminder_gt_zero:
 
   push xShift
   push %ebx
-  call simple_shiftR
+  call simple_shiftR_32
 
   # Kopiujemy resztę
   mov $3, %ecx
