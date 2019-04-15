@@ -21,14 +21,10 @@ simple_div:
   # A: 1 2
   # B: A B
 
-  mov $0, %edi
-  movb $0, div_result(,%edi,1)
-  inc %edi
-  movb $0, div_result(,%edi,1)
-  inc %edi
-  movb $0, div_result(,%edi,1)
-  inc %edi
-  movb $0, div_result(,%edi,1)
+  movb $0, div_result
+  movb $0, div_result+1
+  movb $0, div_result+2
+  movb $0, div_result+3
   movb $1, firstTime
   movb $0, xShift
 
@@ -124,7 +120,6 @@ simple_div:
   inc %ecx
   cmp $0, %ecx
   je divLoopEnd
-  mov $1, %edi
   divLoop:
     push %ecx
   
@@ -167,7 +162,7 @@ simple_div:
   call compareAndAddBit
 
   # Przywracamy resztę
-  movb (%ebx, %edi, 1), %al
+  movb 1(%ebx), %al
   andb $0x80, %al  
   cmpb $0x80, %al 
   jne div_reminder_gt_zero
@@ -199,15 +194,12 @@ simple_div:
     jne div_result_loop
 
   divEnd:
- 
   popa
 	movl %ebp, %esp
 	popl %ebp
 	ret $8
 
-
 ###################### END
-
 compareAndAddBit:
   call compare
   jne div_bit_zero
@@ -217,19 +209,16 @@ compareAndAddBit:
   ret
 
 setResultFirstBit:
-  mov $0, %edi
-  movb div_result(,%edi,1), %al
+  movb div_result, %al
   orb $0x01, %al
   movb %al, div_result
-  mov $1, %edi
-
   ret
 
 compare:
   # Sprawdzamy zgodność znaków 
-  movb (%ebx, %edi, 1), %al
+  movb 1(%ebx), %al
   andb $0x80, %al  
-  movb (%edx, %edi, 1), %cl  
+  movb 1(%edx), %cl  
   andb $0x80, %cl  
   cmpb %al, %cl
   ret

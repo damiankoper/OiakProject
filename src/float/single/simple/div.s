@@ -21,14 +21,10 @@ simple_div:
   # A: 1 2 3 4
   # B: A B C D
 
-  mov $0, %edi
-  movb $0, div_result(,%edi,1)
-  inc %edi
-  movb $0, div_result(,%edi,1)
-  inc %edi
-  movb $0, div_result(,%edi,1)
-  inc %edi
-  movb $0, div_result(,%edi,1)
+  movb $0, div_result
+  movb $0, div_result+1
+  movb $0, div_result+2
+  movb $0, div_result+3
   movb $1, firstTime
   movb $0, xShift
 
@@ -66,11 +62,10 @@ simple_div:
     cmp $-1, %edi
     jne div_cmpZeroLoop
   div_ZeroContinue:
-  mov $3, %edi
 
   # Skalujemy A razem z B
   scaleLoopA:
-    movb (%ebx, %edi, 1), %al
+    movb 3(%ebx), %al
     andb $0x20, %al
     cmpb $0x20, %al
     je scaleLoopAEnd
@@ -89,7 +84,7 @@ simple_div:
   # Tyle razy wykonamy dzielenie, żeby uzyskać wszystkie bity wyniku
   xor %ecx, %ecx
   scaleLoopB:
-    movb (%edx, %edi, 1), %al
+    movb 3(%edx), %al
     andb $0x20, %al
     cmpb $0x20, %al
     je scaleLoopBEnd
@@ -167,7 +162,7 @@ simple_div:
   call compareAndAddBit
 
   # Przywracamy resztę
-  movb (%ebx, %edi, 1), %al
+  movb 3(%ebx), %al
   andb $0x80, %al  
   cmpb $0x80, %al 
   jne div_reminder_gt_zero
@@ -217,19 +212,16 @@ compareAndAddBit:
   ret
 
 setResultFirstBit:
-  mov $0, %edi
-  movb div_result(,%edi,1), %al
+  movb div_result, %al
   orb $0x01, %al
   movb %al, div_result
-  mov $3, %edi
-
   ret
 
 compare:
   # Sprawdzamy zgodność znaków 
-  movb (%ebx, %edi, 1), %al
+  movb 3(%ebx), %al
   andb $0x80, %al  
-  movb (%edx, %edi, 1), %cl  
+  movb 3(%edx), %cl  
   andb $0x80, %cl  
   cmpb %al, %cl
   ret

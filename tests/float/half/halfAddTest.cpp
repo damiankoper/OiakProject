@@ -140,7 +140,7 @@ TEST_CASE("Addition 6", "")
         WHEN("addition is made")
         {
             Half sum = a + b;
-            Half expected = 22598_h;
+            Half expected = 22580_h;
             THEN("value is correct with float")
             {
                 REQUIRE((bool)(sum == expected));
@@ -168,7 +168,7 @@ TEST_CASE("Addition 7", "")
         WHEN("addition is made")
         {
             Half sum = a + b;
-            Half expected = 41800_h;
+            Half expected = 41760_h;
 
             THEN("value is correct with float")
             {

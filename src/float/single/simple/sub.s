@@ -12,23 +12,17 @@ simple_sub:
   mov 8(%ebp), %eax
   mov 12(%ebp), %ebx
 
-  # Index bajta
-  # Odejmowanie a3 = a3 - b3
-  mov $0, %ecx
-  movb (%ebx, %ecx, 1), %dl
-  subb %dl, (%eax, %ecx, 1)
+  movb (%ebx), %dl
+  subb %dl, (%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  sbbb %dl, (%eax, %ecx, 1)
+  movb 1(%ebx), %dl
+  sbbb %dl, 1(%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  sbbb %dl, (%eax, %ecx, 1)
+  movb 2(%ebx), %dl
+  sbbb %dl, 2(%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  sbbb %dl, (%eax, %ecx, 1)
+  movb 3(%ebx), %dl
+  sbbb %dl, 3(%eax)
 
   popa
 	movl	%ebp, %esp

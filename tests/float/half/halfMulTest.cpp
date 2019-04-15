@@ -110,13 +110,13 @@ TEST_CASE("Multiplication 5", "")
 {
     GIVEN("New Half objects")
     {
-        Half a = 1.23_h;
+        Half a = 1.22_h;
         Half b = 1.45_h;
 
         WHEN("multiplication is made")
         {
             Half result = a * b;
-            Half expected = 1.784_h;
+            Half expected = 1.768_h;
 
             THEN("value is correct")
             {
@@ -145,7 +145,7 @@ TEST_CASE("Multiplication 6", "")
         WHEN("multiplication is made")
         {
             Half result = a * b;
-            Half expected = 24700_h;
+            Half expected = 24660_h;
 
             THEN("value is correct")
             {

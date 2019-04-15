@@ -38,8 +38,7 @@ simple_mul:
       add %si, %di
       mov %edi, %edx
       movb %al, mul_buffer(,%edx,1)
-      inc %edx
-      movb %ah, mul_buffer(,%edx,1)
+      movb %ah, 1+mul_buffer(,%edx,1)
 
       # Dodanie bufora do wyniku
       pushl $mul_buffer
@@ -88,26 +87,20 @@ simple_mul:
 
 # Mali pomocnicy do czyszczenia buforów
 simple_mul_clearmul_buffer:
-  pusha
+  push %ecx
   mov $8, %ecx
-
   simple_mul_clearmul_bufferLoop:
-    dec %ecx
-    movb $0, mul_buffer(,%ecx,1)
-    inc %ecx
+    movb $0, -1+mul_buffer(,%ecx,1)
     loop simple_mul_clearmul_bufferLoop
-  popa
+  pop %ecx
   ret
 
 simple_mul_clearmul_result:
-  pusha
+  push %ecx
   mov $8, %ecx
-
   simple_mul_clearmul_resultLoop:
-    dec %ecx
-    movb $0, mul_result(,%ecx,1)
-    inc %ecx
+    movb $0, -1+mul_result(,%ecx,1)
     loop simple_mul_clearmul_resultLoop
-  popa
+  pop %ecx
   ret
   

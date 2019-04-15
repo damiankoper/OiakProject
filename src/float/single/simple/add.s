@@ -12,23 +12,17 @@ simple_add:
   mov 8(%ebp), %eax
   mov 12(%ebp), %ebx
 
-  # Index bajta
-  # Dodawania a3 = a3 + b3
-  mov $0, %ecx
-  movb (%ebx, %ecx, 1), %dl
-  addb %dl, (%eax, %ecx, 1)
+  movb (%ebx), %dl
+  addb %dl, (%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  movb 1(%ebx), %dl
+  adcb %dl, 1(%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  movb 2(%ebx), %dl
+  adcb %dl, 2(%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  movb 3(%ebx), %dl
+  adcb %dl, 3(%eax)
   
   popa
 	movl	%ebp, %esp

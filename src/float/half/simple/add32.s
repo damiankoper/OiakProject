@@ -12,22 +12,17 @@ simple_add_32:
   mov 8(%ebp), %eax
   mov 12(%ebp), %ebx
 
-  # Index bajta
-  mov $0, %ecx
-  movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  movb (%ebx), %dl
+  adcb %dl, (%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  movb 1(%ebx), %dl
+  adcb %dl, 1(%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  movb 2(%ebx), %dl
+  adcb %dl, 2(%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  movb 3(%ebx), %dl
+  adcb %dl, 3(%eax)
   
   popa
 	movl	%ebp, %esp

@@ -13,13 +13,11 @@ simple_add:
   mov 12(%ebp), %ebx
 
   # Index bajta
-  mov $0, %ecx
-  movb (%ebx, %ecx, 1), %dl
-  addb %dl, (%eax, %ecx, 1)
+  movb (%ebx), %dl
+  addb %dl, (%eax)
 
-  inc %ecx
-  movb (%ebx, %ecx, 1), %dl
-  adcb %dl, (%eax, %ecx, 1)
+  movb 1(%ebx), %dl
+  adcb %dl, 1(%eax)
   
   popa
 	movl	%ebp, %esp
