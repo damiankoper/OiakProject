@@ -146,14 +146,24 @@ OTHER_ADD:
     call simple_sub_16
 
     movb 0x15(%ebp), %al
-    
-    shlb $6, %al
+    movb 0x14(%ebp), %ch
 
+    movb $0, %ah
+
+LOOP2:
+    cmpb $6, %ah
+    je LOOP2_EXIT
+    shlb $1, %ch
+    rclb $1, %al
+    incb %ah
+    jmp LOOP2
+LOOP2_EXIT: 
 
     movb $0, %dl
 
 LOOP:
-    shlb %al
+    shlb %ch
+    rclb %al
     jc LOOP_EXIT
     addb $1, %dl
     jmp LOOP
