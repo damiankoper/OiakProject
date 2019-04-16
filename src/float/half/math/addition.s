@@ -148,6 +148,13 @@ OTHER_ADD:
     movb 0x15(%ebp), %al
     movb 0x14(%ebp), %ch
 
+    cmpb $0, %al
+    je MAYBE_ZERO
+    jmp MAYBE_NOT
+MAYBE_ZERO:
+    cmpb $0, %ch
+    je ZERO
+MAYBE_NOT:
     movb $0, %ah
 
 LOOP2:
@@ -237,3 +244,11 @@ RESULT:
 	popl	%edi
 	popl	%ebp
 	ret 
+
+
+ZERO:
+
+    movb $0, 0x14(%ebp)
+    movb $0, 0x15(%ebp)
+    jmp RESULT
+

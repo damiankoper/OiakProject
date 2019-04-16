@@ -241,8 +241,8 @@ TEST_CASE("Addition 10", "")
 {
     GIVEN("New Half objects")
     {
-        Half a = -65504_h;
-        Half b = 25872_h;
+        Half a = 23333_h;
+        Half b = -23333_h;
 
         WHEN("addition is made")
         {
@@ -250,7 +250,7 @@ TEST_CASE("Addition 10", "")
 
             THEN("value is correct with float")
             {
-                Half expected = -39632_h;
+                Half expected = 0_h;
                 REQUIRE((bool)(expected == sum));
             }
             THEN("reverse action gives same result")
