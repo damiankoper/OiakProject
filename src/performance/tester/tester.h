@@ -19,11 +19,12 @@ public:
     long long int cycles;
   };
 
-  Tester();
+  Tester(std::string log = "Test: ");
   TestEnv testEnv = TestEnv();
 
   Tester *setTestedFn(std::function<void(TestEnv &testEnv)> cb);
 
+  Tester *beforeSameDataSet(std::function<void(TestEnv &testEnv)> cb);
   Tester *beforeEach(std::function<void(TestEnv &testEnv)> cb);
   Tester *afterEach(std::function<void(TestEnv &testEnv)> cb);
   Tester *afterSameDataSet(std::function<void(TestEnv &testEnv)> cb);
@@ -37,9 +38,9 @@ public:
 
 private:
   std::vector<TestResult> lastResults;
-
   std::function<void(TestEnv &testEnv)> testedFn = [](TestEnv &testEnv) {};
   std::function<void(TestEnv &testEnv)> beforeEachFn = [](TestEnv &testEnv) {};
+  std::function<void(TestEnv &testEnv)> beforeSameDataSetFn = [](TestEnv &testEnv) {};
   std::function<void(TestEnv &testEnv)> afterEachFn = [](TestEnv &testEnv) {};
   std::function<void(TestEnv &testEnv)> afterSameDataSetFn = [](TestEnv &testEnv) {};
 

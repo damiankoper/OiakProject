@@ -1,7 +1,7 @@
 CXX = g++
 AS = as
 
-CXXFLAGS = -std=c++17 -lstdc++ -g -m32 -fpic
+CXXFLAGS = -std=c++17 -lstdc++ -g -m32
 ASFLAGS = --32 -g
 LDFLAGS = 
 
@@ -56,7 +56,7 @@ testHalf: $(OBJS_SIMPLE) $(OBJS_HALF) $(TEST_OBJS_HALF)
 performance: $(OBJS_SIMPLE) $(OBJS_PERF) $(OBJS_SINGLE) $(OBJS_HALF)
 	$(MKDIR_P) $(PERF_DIR)
 	$(MKDIR_P) $(BUILD)
-	$(CXX) $(OBJS_SIMPLE) $(OBJS_HALF) $(OBJS_SINGLE) $(OBJS_PERF) $(CXXFLAGS) -fno-stack-protector -o $(PERF_DIR)/$@
+	$(CXX) $(OBJS_SIMPLE) $(OBJS_HALF) $(OBJS_SINGLE) $(OBJS_PERF) $(CXXFLAGS) -msoft-float -o $(PERF_DIR)/$@
 
 all: testSingle testHalf performance
 

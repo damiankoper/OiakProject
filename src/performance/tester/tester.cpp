@@ -13,8 +13,9 @@ uint64_t rdtsc()
     return ((uint64_t)hi << 32) | lo;
 }
 
-Tester::Tester()
+Tester::Tester(std::string log)
 {
+    this->log = log;
 }
 
 Tester *Tester::setTestedFn(std::function<void(TestEnv &testEnv)> cb)
@@ -26,6 +27,12 @@ Tester *Tester::setTestedFn(std::function<void(TestEnv &testEnv)> cb)
 Tester *Tester::beforeEach(std::function<void(TestEnv &testEnv)> cb)
 {
     beforeEachFn = cb;
+    return this;
+}
+
+Tester *Tester::beforeSameDataSet(std::function<void(TestEnv &testEnv)> cb)
+{
+    beforeSameDataSetFn = cb;
     return this;
 }
 
@@ -75,13 +82,12 @@ long long int Tester::runSingle()
 
 long long int Tester::runSingleData()
 {
+
     long long int sum = 0;
     for (int i = 0; i < sameDataRepeats; i++)
     {
         sum += runSingle();
     }
-
-    afterSameDataSetFn(testEnv);
 
     double avg = sum / sameDataRepeats;
     std::cout << log << avg << std::endl;
@@ -93,9 +99,13 @@ std::vector<Tester::TestResult> Tester::runAll()
     std::vector<Tester::TestResult> vec = std::vector<Tester::TestResult>();
     for (int i = 0; i < overallRepeats; i++)
     {
+        beforeSameDataSetFn(testEnv);
+
         Tester::TestResult result = TestResult(testEnv);
         result.cycles = runSingleData();
         vec.push_back(result);
+
+        afterSameDataSetFn(testEnv);
     }
     lastResults = vec;
     return vec;

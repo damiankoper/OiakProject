@@ -236,15 +236,15 @@ TEST_CASE("Addition 10", "")
         WHEN("addition is made")
         {
             Single sum = a + b;
-
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == -0.00001f);
+                REQUIRE(sum.printBinary() == Single(-7.6293945e-6f).printBinary());
+                REQUIRE(sum.toFloat() == -7.6293945e-6f);
             }
             THEN("reverse action gives same result")
             {
                 Single reverse = b + a;
-                REQUIRE((bool)(b + a == sum));
+                REQUIRE(sum.printBinary() == reverse.printBinary());
             }
         }
     }

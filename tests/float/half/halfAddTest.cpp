@@ -236,3 +236,28 @@ TEST_CASE("Addition 9", "")
         }
     }
 }
+
+TEST_CASE("Addition 10", "")
+{
+    GIVEN("New Half objects")
+    {
+        Half a = -65504_h;
+        Half b = 25872_h;
+
+        WHEN("addition is made")
+        {
+            Half sum = a + b;
+
+            THEN("value is correct with float")
+            {
+                Half expected = -39632_h;
+                REQUIRE((bool)(expected == sum));
+            }
+            THEN("reverse action gives same result")
+            {
+                Half reverse = b + a;
+                REQUIRE((bool)(b + a == sum));
+            }
+        }
+    }
+}
