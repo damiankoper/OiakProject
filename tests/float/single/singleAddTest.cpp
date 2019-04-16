@@ -230,8 +230,8 @@ TEST_CASE("Addition 10", "")
 {
     GIVEN("New Single objects")
     {
-        Single a = -100_s;
-        Single b = 99.9999924_s;
+        Single a = 99.9999924_s;
+        Single b = -100.0_s;
 
         WHEN("addition is made")
         {
@@ -239,7 +239,7 @@ TEST_CASE("Addition 10", "")
 
             THEN("value is correct with float")
             {
-                REQUIRE(sum.toFloat() == 4.1f);
+                REQUIRE(sum.toFloat() == -0.00001f);
             }
             THEN("reverse action gives same result")
             {

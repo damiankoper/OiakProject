@@ -62,9 +62,25 @@ single_add:
     cmpb $255, %al
     je INFINITY
 
+    cmpb %ah, %al
+    je COMPARE_M
     cmpb %ah, %al    
     jb SWAP 
     jmp M
+
+COMPARE_M:
+
+    decb %ecx
+
+    cmpb $0, %cl
+    jl M
+
+    movb (%edi, %ecx, 1), %dl
+    movb (%esi, %ecx, 1), %dh
+
+    cmpb %dh, %dl
+    jb SWAP
+    jmp COMPARE_M
 
 SWAP:
 
@@ -142,15 +158,22 @@ OTHER_ADD:
 
     movl $2, %ecx
     movb (%edi, %ecx, 1), %al
+    movl $1, %ecx
+    movb (%edi, %ecx,1),  %ah
+    movb $0, %ecx
+    movb (%edi, %ecx, 1), %ch
 
     movb $0, %dl
 
 LOOP: #TODO: bug here
-    shlb %al
+    shlb %ch
+    rclb %ah
+    rclb %al
     jc LOOP_EXIT
     addb $1, %dl
     jmp LOOP
 LOOP_EXIT:
+    xor %ecx, %ecx
 
     movb -0x3(%ebp), %al
     subb %dl, %al
