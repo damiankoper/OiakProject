@@ -4,3 +4,4 @@ main.out
 ipch
 tests/compiled/**/*
 **/*.txt
+bin
