@@ -80,7 +80,9 @@ COMPARE_M:
 
     cmpb %dh, %dl
     jb SWAP
-    jmp COMPARE_M
+    cmpb %dh, %dl
+    je COMPARE_M
+    jmp M
 
 SWAP:
 
@@ -165,7 +167,7 @@ OTHER_ADD:
 
     movb $0, %dl
 
-LOOP: #TODO: bug here
+LOOP:
     shlb %ch
     rclb %ah
     rclb %al
