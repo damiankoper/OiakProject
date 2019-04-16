@@ -225,3 +225,27 @@ TEST_CASE("Addition 9", "")
         }
     }
 }
+
+TEST_CASE("Addition 10", "")
+{
+    GIVEN("New Single objects")
+    {
+        Single a = -100_s;
+        Single b = 99.9999924_s;
+
+        WHEN("addition is made")
+        {
+            Single sum = a + b;
+
+            THEN("value is correct with float")
+            {
+                REQUIRE(sum.toFloat() == 4.1f);
+            }
+            THEN("reverse action gives same result")
+            {
+                Single reverse = b + a;
+                REQUIRE((bool)(b + a == sum));
+            }
+        }
+    }
+}

@@ -8,8 +8,8 @@ class Tester
 public:
   struct TestEnv
   {
-    int startElements = 0;
-    int activeElements = 1;
+    std::string startElements = "";
+    std::string activeElements = "";
   };
 
   struct TestResult : TestEnv

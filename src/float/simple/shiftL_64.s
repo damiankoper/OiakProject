@@ -14,46 +14,37 @@ simple_shiftL_64:
 
   timesLoop:
     clc
-    # Index bajta
-    mov $0, %edx
-    movb (%eax, %edx, 1), %bl
+    movb (%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, (%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 1(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 1(%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 2(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 2(%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 3(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 3(%eax)
     
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 4(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 4(%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 5(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 5(%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 6(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 6(%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 7(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 7(%eax)
 
     loop timesLoop
   

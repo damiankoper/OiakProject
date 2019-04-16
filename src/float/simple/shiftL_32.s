@@ -12,26 +12,21 @@ simple_shiftL_32:
 
   timesLoop:
     clc
-    # Index bajta
-    mov $0, %edx
-    movb (%eax, %edx, 1), %bl
+    movb (%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, (%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 1(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 1(%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 2(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 2(%eax)
 
-    inc %edx
-    movb (%eax, %edx, 1), %bl
+    movb 3(%eax), %bl
     rclb %bl
-    movb %bl, (%eax, %edx, 1)
+    movb %bl, 3(%eax)
     
     loop timesLoop
 

@@ -145,7 +145,7 @@ OTHER_ADD:
 
     movb $0, %dl
 
-LOOP:
+LOOP: #TODO: bug here
     shlb %al
     jc LOOP_EXIT
     addb $1, %dl

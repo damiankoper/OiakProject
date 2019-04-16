@@ -57,20 +57,20 @@ long long int Tester::runSingle()
 {
     beforeEachFn(testEnv);
 
-    uint64_t t1, t2;
+    uint64_t perfTime, rawLatency;
     if (testedFn != NULL)
     {
-        t2 = rdtsc();
-        t2 = rdtsc() - t2;
+        rawLatency = rdtsc();
+        rawLatency = rdtsc() - rawLatency;
 
-        t1 = rdtsc();
+        perfTime = rdtsc();
         testedFn(testEnv);
-        t1 = rdtsc() - t1;
-        t1 -= t2;
+        perfTime = rdtsc() - perfTime;
+        perfTime -= rawLatency;
     }
 
     afterEachFn(testEnv);
-    return t1;
+    return perfTime;
 }
 
 long long int Tester::runSingleData()
