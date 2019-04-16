@@ -1,7 +1,7 @@
 CXX = g++
 AS = as
 
-CXXFLAGS = -std=c++17 -lstdc++ -g -m32
+CXXFLAGS = -std=c++17 -lstdc++ -g -m32 -Wstack-protector -fstack-protector
 ASFLAGS = --32 -g
 LDFLAGS = 
 

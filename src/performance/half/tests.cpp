@@ -15,7 +15,7 @@ std::string pathHalf = "src/performance/results/half";
 void half::testAdd()
 {
     vector<float>
-        linspace1 = utils::createLinspace<float>(-100000., 101000., 100);
+        linspace1 = utils::createLinspace<float>(-1000., 1000., 10);
 
     Half h1, h2;
     int i = 0, j = -1;

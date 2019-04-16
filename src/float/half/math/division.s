@@ -86,6 +86,7 @@ half_div:
 
     # mantysa
 
+    # TODO: optimise this
     push $5
     push %edi
     call simple_shiftL_16
