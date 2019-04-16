@@ -165,6 +165,19 @@ OTHER_ADD:
     movb $0, %ecx
     movb (%edi, %ecx, 1), %ch
 
+MAYBE_ZERO:
+    cmpb $0, %al
+    je MAAYBE_ZERO
+    jmp MAYBE_NOT
+MAAYBE_ZERO:
+    cmpb $0, %ah
+    je MAAAYBE_ZERO
+    jmp MAYBE_NOT
+MAAAYBE_ZERO:
+    cmpb $0, %ch
+    je ZERO
+    jmp MAYBE_NOT
+MAYBE_NOT:
     movb $0, %dl
 
 LOOP:
@@ -238,3 +251,11 @@ RESULT:
 	popl	%edi
 	popl	%ebp
 	ret 
+
+ZERO:
+
+    movb $0, 0x14(%ebp)
+    movb $1, 0x15(%ebp)
+    movb $2, 0x16(%ebp)
+    movb $3, 0x17(%ebp)
+    jmp RESULT
