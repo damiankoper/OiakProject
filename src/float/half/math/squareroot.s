@@ -83,13 +83,7 @@ ODD:
 # wykładnik gotowy
 # Przesunięcie mantysy w lewo żeby pozbyć się najstarszego bitu, który jest częścią wykładnika
 
-    push $6
-    push %edi
-    call simple_shiftL_16
-
-    push $6
-    push %edi
-    call simple_shiftR_16
+    andb $3, -0x7(%ebp)
 
     movb $1, %cl
     addb $4, (%edi, %ecx, 1)
@@ -135,13 +129,7 @@ EVEN:
 
     movb %al, -0xd(%ebp)
 
-    push $6
-    push %edi
-    call simple_shiftL_16
-
-    push $6
-    push %edi
-    call simple_shiftR_16
+    andb $3, -0x7(%ebp)
 
     movb $1, %cl
     addb $4, (%edi, %ecx, 1)

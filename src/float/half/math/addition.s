@@ -33,7 +33,7 @@ half_add:
 
 # Wykładnik 1
     
-    movb $0, %dl
+    xor %dl, %dl
     movb 0x15(%ebp), %al
     shlb $1, %al
     adcb $0, %dl
@@ -41,7 +41,7 @@ half_add:
 
 
 
-    movb $0, %dl
+    xor %dl, %dl
     movb 0x19(%ebp), %ah
     shlb $1, %ah
     adcb $0, %dl
@@ -86,30 +86,17 @@ M:
     subb %ah, %al
     xor %ah, %ah
 
-    push $6
-    push %esi
-    call simple_shiftL_16
-
-    push $6
-    push %esi
-    call simple_shiftR_16
+    andb $3, 0x19(%ebp)
 
     movb 0x19(%ebp), %cl
     addb $4, %cl
     movb %cl, 0x19(%ebp)
 
-    push $6
-    push %edi
-    call simple_shiftL_16
-
-    push $6
-    push %edi
-    call simple_shiftR_16
+    andb $3, 0x15(%ebp)
 
     movb 0x15(%ebp), %cl
     addb $4, %cl
     movb %cl, 0x15(%ebp)
-
 
     cmpb $0, %al
     je DONT_SHIFT

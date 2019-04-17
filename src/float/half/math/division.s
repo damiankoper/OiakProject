@@ -52,23 +52,14 @@ half_div:
 
     # wykładnik
 
-    push $1
-    push %edi
-    call simple_shiftL_16
-
-    push $1
-    push %esi
-    call simple_shiftL_16
-
-    push $1
-    push %edx
-    call simple_shiftL_16
-
     xor %ecx, %ecx
     movb $3, %cl
 
     movb 0x15(%ebp), %ah
     movb 0x19(%ebp), %al
+
+    shlb $1, %ah
+    shlb $1, %al
 
     shrb $3, %ah
     shrb $3, %al
@@ -86,22 +77,9 @@ half_div:
 
     # mantysa
 
-    # TODO: optimise this
-    push $5
-    push %edi
-    call simple_shiftL_16
+    andb $3, 0x19(%ebp)
+    andb $3, 0x15(%ebp)
 
-    push $6
-    push %edi
-    call simple_shiftR_16
-
-    push $5
-    push %esi
-    call simple_shiftL_16
-
-    push $6
-    push %esi
-    call simple_shiftR_16
 
     movb 0x15(%ebp), %cl
     addb $4, %cl
@@ -149,8 +127,6 @@ LOOP:
     jmp X_0
 
 SWAP:
-
-   // movl %edi, %esi
 
     movb $0, %cl
     movb -0xc(%ebp), %al

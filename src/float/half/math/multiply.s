@@ -83,25 +83,13 @@ DALEJ_2:
 
     movb %dl, -0x1(%ebp)
 
-    push $6
-    push %esi
-    call simple_shiftL_16
-
-    push $6
-    push %esi
-    call simple_shiftR_16
+    andb $3, 0x19(%ebp)
 
     movb 0x19(%ebp), %cl
     addb $4, %cl
     movb %cl, 0x19(%ebp)
 
-    push $6
-    push %edi
-    call simple_shiftL_16
-
-    push $6
-    push %edi
-    call simple_shiftR_16
+    andb $3, 0x15(%ebp)
 
     movb 0x15(%ebp), %cl
     addb $4, %cl
