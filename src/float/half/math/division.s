@@ -98,13 +98,28 @@ half_div:
 
     xor %ah, %ah
 
-
+/*
     movb $0, -0x8(%ebp)
     movb $0, -0x7(%ebp)
     movb $0, -0x6(%ebp)
     movb $0, -0x5(%ebp)
+*/
+
+# to jest nowe
+
+    push $10
+    push %edi
+    call simple_shiftL_32
+
+    push %esi
+    push %edi
+    call simple_div_32
 
 
+    jmp LOOP_EXIT
+# tu sie kończy nowe
+
+/*
 LOOP:
 
     cmpb $11, %ah
@@ -162,23 +177,23 @@ SHIFT:
     movb %al, -0x7(%ebp)
   
     jmp SWAP
-
+*/
 LOOP_EXIT:
   
     push $6
-    push %edx
+    push %edi
     call simple_shiftL_32
 
-    movb -0x6(%ebp), %al
+    movb 0x16(%ebp), %al
     cmpb $1, %al
     jb SHIFT_EXP_M
 
 
     movb -0x1(%ebp), %al
-    movb %al, -0x6(%ebp)
+    movb %al, 0x16(%ebp)
 
     push $5
-    push %edx
+    push %edi
     call simple_shiftR_32
 
     jmp ADDING_THE_SIGN
@@ -186,7 +201,7 @@ LOOP_EXIT:
 SHIFT_EXP_M:
 
     push $1
-    push %edx
+    push %edi
     call simple_shiftL_32
 
     movb -0x1(%ebp), %al
@@ -194,10 +209,10 @@ SHIFT_EXP_M:
     cmpb $0, %al
     je NAN
 
-    movb %al, -0x6(%ebp)
+    movb %al, 0x16(%ebp)
 
     push $5
-    push %edx
+    push %edi
     call simple_shiftR_32
 
     jmp ADDING_THE_SIGN
@@ -205,7 +220,7 @@ SHIFT_EXP_M:
 ADDING_THE_SIGN:
 
     push $1
-    push %edx
+    push %edi
     call simple_shiftR_16
 
     movb -0x4(%ebp), %al
@@ -215,13 +230,13 @@ ADDING_THE_SIGN:
 
 CHANGE_SIGN:
 
-    movb -0x7(%ebp), %al
+    movb 0x15(%ebp), %al
     addb $128, %al
-    movb %al, -0x7(%ebp)
+    movb %al, 0x15(%ebp)
 
 RESULT:
 
-    movl -0x8(%ebp), %ecx
+    movl 0x14(%ebp), %ecx
     movl 0x10(%ebp), %edi
     movl %ecx, 0x0(%edi)
 
@@ -239,21 +254,21 @@ NAN_OR_INF:
 
 INF: 
 
-    movb $0,   -0x8(%ebp)
-    movb $248, -0x7(%ebp)
+    movb $0,   0x14(%ebp)
+    movb $248, 0x15(%ebp)
  
     jmp ADDING_THE_SIGN
 
 NAN:
 
-    movb $255, -0x8(%ebp)
-    movb $255, -0x7(%ebp)
+    movb $255, 0x14(%ebp)
+    movb $255, 0x15(%ebp)
 
     jmp ADDING_THE_SIGN
 
 ZERO:
 
-    movb $0, -0x8(%ebp)
-    movb $0, -0x7(%ebp)
+    movb $0, 0x14(%ebp)
+    movb $0, 0x15(%ebp)
 
     jmp ADDING_THE_SIGN
