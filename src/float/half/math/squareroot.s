@@ -101,23 +101,20 @@ ODD:
     push %edi
     call simple_shiftL_16
 
-    push $2
-    push %esi
-    call simple_shiftL_32
 
-    push $8
+    push $6
     push %esi
-    call simple_shiftR_32
-
+    call simple_shiftR_16
 
     // esi - reszta
 
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
 
-    push %ebx
-    push %esi
-    call simple_sub_16
+    movb -0x4(%ebp), %al
+
+    subb $1, %al
+    movb %al, -0x4(%ebp)
 
     movb $0, %dl
     jmp ALGORITHM_LOOP
@@ -138,30 +135,12 @@ EVEN:
     push %edi
     call simple_shiftL_16
 
-        //przesuniecie dodajace reszte
-
-    movb -0x7(%ebp), %al
-    movb %al, -0x4(%ebp)
-
     push $1
     push %edi
     call simple_shiftL_16
 
-    push $1
-    push %esi
-    call simple_shiftL_32
-
-    push $8
-    push %esi
-    call simple_shiftR_32
-
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
-
-    push %ebx
-    push %esi
-    call simple_sub_16
-
 
     movb $0, %dl
 
@@ -170,29 +149,28 @@ ALGORITHM_LOOP:
     cmpb $11, %dl
     je ALGORITHM_LOOP_EXIT
 
-    push $8
-    push %esi
-    call simple_shiftL_32
+
+    movb -0x4(%ebp), %al
+    movb -0x3(%ebp), %cl
+    movb %al, -0x3(%ebp)
+    movb %cl, -0x2(%ebp)
+
 
     movb -0x7(%ebp), %al
     movb %al, -0x4(%ebp)
+
+    push $6
+    push %esi
+    call simple_shiftR_32
 
     push $2
     push %edi
     call simple_shiftL_16
 
-    push $2
-    push %esi
-    call simple_shiftL_32
-
-    push $8
-    push %esi
-    call simple_shiftR_32
-
 
     push $2
     push %ebx
-    call simple_shiftL_32
+    call simple_shiftL_16
 
     movb $0, %cl
     addb $1, (%ebx, %ecx, 1)
@@ -218,16 +196,15 @@ X_1:
     push %esi
     call simple_sub_16
 
-    push $2
+    push $1
     push %ebx
     call simple_shiftR_16
 
-    push $1
-    push %ebx
-    call simple_shiftL_16
 
-    movb $0, %cl
-    addb $1, (%ebx, %ecx, 1)
+    movb -0xc(%ebp), %al
+    andb $254, %al
+    addb $1, %al
+    movb %al, -0xc(%ebp)
 
     incb %dl
     jmp ALGORITHM_LOOP

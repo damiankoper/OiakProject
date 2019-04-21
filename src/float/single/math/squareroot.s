@@ -91,23 +91,27 @@ ODD:
 # wykładnik gotowy
 # Przesunięcie mantysy w lewo żeby pozbyć się najstarszego bitu, który jest częścią wykładnika
 
-    push $9
-    push %edi
-    call simple_shiftL_32
 
-    push $1
-    push %edi
-    call simple_shiftR_32
+    movb -0x6(%ebp), %al
+    andb $127, %al
+    addb $128, %al 
+   
+    movb %al, -0x5(%ebp)
+    movb -0x7(%ebp), %al
+    movb %al, -0x6(%ebp)
+    movb -0x8(%ebp), %al
+    movb %al, -0x7(%ebp)
+    movb $0, -0x8(%ebp)
 
-    movb $3, %cl
-    addb $128, (%edi, %ecx, 1)
+
+
 
     push $2
     push %edi
     call simple_shiftL_64
 
-    movb $0, %cl
-    addb $1, (%ebx, %ecx, 1)
+
+    movb $1, -0xc(%ebp)
 
     push %ebx
     push %esi
@@ -123,23 +127,27 @@ EVEN:
 
     movb %al, -0xd(%ebp)
 
-    push $9
-    push %edi
-    call simple_shiftL_32
 
-    push $1
-    push %edi
-    call simple_shiftR_32
+    movb -0x6(%ebp), %al
+    andb $127, %al
+    addb $128, %al
+   
+    movb %al, -0x5(%ebp)
+    movb -0x7(%ebp), %al
+    movb %al, -0x6(%ebp)
+    movb -0x8(%ebp), %al
+    movb %al, -0x7(%ebp)
+    movb $0, -0x8(%ebp)
 
-    movb $3, %cl
-    addb $128, (%edi, %ecx, 1)
+
 
     push $1
     push %edi
     call simple_shiftL_64
 
-    movb $0, %cl
-    addb $1, (%ebx, %ecx, 1)
+
+    movb $1, -0xc(%ebp)
+
 
     push %ebx
     push %esi
@@ -186,29 +194,28 @@ X_1:
     push %esi
     call simple_sub_32
 
-    push $2
+    push $1
     push %ebx
     call simple_shiftR_32
 
-    push $1
-    push %ebx
-    call simple_shiftL_32
-
-    movb $0, %cl
-    addb $1, (%ebx, %ecx, 1)
+    movb -0xc(%ebp), %al
+    andb $254, %al
+    addb $1, %al
+    movb %al, -0xc(%ebp)
 
     incb %dl
     jmp ALGORITHM_LOOP
 
 X_0:
 
-    push $2
+    push $1
     push %ebx
     call simple_shiftR_32
 
-    push $1
-    push %ebx
-    call simple_shiftL_32
+    movb -0xc(%ebp), %al
+    andb $254, %al
+    movb %al, -0xc(%ebp)
+
 
     incb %dl
     jmp ALGORITHM_LOOP

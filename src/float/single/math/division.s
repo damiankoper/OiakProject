@@ -52,23 +52,20 @@ single_div:
 
     # wykładnik
 
-    push $1
-    push %edi
-    call simple_shiftL_32
-
-    push $1
-    push %esi
-    call simple_shiftL_32
-
-    push $1
-    push %edx
-    call simple_shiftL_32
-
     xor %ecx, %ecx
     movb $3, %cl
 
-    movb (%esi, %ecx, 1), %ah
-    movb (%edi, %ecx, 1), %al
+    movb 0x3(%esi), %ah
+    movb 0x2(%esi), %cl
+
+    shlb $1, %cl
+    rclb $1, %ah
+
+    movb 0x3(%edi), %al
+    movb 0x2(%edi), %cl
+
+    shlb $1, %cl
+    rclb $1, %al
 
     cmpb $0, %ah
     je NAN_OR_INF
@@ -84,22 +81,19 @@ single_div:
 
     # mantysa
 
-    movb $0, (%edi, %ecx, 1)
-    movb $0, (%esi, %ecx, 1)
-    movb $0, (%edx, %ecx, 1)
+    movb $0, 0x3(%edi)
+    movb $0, 0x3(%esi)
 
-    push $1
-    push %edi
-    call simple_shiftR_32
+    movb 0x2(%edi), %al
+    andb $127, %al
+    addb $128, %al
+    movb %al, 0x2(%edi) 
 
-    movb $2, %cl
-    addb $128, (%edi, %ecx, 1)
+    movb 0x2(%esi), %al
+    andb $127, %al
+    addb $128, %al
+    movb %al, 0x2(%esi)
 
-    push $1
-    push %esi
-    call simple_shiftR_32
-
-    addb $128, (%esi, %ecx, 1)
 
     movb 0x18(%ebp), %al
     movb %al, -0xc(%ebp)
@@ -110,14 +104,8 @@ single_div:
     movb 0x1b(%ebp), %al
     movb %al, -0x9(%ebp)
 
-    push $1
-    push %edx
-    call simple_shiftR_32
-
-    addb $128, (%edx, %ecx, 1)
 
     xor %ah, %ah
-
 
     movb $0, -0x8(%ebp)
     movb $0, -0x7(%ebp)
@@ -145,8 +133,6 @@ LOOP:
     jmp X_0
 
 SWAP:
-
-   // movl %edi, %esi
 
     movb $0, %cl
     movb -0xc(%ebp), %al

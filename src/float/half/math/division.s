@@ -98,12 +98,7 @@ half_div:
 
     xor %ah, %ah
 
-/*
-    movb $0, -0x8(%ebp)
-    movb $0, -0x7(%ebp)
-    movb $0, -0x6(%ebp)
-    movb $0, -0x5(%ebp)
-*/
+
 
 # to jest nowe
 
@@ -119,65 +114,6 @@ half_div:
     jmp LOOP_EXIT
 # tu sie kończy nowe
 
-/*
-LOOP:
-
-    cmpb $11, %ah
-    je LOOP_EXIT
-
-    push %esi
-    push %edi
-    call simple_div_16
-
-
-    push $1
-    push %esi
-    call simple_shiftL_16
-
-    movb $0, %cl
-    movb (%edi, %ecx, 1), %al    
-
-    cmpb $1, %al
-    je X_1
-    jmp X_0
-
-SWAP:
-
-    movb $0, %cl
-    movb -0xc(%ebp), %al
-    movb %al, 0x0(%edi)
-    movb -0xb(%ebp), %al
-    movb %al, 0x1(%edi)
-
-
-    movl %edi, %ebx
-    movl %esi, %edi
-    movl %ebx, %esi
-
-    incb %ah
-    jmp LOOP
-
-X_1:
-
-    movb $0, %cl
-    stc
-    jmp SHIFT
-X_0:
-
-    movb $0, %cl
-    clc
-    jmp SHIFT
-SHIFT:
-
-    movb -0x8(%ebp), %al
-    rclb $1, %al    
-    movb %al, -0x8(%ebp)
-    movb -0x7(%ebp), %al
-    rclb $1, %al    
-    movb %al, -0x7(%ebp)
-  
-    jmp SWAP
-*/
 LOOP_EXIT:
   
     push $6
