@@ -120,7 +120,8 @@ void single::testSqrt()
         ->beforeSameDataSet([&i, &s1, linspace1](Tester::TestEnv &testenv) {
             i++;
             s1 = linspace1[i];
-            testenv.activeElements = s1.printBinary();
+            testenv.startElements = s1.printBinary();
+            testenv.activeElements = s1.sqrt().printBinary();
         })
         ->setTestedFn([&s1](Tester::TestEnv testenv) {
             Single s = s1.sqrt();

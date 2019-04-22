@@ -119,7 +119,8 @@ void half::testSqrt()
         ->beforeSameDataSet([&i, &h1, linspace1](Tester::TestEnv &testenv) {
             i++;
             h1 = linspace1[i];
-            testenv.activeElements = h1.printBinary();
+            testenv.startElements = h1.printBinary();
+            testenv.activeElements = h1.sqrt().printBinary();
         })
         ->setTestedFn([&h1](Tester::TestEnv testenv) {
             Half h = h1.sqrt();
