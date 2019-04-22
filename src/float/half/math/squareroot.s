@@ -58,6 +58,9 @@ half_sqrt:
 
 # Sprawdzam czy wykładnik jest parzysty
 
+    cmpb $0, %al
+    je ZERO
+
     subb $15, %al
     movb %al, %cl
     shrb $1, %cl
@@ -251,3 +254,10 @@ ADDING_THE_SIGN:
 	popl	%edi
     popl    %ebp
     ret
+
+
+    ZERO:
+
+    movb $0, 0x1(%ebx)
+    movb $0, 0x0(%ebx)
+    jmp ADDING_THE_SIGN

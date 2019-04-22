@@ -53,6 +53,10 @@ single_sqrt:
     rclb $1, %al
     jc UNDOABLE
 
+
+    cmpb $0, %al
+    je ZERO
+
 # Sprawdzam czy wykładnik jest parzysty
 
     subb $127, %al
@@ -112,11 +116,14 @@ ODD:
 
 
     movb $1, -0xc(%ebp)
-
+    movb $1, -0x4(%ebp)
+    /*
     push %ebx
     push %esi
     call simple_sub_32
+*/
 
+    movb $0, %dl
 
     jmp ALGORITHM_LOOP
 
@@ -149,10 +156,14 @@ EVEN:
     movb $1, -0xc(%ebp)
 
 
+    movb $1, -0xc(%ebp)
+    movb $0, -0x4(%ebp)
+
+/*
     push %ebx
     push %esi
     call simple_sub_32
-
+*/
 
     movb $0, %dl
 
@@ -169,10 +180,13 @@ ALGORITHM_LOOP:
     push %ebx
     call simple_shiftL_32
 
-    movb $0, %cl
-    addb $1, (%ebx, %ecx, 1)
+//    movb $0, %cl
+//    addb $1, (%ebx, %ecx, 1)
+
+    addb $1, 0x0(%ebx)
 
 
+/*
     movb $3, %cl
 LOOP:    
     cmpb $0, %cl
@@ -188,6 +202,41 @@ DALEJ:
 
     decb %cl
     jmp LOOP
+*/
+
+    movb 0x3(%esi), %ah
+    movb 0x2(%esi), %al
+    movb 0x1(%esi), %dh
+    movb 0x0(%esi), %cl
+
+
+    cmpb $5, %dl
+    jb DL8
+    cmpb $13, %dl
+    jb DL16
+    cmpb $21, %dl
+    jb DL24
+
+    cmpb 0x3(%ebx), %ah
+    jb X_0
+    cmpb 0x3(%ebx), %ah
+    ja X_1
+DL24:
+    cmpb 0x2(%ebx), %al
+    jb X_0
+    cmpb 0x2(%ebx), %al
+    ja X_1
+DL16:
+    cmpb 0x1(%ebx), %dh
+    jb X_0
+    cmpb 0x1(%ebx), %dh
+    ja X_1
+DL8:
+    cmpb 0x0(%ebx), %cl
+    jb X_0
+
+
+
 X_1:
 
     push %ebx
@@ -243,3 +292,12 @@ ADDING_THE_SIGN:
 	popl	%edi
     popl    %ebp
     ret
+
+
+ZERO:
+
+    movb $0, 0x3(%ebx)
+    movb $0, 0x2(%ebx)
+    movb $0, 0x1(%ebx)
+    movb $0, 0x0(%ebx)
+    jmp ADDING_THE_SIGN
