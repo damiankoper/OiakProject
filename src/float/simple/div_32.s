@@ -29,7 +29,7 @@ simple_div_32:
   movb $0, xShift
 
   # Sprawdzenie czy A < B
-  mov $3, %edi
+  mov $2, %edi
   div_cmpZeroLoop:
     movb (%ebx, %edi, 1), %ah
     movb (%edx, %edi, 1), %al
@@ -38,7 +38,7 @@ simple_div_32:
     je div_ZeroIf
 
     # Kopiujemy resztę
-    mov $3, %ecx
+    mov $2, %ecx
     div_result_zero_loop1:
       movb (%ebx, %ecx, 1), %al
       movb %al, (%edx, %ecx, 1)
@@ -47,7 +47,7 @@ simple_div_32:
       jne div_result_zero_loop1
 
     # Kopiujemy wynik
-    mov $3, %ecx
+    mov $2, %ecx
     div_result_zero_loop2:
       movb $0, (%ebx, %ecx, 1)
       dec %ecx
@@ -65,7 +65,7 @@ simple_div_32:
 
   # Skalujemy A razem z B
   scaleLoopA:
-    movb 3(%ebx), %al
+    movb 2(%ebx), %al
     andb $0x20, %al
     cmpb $0x20, %al
     je scaleLoopAEnd
@@ -73,10 +73,10 @@ simple_div_32:
     incb xShift
     pushl $1
     pushl %ebx
-    call simple_shiftL_32
+    call simple_shiftL_24
     push $1
     push %edx
-    call simple_shiftL_32
+    call simple_shiftL_24
     jmp scaleLoopA
     scaleLoopAEnd:
 
@@ -84,7 +84,7 @@ simple_div_32:
   # Tyle razy wykonamy dzielenie, żeby uzyskać wszystkie bity wyniku
   xor %ecx, %ecx
   scaleLoopB:
-    movb 3(%edx), %al
+    movb 2(%edx), %al
     andb $0x20, %al
     cmpb $0x20, %al
     je scaleLoopBEnd
@@ -92,13 +92,13 @@ simple_div_32:
     incb xShift
     push $1
     push %edx
-    call simple_shiftL_32
+    call simple_shiftL_24
     incb %cl
     jmp scaleLoopB
     scaleLoopBEnd:
 
   # Porównanie i korekcja skalowania
-  mov $3, %edi
+  mov $2, %edi
   div_cmpLoop:
     movb (%ebx, %edi, 1), %ah
     movb (%edx, %edi, 1), %al
@@ -112,14 +112,14 @@ simple_div_32:
     decb xShift
     push $1
     push %edx
-    call simple_shiftR_32
+    call simple_shiftR_24
     decb %cl
   div_continue:
   
   inc %ecx
   cmp $0, %ecx
   je divLoopEnd
-  mov $3, %edi
+  mov $2, %edi
   divLoop:
     push %ecx
   
@@ -129,12 +129,12 @@ simple_div_32:
     je notFirstTime
       push $1
       push %ebx
-      call simple_shiftL_32
+      call simple_shiftL_24
 
       # Przesuwanie wyniku w lewo o 1
       push $1
       push $div_result
-      call simple_shiftL_32
+      call simple_shiftL_24
     notFirstTime:
     movb $0, firstTime
 
@@ -145,13 +145,13 @@ simple_div_32:
     addR:
       push %edx
       push %ebx
-      call simple_add_32
+      call simple_add_24
       jmp addsubEnd
 
     subR:
       push %edx
       push %ebx
-      call simple_sub_32
+      call simple_sub_24
     addsubEnd:
 
     clc
@@ -162,21 +162,21 @@ simple_div_32:
   call compareAndAddBit
 
   # Przywracamy resztę
-  movb 3(%ebx), %al
+  movb 2(%ebx), %al
   andb $0x80, %al  
   cmpb $0x80, %al 
   jne div_reminder_gt_zero
     push %edx
     push %ebx
-    call simple_add_32
+    call simple_add_24
   div_reminder_gt_zero:
 
   push xShift
   push %ebx
-  call simple_shiftR_32
+  call simple_shiftR_24
 
   # Kopiujemy resztę
-  mov $3, %ecx
+  mov $2, %ecx
   div_reminder_loop:
     movb (%ebx,%ecx,1), %al
     movb %al, (%edx, %ecx, 1)
@@ -185,7 +185,7 @@ simple_div_32:
     jne div_reminder_loop
 
   # Kopiujemy wynik
-  mov $3, %ecx
+  mov $2, %ecx
   div_result_loop:
     movb div_result(,%ecx,1), %al
     movb %al, (%ebx, %ecx, 1)
@@ -219,9 +219,9 @@ setResultFirstBit:
 
 compare:
   # Sprawdzamy zgodność znaków 
-  movb 3(%ebx), %al
+  movb 2(%ebx), %al
   andb $0x80, %al  
-  movb 3(%edx), %cl  
+  movb 2(%edx), %cl  
   andb $0x80, %cl  
   cmpb %al, %cl
   ret

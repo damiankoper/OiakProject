@@ -42,7 +42,7 @@ public:
   Half add(Half component);
   Half multiply(Half multiplier);
   Half subtract(Half subtrahend);
-  Half divideBy(Half divisor); // TODO: implement this
+  Half divideBy(Half divisor);
 
   Half sqrt();
   /**
