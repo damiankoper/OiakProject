@@ -1,11 +1,11 @@
 #include "../../catch/catch.hpp"
 #include <cinttypes>
 #include <iostream>
-
 extern "C" void simple_add_32(int32_t *, int32_t *);
 extern "C" void simple_sub_32(int32_t *, int32_t *);
 extern "C" void simple_mul_32(int32_t *, int32_t *);
 extern "C" void simple_div_32(int32_t *, int32_t *);
+extern "C" void simple_div_byte_32(int32_t *, int8_t *);
 extern "C" void simple_shiftR_32(int32_t *, int8_t);
 extern "C" void simple_shiftL_32(int32_t *, int8_t);
 extern "C" void simple_shiftL_64(int32_t *, int8_t);
@@ -218,12 +218,42 @@ TEST_CASE("Simple mul test", "")
     }
 }
 
+TEST_CASE("Simple div byte test", "")
+{
+    GIVEN("Raw uint32")
+    {
+        int32_t a = -280;
+        int8_t b = 28;
+        WHEN("division is made")
+        {
+            simple_div_byte_32(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == -10);
+            }
+        }
+    }
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 0x00030405;
+        int8_t b = 0b00000010;
+        WHEN("division is made")
+        {
+            simple_div_byte_32(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 0x00018202);
+            }
+        }
+    }
+}
+
 TEST_CASE("Simple div test", "")
 {
     GIVEN("Raw uint32")
     {
-        int32_t a = 0b100000000000000000000000;
-        int32_t b = 0b100000000000000000000000;
+        int32_t a = 0b00000000100000000000000000000000;
+        int32_t b = 0b00000000100000000000000000000000;
         WHEN("division is made")
         {
             simple_div_32(&a, &b);
@@ -337,7 +367,6 @@ TEST_CASE("Simple div test", "")
             }
         }
     }
-
     GIVEN("Raw uint32")
     {
         int32_t a = 7999999;
@@ -377,19 +406,37 @@ TEST_CASE("Simple div test 1", "")
 {
     GIVEN("Raw uint32")
     {
-        int32_t a = 125;
-        int32_t b = 3;
+        int32_t a = 345;
+        int32_t b = 27;
         WHEN("division is made")
         {
 
             simple_div_32(&a, &b);
             THEN("value is correct")
             {
-                REQUIRE(a == 41);
+                REQUIRE(a == 12);
             }
             THEN("value is correct")
             {
-                REQUIRE(b == 2);
+                REQUIRE(b == 21);
+            }
+        }
+    }
+    GIVEN("Raw uint32")
+    {
+        int32_t a = 458752;
+        int32_t b = 2047;
+        WHEN("division is made")
+        {
+
+            simple_div_32(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 224);
+            }
+            THEN("value is correct")
+            {
+                REQUIRE(b == 224);
             }
         }
     }

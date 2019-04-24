@@ -1,227 +1,191 @@
 .data
-  firstTime: .byte 1
-  xShift: .byte 0
+  R: .long 1
+  Rbuff: .long 0
 .bss 
-  div_result: .space 4
+  Q: .space 4
+  Qbuff: .space 4
+  Dbuff: .space 4
 .text
 .globl simple_div_32
-# Tylko liczby dodatnie
-# A = A/B; B = A%B
-# Wynik A
-# Reszta B
 simple_div_32:
   pushl	%ebp
 	movl	%esp, %ebp
   pusha
 
   # Wskaźniki na składniki są na stosie 
-  mov 8(%ebp), %ebx  # A
-  mov 12(%ebp), %edx # B
+  mov 8(%ebp), %ebx  # N - nominator
+  mov 12(%ebp), %edx # D - denominator
 
-  # A: 1 2 3 4
-  # B: A B C D
-
-  movb $0, div_result
-  movb $0, div_result+1
-  movb $0, div_result+2
-  movb $0, div_result+3
-  movb $1, firstTime
-  movb $0, xShift
-
-  # Sprawdzenie czy A < B
-  mov $3, %edi
-  div_cmpZeroLoop:
-    movb (%ebx, %edi, 1), %ah
-    movb (%edx, %edi, 1), %al
-    cmpb %al, %ah
-    ja div_ZeroContinue
-    je div_ZeroIf
-
-    # Kopiujemy resztę
-    mov $3, %ecx
-    div_result_zero_loop1:
-      movb (%ebx, %ecx, 1), %al
-      movb %al, (%edx, %ecx, 1)
-      dec %ecx
-      cmp $-1, %ecx
-      jne div_result_zero_loop1
-
-    # Kopiujemy wynik
-    mov $3, %ecx
-    div_result_zero_loop2:
-      movb $0, (%ebx, %ecx, 1)
-      dec %ecx
-      cmp $-1, %ecx
-      jne div_result_zero_loop2
-
-    jmp divEnd
-
-    div_ZeroIf:
-
-    dec %edi
-    cmp $-1, %edi
-    jne div_cmpZeroLoop
-  div_ZeroContinue:
-
-  # Skalujemy A razem z B
-  scaleLoopA:
-    movb 3(%ebx), %al
-    andb $0x20, %al
-    cmpb $0x20, %al
-    je scaleLoopAEnd
-
-    incb xShift
-    pushl $1
-    pushl %ebx
-    call simple_shiftL_32
-    push $1
-    push %edx
-    call simple_shiftL_32
-    jmp scaleLoopA
-    scaleLoopAEnd:
-
-  # Skalujemy B (wiemy, że A > B) i liczymy przesunięcia w %cl
-  # Tyle razy wykonamy dzielenie, żeby uzyskać wszystkie bity wyniku
-  xor %ecx, %ecx
-  scaleLoopB:
-    movb 3(%edx), %al
-    andb $0x20, %al
-    cmpb $0x20, %al
-    je scaleLoopBEnd
-
-    incb xShift
-    push $1
-    push %edx
-    call simple_shiftL_32
-    incb %cl
-    jmp scaleLoopB
-    scaleLoopBEnd:
-
-  # Porównanie i korekcja skalowania
-  mov $3, %edi
-  div_cmpLoop:
-    movb (%ebx, %edi, 1), %ah
-    movb (%edx, %edi, 1), %al
-    cmpb %al, %ah
-    jb div_adjust_scale
-    jae div_continue
-    dec %edi
-    cmp $-1, %edi
-    jne div_cmpLoop
-  div_adjust_scale:
-    decb xShift
-    push $1
-    push %edx
-    call simple_shiftR_32
-    decb %cl
-  div_continue:
-  
-  inc %ecx
-  cmp $0, %ecx
-  je divLoopEnd
-  mov $3, %edi
-  divLoop:
-    push %ecx
-  
-    call compareAndAddBit
-
-    cmpb $1, firstTime
-    je notFirstTime
-      push $1
-      push %ebx
-      call simple_shiftL_32
-
-      # Przesuwanie wyniku w lewo o 1
-      push $1
-      push $div_result
-      call simple_shiftL_32
-    notFirstTime:
-    movb $0, firstTime
-
-    call compare
-    je subR
-    jne addR
-
-    addR:
-      push %edx
-      push %ebx
-      call simple_add_32
-      jmp addsubEnd
-
-    subR:
-      push %edx
-      push %ebx
-      call simple_sub_32
-    addsubEnd:
-
-    clc
-    pop %ecx
-    loop divLoop
-  divLoopEnd:
-
-  call compareAndAddBit
-
-  # Przywracamy resztę
-  movb 3(%ebx), %al
-  andb $0x80, %al  
-  cmpb $0x80, %al 
-  jne div_reminder_gt_zero
-    push %edx
-    push %ebx
-    call simple_add_32
-  div_reminder_gt_zero:
-
-  push xShift
+  push $Q
   push %ebx
-  call simple_shiftR_32
+  call copyFromTo
 
-  # Kopiujemy resztę
-  mov $3, %ecx
-  div_reminder_loop:
-    movb (%ebx,%ecx,1), %al
-    movb %al, (%edx, %ecx, 1)
-    dec %ecx
-    cmp $-1, %ecx
-    jne div_reminder_loop
+  push %edx
+  call byteDiv
 
-  # Kopiujemy wynik
-  mov $3, %ecx
-  div_result_loop:
-    movb div_result(,%ecx,1), %al
-    movb %al, (%ebx, %ecx, 1)
-    dec %ecx
-    cmp $-1, %ecx
-    jne div_result_loop
+  # Oblicz pierwszą resztę
+  push %edx
+  push $R
+  call simple_add_32
 
-  divEnd:
+  # Jeśli ABS(R)>=D
+  divLoop:
+    # ABS
+
+    push $Rbuff
+    push $R
+    call copyFromTo
+
+    cmpb $0, R+3
+    jge isPositive
+
+    movb $0, Rbuff
+    movb $0, Rbuff+1
+    movb $0, Rbuff+2
+    movb $0, Rbuff+3
+    
+    push $R
+    push $Rbuff
+    call simple_sub_32
+    isPositive:
+
+    # >= D
+    mov $3, %ecx
+    cmpLoop:
+      movb Rbuff(,%ecx,1), %al
+      cmpb %al, (%edx, %ecx, 1)
+      ja divLoopEnd
+      jb cmpLoopEnd
+      dec %ecx
+      cmp $-1, %ecx
+      jne cmpLoop
+    cmpLoopEnd:
+
+    # Body:
+    push $R
+    push %ebx
+    call copyFromTo
+
+    push $Qbuff
+    push $Q
+    call copyFromTo
+
+    push $Dbuff
+    push %edx
+    call copyFromTo
+    
+    push $Dbuff
+    push $Qbuff
+    call simple_mul_32
+
+    push $Dbuff
+    push $R
+    call simple_sub_32
+
+    push $Qbuff
+    push $Q
+    call copyFromTo
+
+    push $Q
+    push $R
+    call copyFromTo
+
+    push %edx
+    call byteDiv
+
+    sarb Q+3
+    rcrb Q+2
+    rcrb Q+1
+    rcrb Q
+
+    push $Qbuff
+    push $Q
+    call simple_add_32
+
+    jmp divLoop
+  divLoopEnd:
  
+  push %ebx
+  push $Q
+  call copyFromTo
+
+  push %edx
+  push $R
+  call copyFromTo
+
   popa
 	movl %ebp, %esp
 	popl %ebp
 	ret $8
 
 
-###################### END
+copyFromTo:
+  pushl	%ebp
+	movl	%esp, %ebp
+  pusha
 
-compareAndAddBit:
-  call compare
-  jne div_bit_zero
-    # Wstawianie 1 na końcu wyniku jeśli znaki zgodne
-    call setResultFirstBit
-  div_bit_zero:
-  ret
+  mov 8(%ebp), %edx
+  mov 12(%ebp), %ebx
 
-setResultFirstBit:
-  movb div_result, %al
-  orb $0x01, %al
-  movb %al, div_result
-  ret
+    movb (%edx), %al
+    movb %al, (%ebx)
+    movb 1(%edx), %al
+    movb %al, 1(%ebx)
+    movb 2(%edx), %al
+    movb %al, 2(%ebx)
+    movb 3(%edx), %al
+    movb %al, 3(%ebx)
 
-compare:
-  # Sprawdzamy zgodność znaków 
-  movb 3(%ebx), %al
-  andb $0x80, %al  
-  movb 3(%edx), %cl  
-  andb $0x80, %cl  
-  cmpb %al, %cl
-  ret
+  popa
+	movl %ebp, %esp
+	popl %ebp
+  ret $8
+
+
+byteDiv:
+  pushl	%ebp
+	movl	%esp, %ebp
+  pusha
+
+  mov 8(%ebp), %edx  
+
+  # Szukanie pierwszego niezerowego bajtu(cyfry) dzielnika
+  mov $4, %ecx
+  findFirstNonZero:
+    cmpb $0, -1(%edx, %ecx, 1)
+    jne calcQ
+  loop findFirstNonZero
+
+  # Oblicz Q
+  calcQ:
+    lea -1(%edx, %ecx, 1), %eax
+    push %eax
+    push $Q
+    call simple_div_byte_32
+
+  # Przesuń w prawo o 8*(ecx-1)
+  dec %ecx
+  cmp $0, %ecx
+  je doNotShift
+  shiftBytewise:
+    movb Q+1, %al
+    movb %al, Q
+    movb Q+2, %al
+    movb %al, Q+1
+    movb Q+3, %al
+    movb %al, Q+2
+
+    cmpb $0, Q+3 
+    jl negative2
+      movb $0, Q+3
+    jmp endsign2
+    negative2:
+      movb $0xff, Q+3
+    endsign2:
+
+    loop shiftBytewise
+  doNotShift:
+  popa
+	movl %ebp, %esp
+	popl %ebp
+  ret $4
