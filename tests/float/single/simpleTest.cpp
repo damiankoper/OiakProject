@@ -6,6 +6,7 @@ extern "C" void simple_add_32(int32_t *, int32_t *);
 extern "C" void simple_sub_32(int32_t *, int32_t *);
 extern "C" void simple_mul_32(int32_t *, int32_t *);
 extern "C" void simple_div_32(int32_t *, int32_t *);
+extern "C" void simple_div_64(int64_t *, int64_t *);
 extern "C" void simple_shiftR_32(int32_t *, int8_t);
 extern "C" void simple_shiftL_32(int32_t *, int8_t);
 extern "C" void simple_shiftL_64(int32_t *, int8_t);
@@ -390,6 +391,38 @@ TEST_CASE("Simple div test 1", "")
             THEN("value is correct")
             {
                 REQUIRE(b == 2);
+            }
+        }
+    }
+}
+
+TEST_CASE("Simple div 64 test", "")
+{
+    GIVEN("Raw uint32")
+    {
+        int64_t a = 0b100000000000000000000000;
+        int64_t b = 0b100000000000000000000000;
+        WHEN("division is made")
+        {
+            simple_div_64(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 1);
+                REQUIRE(b == 0);
+            }
+        }
+    }
+    GIVEN("Raw uint32")
+    {
+        int64_t a = 0x1234567890;
+        int64_t b = 0x10;
+        WHEN("division is made")
+        {
+            simple_div_64(&a, &b);
+            THEN("value is correct")
+            {
+                REQUIRE(a == 0x123456789);
+                REQUIRE(b == 0);
             }
         }
     }
