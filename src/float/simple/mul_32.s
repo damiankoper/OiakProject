@@ -43,7 +43,7 @@ simple_mul_32:
       # Dodanie bufora do wyniku
       pushl $mul_buffer
       pushl $mul_result
-      call simple_add_32_64
+      call simple_add_64
 
       call simple_mul_32_clearmul_buffer
 
