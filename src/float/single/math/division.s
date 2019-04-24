@@ -8,7 +8,7 @@ single_div:
     pushl   %esi
 	movl	%esp, %ebp
 
-	subl 	$12, %esp
+	subl 	$28, %esp
 
     movl %ebp, %edi
     addl $20, %edi
@@ -34,6 +34,11 @@ single_div:
     # | znak C          | -0x4(%ebp)
     # | M               | -0x8(%ebp)
     # | A               | -0xc(%ebp)
+    # | A_2             | -0x10(%ebp)
+    # | A_1             | -0x14(%ebp)
+    # | B_2             | -0x18(%ebp)
+    # | B_1             | -0x1c(%ebp)
+
 
     # znak
     movb $0, %cl
@@ -78,7 +83,6 @@ single_div:
     movb %al, -0x1(%ebp)
 
 
-
     # mantysa
 
     movb $0, 0x3(%edi)
@@ -94,17 +98,55 @@ single_div:
     addb $128, %al
     movb %al, 0x2(%esi)
 
+    #nowe
+    
+    movb 0x3(%edi), %al
+    movb %al, -0x11(%ebp)
+    movb 0x2(%edi), %al
+    movb %al, -0x12(%ebp)
+    movb 0x1(%edi), %al
+    movb %al, -0x13(%ebp)
+    movb 0x0(%edi), %al
+    movb %al, -0x14(%ebp)
+    movb $0, -0xd(%ebp)
+    movb $0, -0xe(%ebp)
+    movb $0, -0xf(%ebp)
+    movb $0, -0x10(%ebp)
 
-    movb 0x18(%ebp), %al
-    movb %al, -0xc(%ebp)
-    movb 0x19(%ebp), %al
-    movb %al, -0xb(%ebp)
-    movb 0x1a(%ebp), %al
-    movb %al, -0xa(%ebp)
-    movb 0x1b(%ebp), %al
-    movb %al, -0x9(%ebp)
+
+    movb 0x3(%esi), %al
+    movb %al, -0x19(%ebp)
+    movb 0x2(%esi), %al
+    movb %al, -0x1a(%ebp)
+    movb 0x1(%esi), %al
+    movb %al, -0x1b(%ebp)
+    movb 0x0(%esi), %al
+    movb %al, -0x1c(%ebp)
+    movb $0, -0x18(%ebp)
+    movb $0, -0x17(%ebp)
+    movb $0, -0x16(%ebp)
+    movb $0, -0x15(%ebp)
 
 
+    movl %ebp, %edi
+    subl $20, %edi
+
+    movl %ebp, %esi
+    subl $28, %esi
+
+
+
+    push $24
+    push %edi
+    call simple_shiftL_64
+
+    push %esi
+    push %edi
+    call simple_div_64
+
+    jmp LOOP_EXIT
+
+/*
     xor %ah, %ah
 
     movb $0, -0x8(%ebp)
@@ -177,21 +219,22 @@ SHIFT:
     movb %al, -0x5(%ebp)
 
     jmp SWAP
-
+*/
 LOOP_EXIT:
-  
-    movb -0x5(%ebp), %al
+
+    movb 0x3(%edi), %al
     cmpb $0, %al
     je SHIFT_EXP_M
 
     movb -0x1(%ebp), %al
-    movb %al, -0x5(%ebp)
+    movb %al, 0x3(%edi)
     jmp ADDING_THE_SIGN
+
 
 SHIFT_EXP_M:
 
     push $1
-    push %edx
+    push %edi
     call simple_shiftL_32
 
     movb -0x1(%ebp), %al
@@ -199,14 +242,15 @@ SHIFT_EXP_M:
     cmpb $0, %al
     je NAN
 
-    movb %al, -0x5(%ebp)
+    movb %al, 0x3(%edi)
 
     jmp ADDING_THE_SIGN
+
 
 ADDING_THE_SIGN:
 
     push $1
-    push %edx
+    push %edi
     call simple_shiftR_32
 
     movb -0x4(%ebp), %al
@@ -214,24 +258,24 @@ ADDING_THE_SIGN:
     je CHANGE_SIGN
     jmp RESULT
 
+
 CHANGE_SIGN:
 
-    movb -0x5(%ebp), %al
+    movb 0x3(%edi), %al
     addb $128, %al
-    movb %al, -0x5(%ebp)
+    movb %al, 0x3(%edi)
 
 RESULT:
 
-    movl -0x8(%ebp), %ecx
+    movl 0x0(%edi), %ecx
     movl 0x10(%ebp), %edi
-    movl %ecx, 0x0(%edi)
+    movl %ecx, 0x0(%edi)    
 
     movl	%ebp, %esp
     popl    %esi
 	popl	%edi
     popl    %ebp
     ret
-
 
 NAN_OR_INF:
 
@@ -240,25 +284,25 @@ NAN_OR_INF:
 
 INF: 
 
-    movb $0, -0x8(%ebp)
-    movb $0, -0x7(%ebp)
-    movb $0, -0x6(%ebp)
-    movb $255, -0x5(%ebp)
+    movb $0, 0x0(%edi)
+    movb $0, 0x1(%edi)
+    movb $0, 0x2(%edi)
+    movb $255, 0x3(%edi)
     jmp ADDING_THE_SIGN
 
 NAN:
 
-    movb $255, -0x8(%ebp)
-    movb $255, -0x7(%ebp)
-    movb $255, -0x6(%ebp)
-    movb $255, -0x5(%ebp)
+    movb $255, 0x0(%edi)
+    movb $255, 0x1(%edi)
+    movb $255, 0x2(%edi)
+    movb $255, 0x3(%edi)
     jmp ADDING_THE_SIGN
 
 ZERO:
 
-    movb $0, -0x8(%ebp)
-    movb $0, -0x7(%ebp)
-    movb $0, -0x6(%ebp)
-    movb $0, -0x5(%ebp)
+    movb $0, 0x0(%edi)
+    movb $0, 0x1(%edi)
+    movb $0, 0x2(%edi)
+    movb $0, 0x3(%edi)
     jmp ADDING_THE_SIGN
 
