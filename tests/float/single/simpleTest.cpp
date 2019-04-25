@@ -221,10 +221,10 @@ TEST_CASE("Simple mul test", "")
 
 TEST_CASE("Simple div test", "")
 {
-    /*     GIVEN("Raw uint32")
+    GIVEN("Raw uint32")
     {
-        int32_t a = 0b10000000000000000000000;
-        int32_t b = 0b10000000000000000000000;
+        int32_t a = 0b10000000000000000000;
+        int32_t b = 0b10000000000000000000;
         WHEN("division is made")
         {
             simple_div_32(&a, &b);
@@ -249,7 +249,7 @@ TEST_CASE("Simple div test", "")
                 REQUIRE(b == 0);
             }
         }
-    } */
+    }
 
     GIVEN("Raw uint32")
     {
@@ -352,7 +352,7 @@ TEST_CASE("Simple div test", "")
             }
             THEN("value is correct")
             {
-                REQUIRE(b == 98);
+                REQUIRE(b == 59263);
             }
         }
     }

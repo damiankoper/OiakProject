@@ -176,6 +176,7 @@ simple_div_32:
   call simple_shiftR_24
 
   # Kopiujemy resztę
+  movb $0, 3(%edx)
   mov $2, %ecx
   div_reminder_loop:
     movb (%ebx,%ecx,1), %al
@@ -185,6 +186,7 @@ simple_div_32:
     jne div_reminder_loop
 
   # Kopiujemy wynik
+  movb $0, 3(%ebx)
   mov $2, %ecx
   div_result_loop:
     movb div_result(,%ecx,1), %al
