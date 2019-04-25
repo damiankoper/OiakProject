@@ -99,7 +99,7 @@ single_div:
     movb %al, 0x2(%esi)
 
     #nowe
-    
+ /*   
     movb 0x3(%edi), %al
     movb %al, -0x11(%ebp)
     movb 0x2(%edi), %al
@@ -112,6 +112,21 @@ single_div:
     movb $0, -0xe(%ebp)
     movb $0, -0xf(%ebp)
     movb $0, -0x10(%ebp)
+
+*/
+    movb $0, -0x14(%ebp)
+    movb $0, -0x13(%ebp)
+    movb $0, -0x12(%ebp)
+    movb 0x0(%edi), %al
+    movb %al, -0x11(%ebp)
+    movb 0x1(%edi), %al
+    movb %al, -0x10(%ebp)
+    movb 0x2(%edi), %al
+    movb %al, -0xf(%ebp)
+    movb 0x3(%edi), %al
+    movb %al, -0xe(%ebp)
+    movb $0, -0xd(%ebp)
+
 
 
     movb 0x3(%esi), %al
@@ -135,10 +150,12 @@ single_div:
     subl $28, %esi
 
 
-
+/*
     push $24
     push %edi
     call simple_shiftL_64
+*/
+
 
     push %esi
     push %edi
