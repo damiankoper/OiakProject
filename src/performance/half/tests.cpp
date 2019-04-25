@@ -22,7 +22,7 @@ void half::testAdd()
     Tester *tester = new Tester("Test half addition: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &h1, &h2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -38,9 +38,11 @@ void half::testAdd()
         })
         ->setTestedFn([&h1, &h2](Tester::TestEnv testenv) {
             Half h = h1 + h2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathHalf + "/halfAdd.txt");
+    delete tester;
 }
 
 void half::testMul()
@@ -53,7 +55,7 @@ void half::testMul()
     Tester *tester = new Tester("Test half multiplication: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &h1, &h2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -69,9 +71,11 @@ void half::testMul()
         })
         ->setTestedFn([&h1, &h2](Tester::TestEnv testenv) {
             Half h = h1 * h2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathHalf + "/halfMul.txt");
+    delete tester;
 }
 
 void half::testDiv()
@@ -84,7 +88,7 @@ void half::testDiv()
     Tester *tester = new Tester("Test half division: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &h1, &h2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -100,9 +104,11 @@ void half::testDiv()
         })
         ->setTestedFn([&h1, &h2](Tester::TestEnv testenv) {
             Half h = h1 / h2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathHalf + "/halfDiv.txt");
+    delete tester;
 }
 
 void half::testSqrt()
@@ -124,7 +130,9 @@ void half::testSqrt()
         })
         ->setTestedFn([&h1](Tester::TestEnv testenv) {
             Half h = h1.sqrt();
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathHalf + "/halfSqrt.txt");
+    delete tester;
 }

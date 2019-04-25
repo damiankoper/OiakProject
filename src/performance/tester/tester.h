@@ -33,11 +33,12 @@ public:
   Tester *setOverallRepeats(int i);
 
   Tester *writeLastToFile(std::string name);
+  Tester *writeEveryToFile();
   std::vector<TestResult> runAll();
   std::string log = "";
 
 private:
-  std::vector<TestResult> lastResults;
+  std::vector<TestResult> lastResults = std::vector<Tester::TestResult>();
   std::function<void(TestEnv &testEnv)> testedFn = [](TestEnv &testEnv) {};
   std::function<void(TestEnv &testEnv)> beforeEachFn = [](TestEnv &testEnv) {};
   std::function<void(TestEnv &testEnv)> beforeSameDataSetFn = [](TestEnv &testEnv) {};
@@ -47,6 +48,7 @@ private:
   int sameDataRepeats = 1;
   int overallRepeats = 1;
 
+  bool writeEveryTest = false;
   long long int runSingle();
   long long int runSingleData();
 };

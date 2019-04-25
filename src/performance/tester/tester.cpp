@@ -8,7 +8,7 @@ using namespace floating;
 uint64_t rdtsc()
 {
     unsigned int lo, hi;
-    __asm__ __volatile__("rdtsc"
+    __asm__ __volatile__("cpuid; rdtsc"
                          : "=a"(lo), "=d"(hi));
     return ((uint64_t)hi << 32) | lo;
 }
@@ -83,10 +83,17 @@ long long int Tester::runSingle()
 long long int Tester::runSingleData()
 {
 
-    long long int sum = 0;
+    long long int sum = 0, t = 0;
     for (int i = 0; i < sameDataRepeats; i++)
     {
-        sum += runSingle();
+        t = runSingle();
+        sum += t;
+        if (writeEveryTest)
+        {
+            Tester::TestResult result = TestResult(testEnv);
+            result.cycles = t;
+            lastResults.push_back(result);
+        }
     }
 
     double avg = sum / sameDataRepeats;
@@ -96,19 +103,17 @@ long long int Tester::runSingleData()
 
 std::vector<Tester::TestResult> Tester::runAll()
 {
-    std::vector<Tester::TestResult> vec = std::vector<Tester::TestResult>();
     for (int i = 0; i < overallRepeats; i++)
     {
         beforeSameDataSetFn(testEnv);
 
         Tester::TestResult result = TestResult(testEnv);
         result.cycles = runSingleData();
-        vec.push_back(result);
+        lastResults.push_back(result);
 
         afterSameDataSetFn(testEnv);
     }
-    lastResults = vec;
-    return vec;
+    return lastResults;
 }
 
 Tester *Tester::writeLastToFile(std::string name)
@@ -125,4 +130,9 @@ Tester *Tester::writeLastToFile(std::string name)
 
     myfile.close();
     return this;
+}
+
+Tester *Tester::writeEveryToFile()
+{
+    writeEveryTest = true;
 }

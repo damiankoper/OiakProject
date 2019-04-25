@@ -23,7 +23,7 @@ void single::testAdd()
     Tester *tester = new Tester("Test single addition: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &s1, &s2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -39,9 +39,11 @@ void single::testAdd()
         })
         ->setTestedFn([&s1, &s2](Tester::TestEnv testenv) {
             Single s = s1 + s2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathSingle + "/singleAdd.txt");
+    delete tester;
 }
 
 void single::testMul()
@@ -54,7 +56,7 @@ void single::testMul()
     Tester *tester = new Tester("Test single multiplication: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &s1, &s2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -70,9 +72,11 @@ void single::testMul()
         })
         ->setTestedFn([&s1, &s2](Tester::TestEnv testenv) {
             Single s = s1 * s2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathSingle + "/singleMul.txt");
+    delete tester;
 }
 
 void single::testDiv()
@@ -85,7 +89,7 @@ void single::testDiv()
     Tester *tester = new Tester("Test single division: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &s1, &s2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -101,9 +105,11 @@ void single::testDiv()
         })
         ->setTestedFn([&s1, &s2](Tester::TestEnv testenv) {
             Single s = s1 / s2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathSingle + "/singleDiv.txt");
+    delete tester;
 }
 
 void single::testSqrt()
@@ -125,7 +131,9 @@ void single::testSqrt()
         })
         ->setTestedFn([&s1](Tester::TestEnv testenv) {
             Single s = s1.sqrt();
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathSingle + "/singleSqrt.txt");
+    delete tester;
 }

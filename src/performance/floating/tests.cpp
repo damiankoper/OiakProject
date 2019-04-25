@@ -21,7 +21,7 @@ void _float::testAdd()
     Tester *tester = new Tester("Test float addition: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &f1, &f2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -37,9 +37,11 @@ void _float::testAdd()
         })
         ->setTestedFn([&f1, &f2](Tester::TestEnv testenv) {
             float f = f1 + f2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathFloat + "/floatAdd.txt");
+    delete tester;
 }
 
 void _float::testMul()
@@ -52,7 +54,7 @@ void _float::testMul()
     Tester *tester = new Tester("Test float multiplication: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &f1, &f2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -68,9 +70,11 @@ void _float::testMul()
         })
         ->setTestedFn([&f1, &f2](Tester::TestEnv testenv) {
             float f = f1 * f2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathFloat + "/floatMul.txt");
+    delete tester;
 }
 
 void _float::testDiv()
@@ -83,7 +87,7 @@ void _float::testDiv()
     Tester *tester = new Tester("Test float division: ");
     tester
         ->setSameDataRepeats(100)
-        ->setOverallRepeats(10000)
+        ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &f1, &f2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
             {
@@ -99,9 +103,11 @@ void _float::testDiv()
         })
         ->setTestedFn([&f1, &f2](Tester::TestEnv testenv) {
             float f = f1 / f2;
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathFloat + "/floatDiv.txt");
+    delete tester;
 }
 
 void _float::testSqrt()
@@ -122,7 +128,9 @@ void _float::testSqrt()
         })
         ->setTestedFn([&f1](Tester::TestEnv testenv) {
             float f = sqrt(f1);
-        });
+        })
+        ->writeEveryToFile();
     tester->runAll();
     tester->writeLastToFile(pathFloat + "/floatSqrt.txt");
+    delete tester;
 }
