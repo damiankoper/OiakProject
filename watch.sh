@@ -6,4 +6,3 @@
         make ${1:-all}
     done
 }
-
