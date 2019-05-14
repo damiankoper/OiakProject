@@ -235,6 +235,29 @@ Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zost
 
 ### Wyniki testów
 
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/tabelka.png?raw=true)
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/czas_wykonania.png?raw=true)
+
+Profilowanie wykonane zostało przy użyciu Callgrind oraz KCachegrind. Na podstawie oszacowanych cykli oraz mapy wywoływanych w KCachegrind udało się utworzyć wykresy reprezentujące rozkład kosztów, własnego oraz użytych w danej operacji funkcji simple, w których wykonywane są operacje 8 bitowe.
+
+
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/add.png?raw=true)
+
+Większość kosztów to przesunięcia, dwa najbardziej kosztowne spośród wywołań simple_shiftR i simple_shiftL to przesunięcia, których celem jest wyzerowanie bitów znaku i wykładnika co da się w prosty sposób wykonać przy użyciu AND tak jak zostało to wykonane w implementacji dodawania dla half. Niestety dla implementacji w single zostało to przeoczone podczas optymalizowania kodu. Drugie najbardziej kosztowne wywoływania przesunięć to skalowanie mantysy wynikowej po wykonaniu operacji dodawania lub odejmowania.
+
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/div.png?raw=true)
+
+Operacja simple_div zajmuje większą część kosztów operacji dzielenia. Ograniczenie do użycia rejestrów 8 bitowych okazało się być w przypadku algorytmu dzielenia najbardziej kosztowne.
+
+
+![alt](charts/sqrt.png?raw=true)
+
+Większość kosztów pierwiastka to przesunięcia, które wykonywane są w pętli podczas wykonywania algorytmu `(2 * Qi * B + x)x <= Ri`.
+
+
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/mul.png?raw=true)
+
+W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą najbardziej kosztowną operacją jest przesunięcie wyniku mnożenia, który maksymalnie zajmuje 48 bitów o 16 bitów w lewo. To samo dałoby się osiągnąć znacznie optymalniej przepisując odpowiednio kolejne bajty.
 
 ## Napotkane problemy
 1. Brak możliwości porównania wydajności operacji z biblioteką `soft-float`. Kompilacja plików za pomocą `gcc` z flagą `-msoft-float` generuje błędy linkowania, ponieważ biblioteka `soft-float` domyślnie nie jest obecna w `libgcc`, a wszelkie próby kompilowania jej ze źródeł nie przyniosły żadnych efektów.
@@ -242,6 +265,7 @@ Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zost
 
 ## Wnioski
 
+//TODO
 
 ## Literatura
 1. http://justinparrtech.com/JustinParr-Tech/an-algorithm-for-arbitrary-precision-integer-division/
