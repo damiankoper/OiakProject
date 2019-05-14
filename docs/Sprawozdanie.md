@@ -7,7 +7,7 @@
 </h1>
 
 <h3 style="text-align:center">
-Mateusz Gurski, 123456<br>
+Mateusz Gurski, 242089<br>
 Damian Koper, 241292
 </h3>
 <hr>
@@ -78,7 +78,7 @@ W przypadku przekroczenia zakresu musimy pamiętać o ustawieniu wartości *+/-0
 
 ### Pierwiastek
 
-//TODO: Mateush napisz tu bo ja nie umim
+Pierwiastkowanie możliwe jest tylko gdy liczba jest dodatnia więc rozpoczynamy od sprawdzenia znaku. Następnie trzeba sprawdzić czy wykładnik jest parzysty – jeśli nie, zmniejszamy go o 1 odpowiednio skalując mantysę. Gdy wykładnik jest już parzysty, dzielimy go przez 2 i otrzymujemy w ten sposób wykładnik wyniku. Dzielenie wykładnika przez 2 można łatwo wykonać przesuwając wykładnik od, którego wcześniej odjęto obciążenie o 1 w prawo. Kolejnym krokiem jest spierwiastkowanie mantysy. Wykonujemy algorytm `(2 * Qi * B + x)x <= Ri` , gdzie Qi – aktualny wynik, B – podstawa liczby, w tym przypadku 2, Ri – aktualna reszta, x to kolejny bit wyniku pierwiastkowania, w przypadku pierwiastkowania liczb o podstawie 2, x równe jest 1 jeśli dla x równego 1 spełnione jest równanie, jeśli nie – x równe jest 0. Jeśli wykładnik był parzysty to mantysa razem z niejawną jedynką jest teraz postaci 1,x..x, jeśli był nieparzysty to mantysa jest postaci 1x,x..x, pierwszy krok algorytmu wykonywany jest więc poza pętlą dla 01 gdy wykładnik był parzysty lub dla 1x gdy był nieparzysty. Pozostałe kroki algorytmu wykonywane są już w pętli.
 
 ## Implementacja
 Procedury obliczeń zostały zrealizowane poprzez stworzenie biblioteki języka `C++`. Architektura projektu została zrealizowana w trzech częściach, gdzie każda korzystała z kolejnej:
@@ -234,7 +234,7 @@ uint64_t rdtsc()
 Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zostały wykonany dla typów `floating::Single` i `floating::Half` oraz `float` w celu porównania do natywnej realizacji.
 
 ### Wyniki testów
-//TODO: Mateush do ur thing
+
 
 ## Napotkane problemy
 1. Brak możliwości porównania wydajności operacji z biblioteką `soft-float`. Kompilacja plików za pomocą `gcc` z flagą `-msoft-float` generuje błędy linkowania, ponieważ biblioteka `soft-float` domyślnie nie jest obecna w `libgcc`, a wszelkie próby kompilowania jej ze źródeł nie przyniosły żadnych efektów.
