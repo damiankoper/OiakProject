@@ -238,15 +238,15 @@ Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zost
 ![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/tabelka.png?raw=true)
 ![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/czas_wykonania.png?raw=true)
 
-Zostały wykonane histogramy dla każdej z operacji single, dla 1000 powtórzeń na tych samych danych. Przedział wartości przedstawiony na wykresie zaczyna się od minimalnej występującej w teście wartości a kończy na maksymalnej. Do momentu w którym zaczynają występować sporadycznie duże wartości przedział zmienia się o stałą wartość, potem przerwy gdzie nie występowały długo żadne wartości wycięte są odpowiednio tak by zawrzeć na wykresie wszystkie wartości, które wystąpiły w teście i nie był on jednocześnie zbyt szeroki.
+Zostały wykonane histogramy dla każdej z operacji single, dla 1000 powtórzeń na tych samych danych.
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd.png?raw=true)
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd2.png?raw=true)
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hmul.png?raw=true)
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hmul2.png?raw=true)
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hdiv.png?raw=true)
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hdiv2.png?raw=true)
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hsqrt.png?raw=true)
+![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hsqrt2.png?raw=true)
 
 Profilowanie wykonane zostało przy użyciu Callgrind oraz KCachegrind. Na podstawie oszacowanych cykli oraz mapy wywoływanych w KCachegrind, udało się utworzyć wykresy reprezentujące rozkład kosztów, własnego oraz użytych w danej operacji funkcji simple, w których wykonywane są operacje 8 bitowe.
 
