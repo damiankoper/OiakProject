@@ -1,3 +1,4 @@
+
 <div style="display:flex;justify-content:space-between"><span>CZ-TP-13</span> Wrocław, 16.05.2019r. </div>
 <h1 style="text-align:center; border: none; margin-bottom: 50px">
     Organizacja i architektura komputerów
@@ -13,7 +14,7 @@ Damian Koper, 241292
 <hr>
 
 ## Cel projektu
-Celem projektu była implementacja procedur obliczeń na liczbach zmiennoprzecinkowych połowicznej i pojedynczej precyzji za pomocą instrukcji stałoprzecinkowych.
+Celem projektu była implementacja procedur obliczeń na liczbach zmiennoprzecinkowych połowicznej i&nbsp;pojedynczej precyzji za pomocą instrukcji stałoprzecinkowych.
 
 ### Ograniczenia
 Jedynym ograniczeniem była długość słowa, ustalona na 8 bitów. Zadanie można interpretować, jako stworzenie biblioteki do programowej realizacji obliczeń zmiennoprzecinkowych, gdzie ograniczenie słowa do 8 bitów sygnalizuje, że może być ona użyta w mikrokontrolerach 8 bitowych, które naturalnie nie mają jednostki zmiennoprzecinkowej, a gdzie zachodzi potrzeba takich obliczeń.
@@ -26,6 +27,7 @@ x | xxxxxxxx | xxxxxxxxxxxxxxxxxxxxxxx
     wykładnik
 ```
 Ułamek zapisny jest z dodanym obciążeniem, co pozwala zachować ciągłość reprezentacji i ułatwia porównania. Dla formatu single obiążenie to wynosi *+127*. Jeśli wykładnik nie reprezentuje liczb zdenormalizowanych (wartość *0x00*), ułamek zawiera ukrytą jedynkę z przodu.
+<div style="margin-bottom:200px"></div>
 
 ## IEEE-754 - Half
 Liczba w formacie połowicznej precyzji przechowywana jest w pamięci w następującym formacie:
@@ -42,21 +44,21 @@ Obciążenie dla formatu half wynosi *+15*. Jeśli wykładnik nie reprezentuje l
 Dodawanie i odejmowanie mogą być zaimplementowane jako jedna operacja, co wynika z zależności *A&#8209;B&nbsp;=&nbsp;A+(-B)*.
 Jako, że implementowane dodawanie jest działaniem przemiennym, warto rozpatrywać zawsze jeden przypadek, gdzie *A <= B*. W przypadku kiedy *A > B* należy zamienić oba składniki miejscami.
 
-Następnie trzeba wyrównać wykładnik mniejszej liczby. Wiemy, że *A <= B*, więc musimy przesunąć bity mantysy B o `exp[A]-exp[B]` w lewo. Na tym etapie, znając utracone bity, możemy zaokrąglić otrzymaną liczbę.
+Następnie trzeba wyrównać wykładnik mniejszej liczby. Wiemy, że *A <= B*, więc trzeba przesunąć bity mantysy B o `exp[A]-exp[B]` w lewo. Na tym etapie, znając utracone bity, możemy zaokrąglić otrzymaną liczbę.
 
 Jeśli znaki obu składników są takie same, należy na mantysach wykonać operację dodawania z zachowaniem znaku wyniku, a jeśli różne, odejmowania razem z ustawieniem znaku wyniku na minus.
 
 Po uzyskaniu wyniku trzeba go znormalizować przesuwając go w lewo lub w prawo jednocześnie zmniejszając lub zwiększając wykładnik wyniku, który początkowo ma wartośc `exp[A]`. Przy wynikach, dla których wartość nie mieści sie w przedziale wartości liczb pojedynczej precyzji należy pamiętać o ustawieniu w odpowiednich przypadkach wartości *0* i *inf*. Wartość *NaN* nie występuje jako wynik w przypadku tych operacji przy poprawnych składnikach.
 
 ### Mnożenie
-Mnożąc liczby ustawiamy znak wyniku według zależności `sign[C] = sign[A] XOR sign[B]`. Następnie sprawdzamy, czy którykolwiek ze składników ma wartośc *0*. Jeśli tak to zwracamy *0* z odpowiednim znakiem (jeśli chcemy mieć znakowane *0*). 
+Mnożąc liczby ustawiamy znak wyniku według zależności `sign[C] = sign[A] XOR sign[B]`. Następnie sprawdzamy, czy którykolwiek ze składników ma wartośc *0*. Jeśli tak, to zwracamy *0* z odpowiednim znakiem (jeśli chcemy mieć znakowane *0*). 
 
 Wynikowy wykładnik otrzymamy poprzez dodanie wartości wykładników składników, pamiętając o odjęciu obiążenia, a następnie korygując go w procesie normalizacji. W celu normalizacji iloczynu mantys, wiedząc, że iloczyn liczb 24 bitowych zawsze da wynik maksymalnie 48 bitowy, możemy sprawdzić bit 48 wyniku tego działania. Jeśli ma on wartośc 1 oznacza to, że wartość jest za duża. Trzeba zwiększyć wykładnik i przesująć mantysę w prawo. 
 
 W przypadku, gdy wartość jest zbyt mała, trzeba sprawdzać bit 47 iloczynu, zmniejszać wykładnik i przesuwać mantysę w lewo, aż owy bit nie będzie miał wartości 1 lub wykładnik nie będzie równy `0x01` (dla Half `0b00001`) - w takim wypadku otrzymamy wynik zdenormalizowany. W przypadku wyniku zdenormalizowanego wykładnik reprezentowany jest jako `0x00` (dla Half `0b00000`).
 
 Zaraz po wykonaniu mnożenia mantys, znając pozostałe bity wyniku, które zostaną utracone, możemy wykonać zaokrąglanie.
-Tak jak w dodawaniu/odejmowaniu, w przypadku przekroczenia zakresu musimy pamiętać o ustawieniu wartości *+/-inf*.
+Tak jak w dodawaniu/odejmowaniu, w przypadku przekroczenia zakresu trzeba pamiętać o ustawieniu wartości *+/-inf*.
 
 ### Dzielenie
 Dzielenie odbywa się na podobnej zasadzie co mnożenie.
@@ -66,22 +68,30 @@ W tym przypadku ważna jest początkowa walidacja liczb. Rozróżniamy przypadki
 * `0/0 = NaN`
 
 Aby uzyskać wykładnik trzeba odjąć od siebie wykładniki dzielnej i dzielnika, a następnie dodać obciążenie.
-Interpretując mantysę jako liczbę w formacie *Q23* (dla Half *Q10*), stosując arytmetykę stałoprzecinkową, przesuwając bity dzielnej o 26 (dla Half *Q13*) w lewo, jako wynik dzielenia `frac[A]/frac[B]` otrzymamy liczbę w formacie *Q26* (dla Half *Q13*), co daje nam wymagane 23 (dla Half *Q10*) bity mantysy i trzy dodatkowe bity GRS. Przy czym bit S:
+Interpretując mantysę jako liczbę w formacie *Q23* (dla Half *Q10*), stosując arytmetykę stałoprzecinkową, przesuwając bity dzielnej o 26 (dla Half o 13) w lewo, jako wynik dzielenia `frac[A]/frac[B]` otrzymamy liczbę w formacie *Q26* (dla Half *Q13*), co daje nam wymagane 23 (dla Half *Q10*) bity mantysy i trzy dodatkowe bity GRS. Przy czym bit S:
 ```
 S = S | mod(frac[A]/frac[B]) != 0
 ```
 uwzględnia bity reszty.
 
-Normalizacja wyniku przebiega podobnie jak w przypadku mnożenia. Różni się tylko rozmiarem wyniku, a co za tym idzie pozcjami bitów które świadczą o potrzebie normalizacji.
+Normalizacja wyniku przebiega podobnie jak w przypadku mnożenia. Różni się tylko rozmiarem wyniku, a co za tym idzie pozcjami bitów, które świadczą o potrzebie normalizacji.
 
-W przypadku przekroczenia zakresu musimy pamiętać o ustawieniu wartości *+/-0*.
+W przypadku przekroczenia zakresu trzeba pamiętać o ustawieniu wartości *+/-0*.
 
 ### Pierwiastek
 
-Pierwiastkowanie możliwe jest tylko gdy liczba jest dodatnia więc rozpoczynamy od sprawdzenia znaku. Następnie trzeba sprawdzić czy wykładnik jest parzysty – jeśli nie, zmniejszamy go o 1 odpowiednio skalując mantysę. Gdy wykładnik jest już parzysty, dzielimy go przez 2 i otrzymujemy w ten sposób wykładnik wyniku. Dzielenie wykładnika przez 2 można łatwo wykonać przesuwając wykładnik od, którego wcześniej odjęto obciążenie o 1 w prawo. Kolejnym krokiem jest spierwiastkowanie mantysy. Wykonujemy algorytm `(2 * Qi * B + x)x <= Ri` , gdzie Qi – aktualny wynik, B – podstawa liczby, w tym przypadku 2, Ri – aktualna reszta, x to kolejny bit wyniku pierwiastkowania, w przypadku pierwiastkowania liczb o podstawie 2, x równe jest 1 jeśli dla x równego 1 spełnione jest równanie, jeśli nie – x równe jest 0. Jeśli wykładnik był parzysty to mantysa razem z niejawną jedynką jest teraz postaci 1,x..x, jeśli był nieparzysty to mantysa jest postaci 1x,x..x, pierwszy krok algorytmu wykonywany jest więc poza pętlą dla 01 gdy wykładnik był parzysty lub dla 1x gdy był nieparzysty. Pozostałe kroki algorytmu wykonywane są już w pętli.
+Pierwiastkowanie możliwe jest tylko, gdy liczba jest dodatnia, więc obliczenia trzeba rozpocząć od sprawdzenia znaku. Następnie trzeba sprawdzić czy wykładnik jest parzysty – jeśli nie, zmniejszamy go o 1 odpowiednio skalując mantysę. Gdy wykładnik jest już parzysty, dzielimy go przez 2 i otrzymujemy w ten sposób wykładnik wyniku. Dzielenie wykładnika przez 2 można łatwo wykonać przesuwając wykładnik, od którego wcześniej odjęto obciążenie o 1 w prawo.
+
+Kolejnym krokiem jest spierwiastkowanie mantysy. Wykonujemy algorytm 
+```
+(2 * Qi * B + x) * x <= Ri
+``` 
+gdzie Qi – aktualny wynik, B – podstawa liczby, w tym przypadku 2, Ri – aktualna reszta, a x to kolejny bit wyniku pierwiastkowania.
+
+W przypadku pierwiastkowania liczb o podstawie 2, `x` równe jest 1 jeśli dla `x` równego 1 spełnione jest powyższe równanie, jeśli nie – `x` równe jest 0. Jeśli wykładnik był parzysty to mantysa razem z niejawną jedynką jest teraz postaci `1,x..x`, jeśli był nieparzysty to mantysa jest postaci `1x,x..x`, pierwszy krok algorytmu wykonywany jest więc poza pętlą dla 01 gdy wykładnik był parzysty lub dla 1x gdy był nieparzysty. Pozostałe kroki algorytmu wykonywane są już w pętli.
 
 ## Implementacja
-Procedury obliczeń zostały zrealizowane poprzez stworzenie biblioteki języka `C++`. Architektura projektu została zrealizowana w trzech częściach, gdzie każda korzystała z kolejnej:
+Procedury obliczeń realizuje stworzona biblioteka języka `C++`. Architektura projektu została zrealizowana w trzech częściach, gdzie każda korzystała z kolejnej:
 ```
 Simple --> Single/Half --> Single/Half(C++)
 ```
@@ -104,7 +114,9 @@ HalfToFloat i FloatToHalf do konwersji wykorzystują rozszerzenie *F16C(SSE)* pr
 Część *Single/Half* implementuje obliczenia na liczbach zmiennoprzecinkowych połowicznej i pojedynczej precyzji używając operacji *Simple*. Według opisanych wyżej procedur obliczeń, na poziomie asemblera zaimplementowane zostały operacje dodawania/odejmowania, mnożenia, dzielenia i pierwiastka. Do każdej z funkcji dostarczane są wskaźniki na dane, poprzez które również zwracany jest wynik.
 
 ### Single/Half (C++)
-Produktem końcowym jest biblioteka napisana w języku `C++`. Stworzone zostały dwa typy `floating::Single` i `floating::Half` posiadające takie same API, a różniące się tylko rozmiarem pola danych, które stworzono za pomocą unii w celu uzyskania dostępu do liczby na różne sposoby.
+Produktem końcowym jest biblioteka napisana w języku `C++`. Stworzone zostały dwa typy `floating::Single` i `floating::Half` posiadające takie same API, a różniące się tylko rozmiarem pola danych, które stworzono za pomocą unii w celu uzyskania dostępu do danych w różnych interpretacjach.
+<div style="margin-bottom: 100px;"></div>
+
 ```cpp
 namespace floating
 {
@@ -199,6 +211,7 @@ Typ `floating::Half` od typu `floating::Single` różni się jedynie mniejszą, 
     uint16_t raw;
   };
 ```
+<div style="margin-bottom: 100px;"></div>
 
 ## Testy i wydajność
 
@@ -221,7 +234,7 @@ Testy jednostkowe zostały stworzone wykorzystując framework `Catch2`. Osobno d
 
 ### Testy wydajności
 Testy wydajności odbyły się na maszynie z systemem *Ubuntu 18.4*, na procesorze Intel(R) Core(TM) i7-4770S CPU @ 3.10GHz podczas normalnego obciążenia systemu. Pliki wykonywalne były kompilowane w architekturze 32 bit i uruchamiane z możliwie najwyższym priorytetem (`niceness=-20`).
-Obiekt klasy `floating::Tester` wielokrotnie wykonywał operację zdefiniowaną w przekazanej funkcji lambda (dla tych samych i różnych danych) i mierzył czas jej wykonania za pomocą rozkazu `rdtsc`, który wymaga serializacji (`cpuid`):
+Obiekt klasy `floating::Tester` wielokrotnie wykonywał operację zdefiniowaną w przekazanej funkcji lambda (dla tych samych i różnych danych) i mierzył czas jej wykonania w cyklach pracy procesora za pomocą rozkazu `rdtsc`, który wymaga serializacji (`cpuid`):
 ```cpp
 uint64_t rdtsc()
 {
@@ -233,39 +246,58 @@ uint64_t rdtsc()
 ```
 Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zostały wykonany dla typów `floating::Single` i `floating::Half` oraz `float` w celu porównania do natywnej realizacji.
 
-### Wyniki testów
+<div style="margin-bottom: 100px;"></div>
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/tabelka.png?raw=true)
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/czas_wykonania.png?raw=true)
+## Wyniki testów
 
-Zostały wykonane histogramy dla każdej z operacji single, dla 1000 powtórzeń na tych samych danych. Dla każdej operacji występują też sporadycznie wartości bardzo duże, które nie zostały uwzględnione na wykresach. 
+### Wyniki ogólne
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd2.png?raw=true)
+<div style="text-align:center">
+  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/tabelka.png?raw=true"/>
+  <div style="height:20px;"></div>
+  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/czas_wykonania.png?raw=true"/>
+</div>
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hmul2.png?raw=true)
+### Histogramy
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hdiv2.png?raw=true)
+Dla każdej z operacji Single zostały wygenerowane histogramy. Każdy z nich przedstawia rozkład czasu trwania operacji dla 1000 powtórzeń działania dla tych samych operandów. Dla każdej operacji występują sporadycznie wartości bardzo duże, które nie zostały uwzględnione na wykresach. 
+<div style="text-align:center">
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hsqrt2.png?raw=true)
+  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd2.png?raw=true"/>
 
-Profilowanie wykonane zostało przy użyciu Callgrind oraz KCachegrind. Na podstawie oszacowanych cykli oraz mapy wywoływanych w KCachegrind, udało się utworzyć wykresy reprezentujące rozkład kosztów, własnego oraz użytych w danej operacji funkcji simple, w których wykonywane są operacje 8 bitowe.
+  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hmul2.png?raw=true"/>
 
+  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hdiv2.png?raw=true"/>
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/add.png?raw=true)
+  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hsqrt2.png?raw=true"/>
 
-Większość kosztów to przesunięcia, dwa najbardziej kosztowne spośród wywołań simple_shiftR i simple_shiftL to przesunięcia, których celem jest wyzerowanie bitów znaku i wykładnika co da się w prosty sposób wykonać przy użyciu AND tak jak zostało to wykonane w implementacji dodawania dla half. Niestety dla implementacji w single zostało to przeoczone podczas optymalizowania kodu. Drugie najbardziej kosztowne wywoływania przesunięć to skalowanie mantysy wynikowej po wykonaniu operacji dodawania lub odejmowania.
+</div>
+<div style="margin-bottom: 100px;"></div>
 
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/div.png?raw=true)
+### Profilowanie
+Profilowanie wykonane zostało przy użyciu *Callgrind* oraz *KCachegrind*. Na podstawie oszacowanych cykli oraz mapy wywoływanych w *KCachegrind*, udało się utworzyć wykresy reprezentujące rozkład kosztów, własnego oraz użytych w danej operacji funkcji *Simple*, w których wykonywane są operacje 8 bitowe.
 
-Operacja simple_div zajmuje większą część kosztów operacji dzielenia. Ograniczenie do użycia rejestrów 8 bitowych okazało się być w przypadku algorytmu dzielenia najbardziej kosztowne.
+<div style="text-align:center">
+  <img style="max-width:500px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/add.png?raw=true"/>
+</div>
 
+Większość kosztów to przesunięcia, dwa najbardziej kosztowne spośród wywołań `simple_shiftR` i&nbsp;`simple_shiftL` to przesunięcia, których celem jest wyzerowanie bitów znaku i wykładnika, co da się w prosty sposób wykonać przy użyciu `AND` tak, jak zostało to wykonane w implementacji dodawania dla Half. Niestety dla implementacji w *Single* zostało to przeoczone podczas optymalizowania kodu. Drugie najbardziej kosztowne wywoływania przesunięć to skalowanie mantysy wynikowej po wykonaniu operacji dodawania lub odejmowania.
 
-![alt](charts/sqrt.png?raw=true)
+<div style="text-align:center">
+  <img style="max-width:500px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/div.png?raw=true"/>
+</div>
+
+Operacja `simple_div` zajmuje większą część kosztów operacji dzielenia. Ograniczenie do użycia rejestrów 8 bitowych okazało się być w przypadku algorytmu dzielenia najbardziej kosztowne.
+
+<div style="text-align:center">
+  <img style="max-width:500px" src="charts/sqrt.png?raw=true"/>
+</div>
 
 Większość kosztów pierwiastka to przesunięcia, które wykonywane są w pętli podczas wykonywania algorytmu `(2 * Qi * B + x)x <= Ri`.
 
-
-![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/mul.png?raw=true)
+<div style="text-align:center">
+  <img style="max-width:500px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/mul.png?raw=true"/>
+</div>
 
 W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą najbardziej kosztowną operacją jest przesunięcie wyniku mnożenia, który maksymalnie zajmuje 48 bitów o 16 bitów w lewo. To samo dałoby się osiągnąć znacznie optymalniej przepisując odpowiednio kolejne bajty.
 
@@ -273,9 +305,17 @@ W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą naj
 1. Brak możliwości porównania wydajności operacji z biblioteką `soft-float`. Kompilacja plików za pomocą `gcc` z flagą `-msoft-float` generuje błędy linkowania, ponieważ biblioteka `soft-float` domyślnie nie jest obecna w `libgcc`, a wszelkie próby kompilowania jej ze źródeł nie przyniosły żadnych efektów.
 2. Z niezidentyfikowanych przyczyn kompilacja z optymalizacją `-O1`, `-O2`, `-O3` generuje błędy.
 
+<div style="margin-bottom: 200px;"></div>
+
 ## Wnioski
 
-//TODO
+Poprawnie napisana i w całości przetestowana biblioteka realizująca obliczenia zmiennoprzecinkowe, która nie korzysta ze sprzętowego wspomagania tych obliczeń, jest niezastąpiona na urządzeniach bez owego wspomagania. Tworząc kod w języku asembler dla kluczowych jej elementów, ograniczamy się do obsługi jednej platformy. Kod tworzony na wyższych warstwach abstrakcji języka ma dużą zaletę, jaką jest przenośność, ponieważ to od kompilatora tego języka zależy, jaką postać kodu maszynowego wygeneruje, co pozwala na proces kompilacji tego samego kodu na różne platformy. 
+
+Spełnienie ograniczenia długości słowa 8 bit wymagało jednak stworzenia większej części kodu w języku asembler, ponieważ *GCC* nie pozwala na kompilację, której wynik spełniałby to ograniczenie. Podchodząc do problemu jeszcze raz, można pokusić się o stworzenie i kompilację kodu w środowisku, gdzie do testów zostałby użyty 8 bitowy mikrokontroler lub jego symulator.
+
+Analizując opisane i przetestowane operacje i ich składowe widać, że największy narzut czasowy stanowią te, które znoszą ograniczenie długości słowa - *Simple*. Można zatem stwierdzić, że długość słowa i szybkość wykonywania na nim najprostszych operacji w dużym stopniu stanowi o szybkości działania złożonych algorytmów - w tym przypadku obliczeń na liczbach zmiennoprzecinkowych. 
+
+Kluczowym elementem poprawiającym wydajność jest również, prócz stworzenia prostych funkcji ogólnego przeznaczenia, dostosowanie ich odpowiedników do poszczególnych algorytmów w celu uniknięcia wykonywania nadmiarowej liczby kroków.
 
 ## Literatura
 1. http://justinparrtech.com/JustinParr-Tech/an-algorithm-for-arbitrary-precision-integer-division/

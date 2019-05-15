@@ -42,7 +42,7 @@ public:
   Single add(Single component);
   Single multiply(Single multiplier);
   Single subtract(Single subtrahend);
-  Single divideBy(Single divisor); // TODO: implement this
+  Single divideBy(Single divisor);
 
   Single sqrt();
   /**
