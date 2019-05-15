@@ -101,7 +101,7 @@ Do każdej z nich dostarczane są wskaźniki na dane, poprzez które również z
 HalfToFloat i FloatToHalf do konwersji wykorzystują rozszerzenie *F16C(SSE)* procesora i instrukcje `VCVTPS2PH` oraz `VCVTPH2PS`. Według ustaleń konwersja nie podlega ograniczeniu długości słowa 8 bit. Korzystanie z tych instrukcji w wyższych warstwach eliminuje całkowicie nałożone ograniczenie dłogości słowa. Używają one instrukcji operujących na liczbach 8 bitowych, wykorzystujących flagę przeniesienia oraz algorytmy m.in dzielenia nieodtwarzającego.
 
 ### Single/Half
-Część *Single/Half* implementuje obliczenia na liczbach zmiennoprzecinkowych połowicznej i pojedynczej precyzji używając operacji *Simple*. Wegług opisanych wyżej procedur obliczeń, na poziomie asemblera zaimplementowane zostały operacje dodawania/odejmowania, mnożenia, dzielenia i pierwiastka. Do każdej z funkcji dostarczane są wskaźniki na dane, poprzez które również zwracany jest wynik.
+Część *Single/Half* implementuje obliczenia na liczbach zmiennoprzecinkowych połowicznej i pojedynczej precyzji używając operacji *Simple*. Według opisanych wyżej procedur obliczeń, na poziomie asemblera zaimplementowane zostały operacje dodawania/odejmowania, mnożenia, dzielenia i pierwiastka. Do każdej z funkcji dostarczane są wskaźniki na dane, poprzez które również zwracany jest wynik.
 
 ### Single/Half (C++)
 Produktem końcowym jest biblioteka napisana w języku `C++`. Stworzone zostały dwa typy `floating::Single` i `floating::Half` posiadające takie same API, a różniące się tylko rozmiarem pola danych, które stworzono za pomocą unii w celu uzyskania dostępu do liczby na różne sposoby.
@@ -238,7 +238,7 @@ Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zost
 ![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/tabelka.png?raw=true)
 ![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/czas_wykonania.png?raw=true)
 
-Zostały wykonane histogramy dla każdej z operacji single, dla 1000 powtórzeń na tych samych danych.
+Zostały wykonane histogramy dla każdej z operacji single, dla 1000 powtórzeń na tych samych danych. Dla każdej operacji występują też sporadycznie wartości bardzo duże, które nie zostały uwzględnione na wykresach. 
 
 ![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd2.png?raw=true)
 
