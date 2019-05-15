@@ -318,10 +318,10 @@ Analizując opisane i przetestowane operacje i ich składowe widać, że najwię
 Kluczowym elementem poprawiającym wydajność jest również, prócz stworzenia prostych funkcji ogólnego przeznaczenia, dostosowanie ich odpowiedników do poszczególnych algorytmów w celu uniknięcia wykonywania nadmiarowej liczby kroków.
 
 #### Repozytorium
-https://github.com/damiankoper/OiakProject/blob/master/docs/Sprawozdanie.pdf
+https://github.com/damiankoper/OiakProject
 
 #### Sprawozdanie
-https://github.com/damiankoper/OiakProject
+https://github.com/damiankoper/OiakProject/blob/master/docs/Sprawozdanie.pdf
 
 ## Literatura
 1. http://justinparrtech.com/JustinParr-Tech/an-algorithm-for-arbitrary-precision-integer-division/
