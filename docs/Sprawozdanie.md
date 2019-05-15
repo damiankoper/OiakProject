@@ -238,7 +238,7 @@ Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zost
 ![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/tabelka.png?raw=true)
 ![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/czas_wykonania.png?raw=true)
 
-Zostały wykonane histogramy dla każdej z operacji single, dla 1000 powtórzeń na tych samych danych. Przedział wartości zaczyna się od minimalnej występującej w teście wartości a kończy na maksymalnej. Do momentu w którym zaczynają występować sporadycznie duże wartości przedział zmienia się o stałą wartość, potem odpowiednio tak by zawrzeć na wykresie wszystkie wartości, które wystąpiły w teście.
+Zostały wykonane histogramy dla każdej z operacji single, dla 1000 powtórzeń na tych samych danych. Przedział wartości przedstawiony na wykresie zaczyna się od minimalnej występującej w teście wartości a kończy na maksymalnej. Do momentu w którym zaczynają występować sporadycznie duże wartości przedział zmienia się o stałą wartość, potem przerwy gdzie nie występowały długo żadne wartości wycięte są odpowiednio tak by zawrzeć na wykresie wszystkie wartości, które wystąpiły w teście i nie był on jednocześnie zbyt szeroki.
 
 ![alt](https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd.png?raw=true)
 
