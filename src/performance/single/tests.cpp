@@ -22,7 +22,7 @@ void single::testAdd()
     int i = 0, j = -1;
     Tester *tester = new Tester("Test single addition: ");
     tester
-        ->setSameDataRepeats(100)
+        ->setSameDataRepeats(1000)
         ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &s1, &s2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
@@ -55,7 +55,7 @@ void single::testMul()
     int i = 0, j = -1;
     Tester *tester = new Tester("Test single multiplication: ");
     tester
-        ->setSameDataRepeats(100)
+        ->setSameDataRepeats(1000)
         ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &s1, &s2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
@@ -88,7 +88,7 @@ void single::testDiv()
     int i = 0, j = -1;
     Tester *tester = new Tester("Test single division: ");
     tester
-        ->setSameDataRepeats(100)
+        ->setSameDataRepeats(1000)
         ->setOverallRepeats(1000)
         ->beforeSameDataSet([&i, &j, &s1, &s2, linspace1](Tester::TestEnv &testenv) {
             if (j == linspace1.size() - 1)
@@ -121,7 +121,7 @@ void single::testSqrt()
     int i = -1;
     Tester *tester = new Tester("Test single sqrt: ");
     tester
-        ->setSameDataRepeats(100)
+        ->setSameDataRepeats(1000)
         ->setOverallRepeats(100)
         ->beforeSameDataSet([&i, &s1, linspace1](Tester::TestEnv &testenv) {
             i++;
