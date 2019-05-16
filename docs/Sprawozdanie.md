@@ -261,6 +261,10 @@ Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zost
 ### Histogramy
 
 Dla każdej z operacji Single zostały wygenerowane histogramy. Każdy z nich przedstawia rozkład czasu trwania operacji dla 1000 powtórzeń działania dla tych samych operandów. Dla każdej operacji występują sporadycznie wartości bardzo duże, które nie zostały uwzględnione na wykresach. 
+
+Rozbieżność czasów dla tych samych operacji wynika z aktualnego obciążenia systemu operacyjnego, który zarządzając zadaniami, może przełączać kontekst pomiędzy procesami i obsługiwać przerwania. Sprawia to, że w rzeczywistości algorytmy, z punktu widzenia procesora, nie wykonują się jak jeden spójny ciąg instrukcji.
+
+Dla operacji Half występują analogiczne rozbieżności.
 <div style="text-align:center">
 
   <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd2.png?raw=true"/>
@@ -270,36 +274,46 @@ Dla każdej z operacji Single zostały wygenerowane histogramy. Każdy z nich pr
   <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hdiv2.png?raw=true"/>
 
   <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hsqrt2.png?raw=true"/>
-
 </div>
+
 <div style="margin-bottom: 100px;"></div>
 
 ### Profilowanie
 Profilowanie wykonane zostało przy użyciu *Callgrind* oraz *KCachegrind*. Na podstawie oszacowanych cykli oraz mapy wywoływanych w *KCachegrind*, udało się utworzyć wykresy reprezentujące rozkład kosztów, własnego oraz użytych w danej operacji funkcji *Simple*, w których wykonywane są operacje 8 bitowe.
+#### Dodawanie
 
 <div style="text-align:center">
-  <img style="max-width:500px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/add.png?raw=true"/>
+  <img style="max-width:450px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/add.png?raw=true"/>
 </div>
 
 Większość kosztów to przesunięcia, dwa najbardziej kosztowne spośród wywołań `simple_shiftR` i&nbsp;`simple_shiftL` to przesunięcia, których celem jest wyzerowanie bitów znaku i wykładnika, co da się w prosty sposób wykonać przy użyciu `AND` tak, jak zostało to wykonane w implementacji dodawania dla Half. Niestety dla implementacji w *Single* zostało to przeoczone podczas optymalizowania kodu. Drugie najbardziej kosztowne wywoływania przesunięć to skalowanie mantysy wynikowej po wykonaniu operacji dodawania lub odejmowania.
 
-<div style="text-align:center">
-  <img style="max-width:500px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/div.png?raw=true"/>
-</div>
-
-Operacja `simple_div` zajmuje większą część kosztów operacji dzielenia. Ograniczenie do użycia rejestrów 8 bitowych okazało się być w przypadku algorytmu dzielenia najbardziej kosztowne.
+#### Mnożenie
 
 <div style="text-align:center">
-  <img style="max-width:500px" src="charts/sqrt.png?raw=true"/>
-</div>
-
-Większość kosztów pierwiastka to przesunięcia, które wykonywane są w pętli podczas wykonywania algorytmu `(2 * Qi * B + x)x <= Ri`.
-
-<div style="text-align:center">
-  <img style="max-width:500px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/mul.png?raw=true"/>
+  <img style="max-width:450px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/mul.png?raw=true"/>
 </div>
 
 W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą najbardziej kosztowną operacją jest przesunięcie wyniku mnożenia, który maksymalnie zajmuje 48 bitów o 16 bitów w lewo. To samo dałoby się osiągnąć znacznie optymalniej przepisując odpowiednio kolejne bajty.
+<div style="margin-bottom: 50px;"></div>
+
+#### Dzielenie
+
+<div style="text-align:center">
+  <img style="max-width:450px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/div.png?raw=true"/>
+</div>
+
+Operacja `simple_div` zajmuje większą część kosztów operacji dzielenia. Ograniczenie do użycia rejestrów 8 bitowych okazało się być w przypadku algorytmu dzielenia najbardziej kosztowne. 
+
+Operacja `simple_div` w pierwszej wersji wykorzystywała algorytm dzielenia nieodtwarzającego. Później został on zamioniony na algorytm wykorzystujący iteratywną korekcję błędu[1], operujący na cyfrach liczby w bazie `2^256`, co pozwoliło wykorzystać dostępną 8 bitową operację dzielenia. Mimo zmiany algorytmu na pozornie szybszy, wydajność operacji nieznacznie się zmniejszyła.
+
+#### Pierwiastek
+
+<div style="text-align:center">
+  <img style="max-width:450px" src="charts/sqrt.png?raw=true"/>
+</div>
+
+Większość kosztów pierwiastka to przesunięcia, które wykonywane są w pętli podczas wykonywania algorytmu `(2 * Qi * B + x)x <= Ri`.
 
 ## Napotkane problemy
 1. Brak możliwości porównania wydajności operacji z biblioteką `soft-float`. Kompilacja plików za pomocą `gcc` z flagą `-msoft-float` generuje błędy linkowania, ponieważ biblioteka `soft-float` domyślnie nie jest obecna w `libgcc`, a wszelkie próby kompilowania jej ze źródeł nie przyniosły żadnych efektów.
