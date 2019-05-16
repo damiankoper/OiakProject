@@ -1,5 +1,6 @@
 {
     "markdown-pdf.headerTemplate": "<div></div>",
+    "markdown-pdf.format": "A4",
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
     "files.associations": {
