@@ -53,7 +53,7 @@ Po uzyskaniu wyniku trzeba go znormalizować przesuwając go w lewo lub w prawo 
 ### Mnożenie
 Mnożąc liczby ustawiamy znak wyniku według zależności `sign[C] = sign[A] XOR sign[B]`. Następnie sprawdzamy, czy którykolwiek ze składników ma wartośc *0*. Jeśli tak, to zwracamy *0* z odpowiednim znakiem (jeśli chcemy mieć znakowane *0*). 
 
-Wynikowy wykładnik otrzymamy poprzez dodanie wartości wykładników składników, pamiętając o odjęciu obiążenia, a następnie korygując go w procesie normalizacji. W celu normalizacji iloczynu mantys, wiedząc, że iloczyn liczb 24 bitowych zawsze da wynik maksymalnie 48 bitowy, możemy sprawdzić bit 48 wyniku tego działania. Jeśli ma on wartośc 1 oznacza to, że wartość jest za duża. Trzeba zwiększyć wykładnik i przesująć mantysę w prawo. 
+Wynikowy wykładnik otrzymamy poprzez dodanie wartości wykładników składników, pamiętając o odjęciu obiążenia, a następnie korygując go w procesie normalizacji. W celu normalizacji iloczynu mantys, wiedząc, że iloczyn liczb 24 bitowych zawsze da wynik maksymalnie 48 bitowy, możemy sprawdzić bit 48 wyniku tego działania. Jeśli ma on wartośc 1 oznacza to, że wartość jest za duża. Trzeba zwiększyć wykładnik i przesunąć mantysę w prawo. 
 
 W przypadku, gdy wartość jest zbyt mała, trzeba sprawdzać bit 47 iloczynu, zmniejszać wykładnik i przesuwać mantysę w lewo, aż owy bit nie będzie miał wartości 1 lub wykładnik nie będzie równy `0x01` (dla Half `0b00001`) - w takim wypadku otrzymamy wynik zdenormalizowany. W przypadku wyniku zdenormalizowanego wykładnik reprezentowany jest jako `0x00` (dla Half `0b00000`).
 
@@ -80,18 +80,18 @@ W przypadku przekroczenia zakresu trzeba pamiętać o ustawieniu wartości *+/-0
 
 ### Pierwiastek
 
-Pierwiastkowanie możliwe jest tylko, gdy liczba jest dodatnia, więc obliczenia trzeba rozpocząć od sprawdzenia znaku. Następnie trzeba sprawdzić czy wykładnik jest parzysty – jeśli nie, zmniejszamy go o 1 odpowiednio skalując mantysę. Gdy wykładnik jest już parzysty, dzielimy go przez 2 i otrzymujemy w ten sposób wykładnik wyniku. Dzielenie wykładnika przez 2 można łatwo wykonać przesuwając wykładnik, od którego wcześniej odjęto obciążenie o 1 w prawo.
+Pierwiastkowanie możliwe jest tylko, gdy liczba jest dodatnia, więc obliczenia trzeba rozpocząć od sprawdzenia znaku. Następnie trzeba sprawdzić czy wykładnik jest parzysty – jeśli nie, zmniejszamy go o 1 odpowiednio skalując mantysę. Gdy wykładnik jest już parzysty, dzielimy go przez 2 i otrzymujemy w ten sposób wykładnik wyniku. Dzielenie wykładnika przez 2 można łatwo wykonać przesuwając wykładnik, od którego wcześniej odjęto obciążenie, o 1 w prawo.
 
 Kolejnym krokiem jest spierwiastkowanie mantysy. Wykonujemy algorytm 
 ```
 (2 * Qi * B + x) * x <= Ri
 ``` 
-gdzie Qi – aktualny wynik, B – podstawa liczby, w tym przypadku 2, Ri – aktualna reszta, a x to kolejny bit wyniku pierwiastkowania.
+gdzie Qi – aktualny wynik, B – podstawa liczby (w tym przypadku 2), Ri – aktualna reszta, x - kolejny bit wyniku pierwiastkowania.
 
-W przypadku pierwiastkowania liczb o podstawie 2, `x` równe jest 1 jeśli dla `x` równego 1 spełnione jest powyższe równanie, jeśli nie – `x` równe jest 0. Jeśli wykładnik był parzysty to mantysa razem z niejawną jedynką jest teraz postaci `1,x..x`, jeśli był nieparzysty to mantysa jest postaci `1x,x..x`, pierwszy krok algorytmu wykonywany jest więc poza pętlą dla 01 gdy wykładnik był parzysty lub dla 1x gdy był nieparzysty. Pozostałe kroki algorytmu wykonywane są już w pętli.
+W przypadku pierwiastkowania liczb o podstawie 2, `x` równe jest 1 jeśli dla `x` równego 1 spełnione jest powyższe równanie, jeśli nie – `x` równe jest 0. Jeśli wykładnik był parzysty to mantysa razem z niejawną jedynką jest teraz postaci `1,x..x`, jeśli był nieparzysty to mantysa jest postaci `1x,x..x`, pierwszy krok algorytmu wykonywany jest więc poza pętlą dla `01` gdy wykładnik był parzysty lub dla `1x` gdy był nieparzysty. Pozostałe kroki algorytmu wykonywane są już w pętli.
 
 ## Implementacja
-Procedury obliczeń realizuje stworzona biblioteka języka `C++`. Architektura projektu została zrealizowana w trzech częściach, gdzie każda korzystała z kolejnej:
+Procedury obliczeń realizuje stworzona biblioteka języka `C++`. Architektura projektu została zrealizowana w trzech częściach, gdzie każda korzysta z kolejnej:
 ```
 Simple --> Single/Half --> Single/Half(C++)
 ```
@@ -108,7 +108,7 @@ Część *Simple* realizuje obliczenia na liczbach stałoprzecinkowych odpowiedn
 * FloatToHalf
   
 Do każdej z nich dostarczane są wskaźniki na dane, poprzez które również zwracany jest wynik.
-HalfToFloat i FloatToHalf do konwersji wykorzystują rozszerzenie *F16C(SSE)* procesora i instrukcje `VCVTPS2PH` oraz `VCVTPH2PS`. Według ustaleń konwersja nie podlega ograniczeniu długości słowa 8 bit. Korzystanie z tych instrukcji w wyższych warstwach eliminuje całkowicie nałożone ograniczenie dłogości słowa. Używają one instrukcji operujących na liczbach 8 bitowych, wykorzystujących flagę przeniesienia oraz algorytmy m.in dzielenia nieodtwarzającego.
+HalfToFloat i FloatToHalf do konwersji wykorzystują rozszerzenie *F16C(SSE)* procesora i instrukcje `VCVTPS2PH` oraz `VCVTPH2PS`. Według ustaleń konwersja nie podlega ograniczeniu długości słowa 8 bit. Korzystanie z tych instrukcji w wyższych warstwach eliminuje całkowicie nałożone ograniczenie długości słowa. Używają one instrukcji operujących na liczbach 8 bitowych, wykorzystujących flagę przeniesienia oraz algorytmy m.in dzielenia nieodtwarzającego.
 
 ### Single/Half
 Część *Single/Half* implementuje obliczenia na liczbach zmiennoprzecinkowych połowicznej i pojedynczej precyzji używając operacji *Simple*. Według opisanych wyżej procedur obliczeń, na poziomie asemblera zaimplementowane zostały operacje dodawania/odejmowania, mnożenia, dzielenia i pierwiastka. Do każdej z funkcji dostarczane są wskaźniki na dane, poprzez które również zwracany jest wynik.
@@ -294,7 +294,7 @@ Większość kosztów to przesunięcia, dwa najbardziej kosztowne spośród wywo
   <img style="max-width:450px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/mul.png?raw=true"/>
 </div>
 
-W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą najbardziej kosztowną operacją jest przesunięcie wyniku mnożenia, który maksymalnie zajmuje 48 bitów o 16 bitów w lewo. To samo dałoby się osiągnąć znacznie optymalniej przepisując odpowiednio kolejne bajty.
+W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą najbardziej kosztowną operacją jest przesunięcie wyniku mnożenia, który maksymalnie zajmuje 48 bitów o 16 bitów w prawo. To samo dałoby się osiągnąć znacznie optymalniej przepisując odpowiednio kolejne bajty.
 <div style="margin-bottom: 50px;"></div>
 
 #### Dzielenie
