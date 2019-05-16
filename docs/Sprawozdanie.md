@@ -115,7 +115,7 @@ Część *Single/Half* implementuje obliczenia na liczbach zmiennoprzecinkowych 
 
 ### Single/Half (C++)
 Produktem końcowym jest biblioteka napisana w języku `C++`. Stworzone zostały dwa typy `floating::Single` i `floating::Half` posiadające takie same API, a różniące się tylko rozmiarem pola danych, które stworzono za pomocą unii w celu uzyskania dostępu do danych w różnych interpretacjach.
-<div style="margin-bottom: 100px;"></div>
+<div style="height:60px;"></div>
 
 ```cpp
 namespace floating
@@ -178,7 +178,10 @@ private:
 
 } // namespace floating
 ```
+<div style="position:relative; top:-10px; margin-bottom:-10px; text-align:center">Listing 1.</div>
+
 Użytko również dodane w `C++11` user-defined literals, które zdefiniowane w następujący sposób:
+
 ```cpp
 namespace floating
 {
@@ -189,12 +192,15 @@ namespace floating
     } // namespace literal
 } // namespace floating
 ```
+<div style="position:relative; top:-10px; margin-bottom:-10px; text-align:center">Listing 2.</div>
+
 umożliwiają tworzenie nowych obiektów w prosty spodób:
 ```cpp
 using namespace floating::literal;
 ...
 floating::Single s = 1.2543_s;
 ```
+<div style="position:relative; top:-10px; margin-bottom:-10px; text-align:center">Listing 3.</div>
 
 Typ `floating::Half` od typu `floating::Single` różni się jedynie mniejszą, wewnętrzną reprezentacją, oraz literałem `_h` zamiast `_s`.
 ```cpp
@@ -211,7 +217,9 @@ Typ `floating::Half` od typu `floating::Single` różni się jedynie mniejszą, 
     uint16_t raw;
   };
 ```
-<div style="margin-bottom: 100px;"></div>
+<div style="position:relative; top:-10px; margin-bottom:-10px; text-align:center">Listing 4.</div>
+
+<div style="margin-bottom: 200px;"></div>
 
 ## Testy i wydajność
 
@@ -228,6 +236,7 @@ Poprzez napisany skrypt biblioteka, jak i testy, kompilowały się automatycznie
     done
 }
 ```
+<div style="position:relative; top:-10px; margin-bottom:-10px; text-align:center">Listing 5.</div>
 
 ### Testy jednostkowe
 Testy jednostkowe zostały stworzone wykorzystując framework `Catch2`. Osobno dla `floating::Single` i `floating::Half` został utworzony plik wykonywalny zawierający test każdej funkcji, które były rekompilowane i uruchamiane po każdej zmianie kodu. Środowisko *Visual Studio Code* poprzez swoje rozszerzenia integrujące `Catch2` pozwoliło na łatwe zarządzanie i wykonywanie testów.
@@ -238,15 +247,18 @@ Obiekt klasy `floating::Tester` wielokrotnie wykonywał operację zdefiniowaną 
 ```cpp
 uint64_t rdtsc()
 {
-    unsigned int lo, hi;
-    __asm__ __volatile__("cpuid; rdtsc"
-                         : "=a"(lo), "=d"(hi));
-    return ((uint64_t)hi << 32) | lo;
+  unsigned int lo, hi;
+  __asm__ __volatile__("xor %%eax, %%eax;"
+                       "cpuid;"
+                       "rdtsc;"
+                       : "=a"(lo), "=d"(hi));
 }
 ```
+<div style="position:relative; top:-10px; margin-bottom:-10px; text-align:center">Listing 6.</div>
+
 Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zostały wykonany dla typów `floating::Single` i `floating::Half` oraz `float` w celu porównania do natywnej realizacji.
 
-<div style="margin-bottom: 100px;"></div>
+<div style="margin-bottom: 200px;"></div>
 
 ## Wyniki testów
 
@@ -254,28 +266,38 @@ Testy każdej operacji dla argumentów z wygenerowanej przestrzeni liniowej zost
 
 <div style="text-align:center">
   <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/tabelka.png?raw=true"/>
+  <br>Tab 1. Średnie wyniki testu wydajności
   <div style="height:20px;"></div>
   <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/czas_wykonania.png?raw=true"/>
+  <br>Rys. 1. Średnie wyniki testu wydajności
 </div>
 
 ### Histogramy
 
-Dla każdej z operacji Single zostały wygenerowane histogramy. Każdy z nich przedstawia rozkład czasu trwania operacji dla 1000 powtórzeń działania dla tych samych operandów. Dla każdej operacji występują sporadycznie wartości bardzo duże, które nie zostały uwzględnione na wykresach. 
+Dla każdej z operacji Single zostały wygenerowane histogramy (rys. 2-5). Każdy z nich przedstawia rozkład czasu trwania operacji dla 1000 powtórzeń działania dla tych samych operandów. Dla każdej operacji występują sporadycznie wartości bardzo duże, które nie zostały uwzględnione na wykresach. 
 
 Rozbieżność czasów dla tych samych operacji wynika z aktualnego obciążenia systemu operacyjnego, który zarządzając zadaniami, może przełączać kontekst pomiędzy procesami i obsługiwać przerwania. Sprawia to, że w rzeczywistości algorytmy, z punktu widzenia procesora, nie wykonują się jak jeden spójny ciąg instrukcji.
 
 Dla operacji Half występują analogiczne rozbieżności.
-<div style="text-align:center">
-
-  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd2.png?raw=true"/>
-
-  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hmul2.png?raw=true"/>
-
-  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hdiv2.png?raw=true"/>
-
-  <img src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hsqrt2.png?raw=true"/>
+<div style="text-align: center">
+  <img style="max-width: 650px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hadd2.png?raw=true"/>
+  <br><div style="margin-bottom:10px">Rys. 2. Histogram na podstawie 1000 operacji dodawania (Single)</div><br>
 </div>
 
+<div style="text-align: center">
+  <img style="max-width: 650px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hmul2.png?raw=true"/>
+  <br><div style="margin-bottom:10px">Rys. 3. Histogram na podstawie 1000 operacji mnożenia (Single)</div>
+</div>
+
+<div style="text-align: center">
+  <img style="max-width: 650px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hdiv2.png?raw=true"/>
+  <br><div style="margin-bottom:10px">Rys. 4. Histogram na podstawie 1000 operacji dzielenia (Single)</div><br>
+</div>
+
+<div style="text-align: center">
+  <img style="max-width: 650px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/hsqrt2.png?raw=true"/>
+  <br><div style="margin-bottom:10px">Rys. 5. Histogram na podstawie 1000 operacji pierwiastkowania (Single)</div>
+</div>
 <div style="margin-bottom: 100px;"></div>
 
 ### Profilowanie
@@ -283,7 +305,8 @@ Profilowanie wykonane zostało przy użyciu *Callgrind* oraz *KCachegrind*. Na p
 #### Dodawanie
 
 <div style="text-align:center">
-  <img style="max-width:450px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/add.png?raw=true"/>
+  <img style="max-width:430px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/add.png?raw=true"/>
+  <br>Rys. 6. Rozkład kosztów zagnieżdżonych funkcji operacji dodawania (Single)
 </div>
 
 Większość kosztów to przesunięcia, dwa najbardziej kosztowne spośród wywołań `simple_shiftR` i&nbsp;`simple_shiftL` to przesunięcia, których celem jest wyzerowanie bitów znaku i wykładnika, co da się w prosty sposób wykonać przy użyciu `AND` tak, jak zostało to wykonane w implementacji dodawania dla Half. Niestety dla implementacji w *Single* zostało to przeoczone podczas optymalizowania kodu. Drugie najbardziej kosztowne wywoływania przesunięć to skalowanie mantysy wynikowej po wykonaniu operacji dodawania lub odejmowania.
@@ -291,7 +314,7 @@ Większość kosztów to przesunięcia, dwa najbardziej kosztowne spośród wywo
 #### Mnożenie
 
 <div style="text-align:center">
-  <img style="max-width:450px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/mul.png?raw=true"/>
+  <img style="max-width:430px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/mul.png?raw=true"/><br>Rys. 7. Rozkład kosztów zagnieżdżonych funkcji operacji mnożenia (Single)
 </div>
 
 W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą najbardziej kosztowną operacją jest przesunięcie wyniku mnożenia, który maksymalnie zajmuje 48 bitów o 16 bitów w prawo. To samo dałoby się osiągnąć znacznie optymalniej przepisując odpowiednio kolejne bajty.
@@ -300,7 +323,8 @@ W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą naj
 #### Dzielenie
 
 <div style="text-align:center">
-  <img style="max-width:450px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/div.png?raw=true"/>
+  <img style="max-width:430px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/div.png?raw=true"/>
+  <br>Rys. 8. Rozkład kosztów zagnieżdżonych funkcji operacji dzielenia (Single)
 </div>
 
 Operacja `simple_div` zajmuje większą część kosztów operacji dzielenia. Ograniczenie do użycia rejestrów 8 bitowych okazało się być w przypadku algorytmu dzielenia najbardziej kosztowne. 
@@ -310,7 +334,9 @@ Operacja `simple_div` w pierwszej wersji wykorzystywała algorytm dzielenia nieo
 #### Pierwiastek
 
 <div style="text-align:center">
-  <img style="max-width:450px" src="charts/sqrt.png?raw=true"/>
+  <img style="max-width:430px" src="charts/sqrt.png?raw=true"/>
+  <br>
+  Rys. 9. Rozkład kosztów zagnieżdżonych funkcji operacji pierwiastkowania (Single)
 </div>
 
 Większość kosztów pierwiastka to przesunięcia, które wykonywane są w pętli podczas wykonywania algorytmu `(2 * Qi * B + x)x <= Ri`.
@@ -338,7 +364,7 @@ https://github.com/damiankoper/OiakProject
 https://github.com/damiankoper/OiakProject/blob/master/docs/Sprawozdanie.pdf
 
 ## Literatura
-1. http://justinparrtech.com/JustinParr-Tech/an-algorithm-for-arbitrary-precision-integer-division/
-2. http://x86asm.net/articles/fixed-point-arithmetic-and-tricks/
-3. https://github.com/lattera/glibc/tree/master/soft-fp
-4. http://www.rfwireless-world.com/Tutorials/floating-point-tutorial.html
+1. Algorytm dzielenia <br>- http://justinparrtech.com/JustinParr-Tech/an-algorithm-for-arbitrary-precision-integer-division/
+2. Arytmetyka stałej precyzji - http://x86asm.net/articles/fixed-point-arithmetic-and-tricks/
+3. Biblioteka soft-fp - https://github.com/lattera/glibc/tree/master/soft-fp
+4. Opis operacji na liczbach zmiennoprzecinkowych <br>-  http://www.rfwireless-world.com/Tutorials/floating-point-tutorial.html
