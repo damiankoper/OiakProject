@@ -20,17 +20,17 @@ Celem projektu była implementacja procedur obliczeń na liczbach zmiennoprzecin
 Jedynym ograniczeniem była długość słowa, ustalona na 8 bitów. Zadanie można interpretować, jako stworzenie biblioteki do programowej realizacji obliczeń zmiennoprzecinkowych, gdzie ograniczenie słowa do 8 bitów sygnalizuje, że może być ona użyta w mikrokontrolerach 8 bitowych, które naturalnie nie mają jednostki zmiennoprzecinkowej, a gdzie zachodzi potrzeba takich obliczeń.
 
 ## IEEE-754 - Single
-Liczba w formacie pojedynczej precyzji przechowywana jest w pamięci w następującym formacie:
+Liczba w formacie pojedynczej precyzji reprezentowana jest przez następujący ciąg bitów:
 ```
 znak           ułamek
 x | xxxxxxxx | xxxxxxxxxxxxxxxxxxxxxxx
     wykładnik
 ```
-Ułamek zapisny jest z dodanym obciążeniem, co pozwala zachować ciągłość reprezentacji i ułatwia porównania. Dla formatu single obiążenie to wynosi *+127*. Jeśli wykładnik nie reprezentuje liczb zdenormalizowanych (wartość *0x00*), ułamek zawiera ukrytą jedynkę z przodu.
+Wykładnik zapisny jest z dodanym obciążeniem, co pozwala zachować ciągłość reprezentacji i ułatwia porównania. Dla formatu single obiążenie to wynosi *+127*. Jeśli wykładnik nie reprezentuje liczb zdenormalizowanych (wartość *0x00*), ułamek zawiera ukrytą jedynkę z przodu.
 <div style="margin-bottom:200px"></div>
 
 ## IEEE-754 - Half
-Liczba w formacie połowicznej precyzji przechowywana jest w pamięci w następującym formacie:
+Liczba w formacie połowicznej precyzji reprezentowana jest przez następujący ciąg bitów:
 ```
 znak        ułamek
 x | xxxxx | xxxxxxxxxx
@@ -322,7 +322,7 @@ W przypadku mnożenia, najbardziej kosztowne jest wymnożenie mantys. Drugą naj
 
 #### Dzielenie
 
-<div style="text-align:center">
+<div style="text-align:center; margin-top:-20px;">
   <img style="max-width:430px" src="https://github.com/damiankoper/OiakProject/blob/master/docs/charts/div.png?raw=true"/>
   <br>Rys. 8. Rozkład kosztów zagnieżdżonych funkcji operacji dzielenia (Single)
 </div>
